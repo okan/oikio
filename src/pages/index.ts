@@ -1,0 +1,9 @@
+export { Dashboard } from './Dashboard'
+export { Persons } from './Persons'
+export { PersonDetail } from './PersonDetail'
+export { Meetings } from './Meetings'
+export { MeetingDetail } from './MeetingDetail'
+export { Actions } from './Actions'
+export { Templates } from './Templates'
+export { Settings } from './Settings'
+
