@@ -5,22 +5,18 @@ import { FileText, ChevronRight } from 'lucide-react'
 import type { Meeting } from '@/types'
 import { Avatar, EmptyState } from '@/components/ui'
 import { formatDateTime } from '@/lib/utils'
-
 interface RecentActivityProps {
   meetings: Meeting[]
 }
-
 export function RecentActivity({ meetings }: RecentActivityProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
-
   return (
     <div className="card">
       <div className="p-4 border-b border-slate-200">
         <h2 className="font-semibold text-slate-900">{t('dashboard.recentActivity')}</h2>
         <p className="text-sm text-slate-500">{t('dashboard.recentNotes')}</p>
       </div>
-
       <div className="divide-y divide-slate-100">
         {meetings.length === 0 ? (
           <EmptyState

@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils'
-
 interface EmptyStateProps {
   icon?: React.ReactNode
   title: string
@@ -7,7 +6,6 @@ interface EmptyStateProps {
   action?: React.ReactNode
   className?: string
 }
-
 export function EmptyState({ icon, title, description, action, className }: EmptyStateProps) {
   return (
     <div className={cn('flex flex-col items-center justify-center py-12 text-center', className)}>
@@ -18,4 +16,3 @@ export function EmptyState({ icon, title, description, action, className }: Empt
     </div>
   )
 }
-

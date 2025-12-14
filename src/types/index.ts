@@ -1,21 +1,29 @@
 export type PersonRole = 'manager' | 'teammate'
-
+export type MeetingFrequency = 'weekly' | 'biweekly' | 'monthly' | 'quarterly'
 export interface Person {
   id: number
   name: string
   role: PersonRole
   email?: string
   notes?: string
+  meetingFrequencyGoal?: MeetingFrequency
+  lastMeetingDate?: string
   createdAt: string
 }
-
+export interface RelationshipHealth {
+  score: number  
+  status: 'good' | 'warning' | 'critical'
+  daysSinceLastMeeting: number | null
+  isOverdue: boolean
+  daysOverdue: number
+}
 export interface Meeting {
   id: number
   personId: number
   personName?: string
   templateId?: number
   date: string
-  title: string
+  title?: string
   notes?: string
   talkingPoints?: string
   nextTopics?: string
@@ -25,7 +33,6 @@ export interface Meeting {
     completed: number
   }
 }
-
 export interface ActionItem {
   id: number
   meetingId: number
@@ -37,7 +44,6 @@ export interface ActionItem {
   completed: boolean
   createdAt: string
 }
-
 export interface Template {
   id: number
   name: string
@@ -45,14 +51,11 @@ export interface Template {
   content: string
   isDefault: boolean
 }
-
 export interface DashboardStats {
   totalPersons: number
   meetingsThisMonth: number
   pendingActions: number
 }
-
-// API interface exposed via preload
 export interface ElectronAPI {
   persons: {
     getAll: () => Promise<Person[]>
@@ -60,6 +63,7 @@ export interface ElectronAPI {
     create: (data: Omit<Person, 'id' | 'createdAt'>) => Promise<Person>
     update: (id: number, data: Partial<Person>) => Promise<Person>
     delete: (id: number) => Promise<void>
+    getNeedingAttention: () => Promise<Person[]>
   }
   meetings: {
     getAll: () => Promise<Meeting[]>
@@ -93,13 +97,23 @@ export interface ElectronAPI {
   data: {
     export: () => Promise<string>
     import: (data: string) => Promise<void>
+    reset: () => Promise<void>
   }
   search: (query: string) => Promise<{ persons: Person[]; meetings: Meeting[] }>
+  notifications: {
+    getSettings: () => Promise<NotificationSettings>
+    updateSettings: (settings: Partial<NotificationSettings>) => Promise<NotificationSettings>
+    test: () => Promise<void>
+  }
 }
-
+export interface NotificationSettings {
+  enabled: boolean
+  meetingReminders: boolean
+  actionReminders: boolean
+  reminderHoursBefore: number
+}
 declare global {
   interface Window {
     api: ElectronAPI
   }
 }
-

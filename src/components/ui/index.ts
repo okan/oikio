@@ -1,4 +1,5 @@
 export { Modal } from './Modal'
+export { FormModal, ConfirmModal } from './FormModal'
 export { Input } from './Input'
 export { Textarea } from './Textarea'
 export { Select } from './Select'
@@ -8,4 +9,5 @@ export { Badge } from './Badge'
 export { Avatar } from './Avatar'
 export { EmptyState } from './EmptyState'
 export { RichTextEditor } from './RichTextEditor'
-
+export { Tabs } from './Tabs'
+export { ErrorBoundary, withErrorBoundary, InlineError, ErrorAlert } from './ErrorBoundary'

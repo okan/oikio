@@ -3,7 +3,6 @@ import { CheckSquare } from 'lucide-react'
 import type { ActionItem as ActionItemType } from '@/types'
 import { EmptyState } from '@/components/ui'
 import { ActionItem } from './ActionItem'
-
 interface ActionListProps {
   actions: ActionItemType[]
   onToggle: (id: number) => void
@@ -12,7 +11,6 @@ interface ActionListProps {
   emptyTitle?: string
   emptyDescription?: string
 }
-
 export function ActionList({
   actions,
   onToggle,
@@ -30,7 +28,6 @@ export function ActionList({
       />
     )
   }
-
   return (
     <div className="space-y-2">
       <AnimatePresence mode="popLayout">

@@ -1,17 +1,14 @@
 import { forwardRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
-
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string
   error?: string
 }
-
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, error, id, ...props }, ref) => {
     const [isFocused, setIsFocused] = useState(false)
     const textareaId = id || label?.toLowerCase().replace(/\s/g, '-')
-
     return (
       <div className="space-y-1.5">
         {label && (
@@ -60,6 +57,4 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     )
   }
 )
-
 Textarea.displayName = 'Textarea'
-

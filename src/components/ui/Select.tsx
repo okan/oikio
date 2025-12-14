@@ -1,12 +1,10 @@
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { ChevronDown, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
 interface SelectOption {
   value: string
   label: string
 }
-
 interface SelectProps {
   label?: string
   placeholder?: string
@@ -14,8 +12,8 @@ interface SelectProps {
   onValueChange: (value: string) => void
   options: SelectOption[]
   error?: string
+  disabled?: boolean
 }
-
 export function Select({
   label,
   placeholder = 'Seçiniz',
@@ -23,19 +21,19 @@ export function Select({
   onValueChange,
   options,
   error,
+  disabled,
 }: SelectProps) {
-  // Filter out empty values - Radix doesn't support them
   const validOptions = options.filter((opt) => opt.value !== '')
-
   return (
     <div className="space-y-1.5">
       {label && <label className="label">{label}</label>}
-      <SelectPrimitive.Root value={value || undefined} onValueChange={onValueChange}>
+      <SelectPrimitive.Root value={value || undefined} onValueChange={onValueChange} disabled={disabled}>
         <SelectPrimitive.Trigger
           className={cn(
             'input flex items-center justify-between gap-2',
             error && 'input-error',
-            !value && 'text-slate-400'
+            !value && 'text-slate-400',
+            disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
           <SelectPrimitive.Value placeholder={placeholder} />
@@ -43,7 +41,6 @@ export function Select({
             <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0" />
           </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
-
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
             className="bg-white rounded-lg border border-slate-200 shadow-xl overflow-hidden z-[100] min-w-[var(--radix-select-trigger-width)]"

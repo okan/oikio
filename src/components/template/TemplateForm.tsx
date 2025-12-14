@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Template } from '@/types'
 import { Button, Input, Textarea, Modal } from '@/components/ui'
-
 interface TemplateFormProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   template?: Template | null
   onSubmit: (data: Omit<Template, 'id'>) => Promise<void>
 }
-
 export function TemplateForm({ open, onOpenChange, template, onSubmit }: TemplateFormProps) {
   const { t } = useTranslation()
   const [name, setName] = useState('')
@@ -17,7 +15,6 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
   const [content, setContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
-
   useEffect(() => {
     if (template) {
       setName(template.name)
@@ -30,27 +27,20 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
     }
     setErrors({})
   }, [template, open])
-
   const validate = () => {
     const newErrors: Record<string, string> = {}
-
     if (!name.trim()) {
       newErrors.name = t('templates.templateName') + ' required'
     }
-
     if (!content.trim()) {
       newErrors.content = t('templates.content') + ' required'
     }
-
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!validate()) return
-
     setIsSubmitting(true)
     try {
       await onSubmit({
@@ -66,7 +56,6 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
       setIsSubmitting(false)
     }
   }
-
   return (
     <Modal
       open={open}
@@ -83,14 +72,12 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
           error={errors.name}
           autoFocus
         />
-
         <Input
           label={t('templates.templateDescription')}
           placeholder={t('templates.descPlaceholder')}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-
         <Textarea
           label={t('templates.content')}
           placeholder={t('templates.contentPlaceholder')}
@@ -100,7 +87,6 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
           rows={10}
           className="font-mono text-sm"
         />
-
         <div className="flex justify-end gap-3 pt-4">
           <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
             {t('common.cancel')}

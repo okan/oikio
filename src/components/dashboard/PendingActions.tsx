@@ -5,22 +5,18 @@ import type { ActionItem } from '@/types'
 import { Checkbox, Badge, EmptyState } from '@/components/ui'
 import { getRelativeTime, isOverdue } from '@/lib/utils'
 import { useActionStore } from '@/store'
-
 interface PendingActionsProps {
   actions: ActionItem[]
 }
-
 export function PendingActions({ actions }: PendingActionsProps) {
   const { toggleComplete } = useActionStore()
   const { t } = useTranslation()
-
   return (
     <div className="card">
       <div className="p-4 border-b border-slate-200">
         <h2 className="font-semibold text-slate-900">{t('dashboard.openActions')}</h2>
         <p className="text-sm text-slate-500">{t('dashboard.tasksToComplete')}</p>
       </div>
-
       <div className="divide-y divide-slate-100">
         {actions.length === 0 ? (
           <EmptyState
@@ -68,7 +64,6 @@ export function PendingActions({ actions }: PendingActionsProps) {
           ))
         )}
       </div>
-
       {actions.length > 5 && (
         <div className="p-4 border-t border-slate-200 text-center">
           <a href="/actions" className="text-sm text-primary-600 hover:text-primary-700">

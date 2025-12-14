@@ -3,17 +3,14 @@ import { FileText } from 'lucide-react'
 import type { Template } from '@/types'
 import { EmptyState, Button } from '@/components/ui'
 import { TemplateCard } from './TemplateCard'
-
 interface TemplateListProps {
   templates: Template[]
   onAddClick: () => void
   onEdit: (template: Template) => void
   onDelete: (id: number) => void
 }
-
 export function TemplateList({ templates, onAddClick, onEdit, onDelete }: TemplateListProps) {
   const { t } = useTranslation()
-
   if (templates.length === 0) {
     return (
       <EmptyState
@@ -24,7 +21,6 @@ export function TemplateList({ templates, onAddClick, onEdit, onDelete }: Templa
       />
     )
   }
-
   return (
     <div className="space-y-3">
       {templates.map((template, index) => (

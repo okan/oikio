@@ -12,7 +12,9 @@
     "noResults": "Sonuç bulunamadı",
     "confirm": "Onayla",
     "yes": "Evet",
-    "no": "Hayır"
+    "no": "Hayır",
+    "dismiss": "Kapat",
+    "more": "daha"
   },
   "nav": {
     "home": "Ana Sayfa",
@@ -46,7 +48,12 @@
     "createMeetingNote": "Toplantı notu oluştur",
     "viewAll": "Tümünü gör",
     "actions_count": "{{count}} aksiyon",
-    "overdue": "Gecikmiş"
+    "overdue": "Gecikmiş",
+    "needAttention": "İlgilenilmesi Gerekenler",
+    "needAttentionDesc": "Toplantı zamanı gelen kişiler",
+    "allCaughtUp": "Her şey yolunda!",
+    "noAttentionNeeded": "Görüşme zamanı gelen kişi yok.",
+    "people": "kişi"
   },
   "persons": {
     "title": "Kişiler",
@@ -68,7 +75,18 @@
     "notes": "Notlar",
     "notesPlaceholder": "Kişi hakkında genel notlar...",
     "deletePerson": "Kişiyi Sil",
-    "deleteConfirm": "Bu kişiyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm toplantı notları da silinecektir."
+    "deleteConfirm": "Bu kişiyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm toplantı notları da silinecektir.",
+    "meetingFrequency": "Toplantı Sıklığı",
+    "noFrequencyGoal": "Hedef belirlenmedi",
+    "weekly": "Haftalık",
+    "biweekly": "2 Haftada Bir",
+    "monthly": "Aylık",
+    "quarterly": "3 Ayda Bir",
+    "lastMeeting": "Son Toplantı",
+    "neverMet": "Henüz görüşülmedi",
+    "daysAgo": "{{days}} gün önce",
+    "overdue": "Gecikmiş",
+    "daysOverdue": "{{days}} gün gecikmiş"
   },
   "meetings": {
     "title": "Toplantılar",
@@ -88,7 +106,15 @@
     "notes": "Notlar",
     "notesPlaceholder": "Toplantı notları...",
     "deleteMeeting": "Toplantıyı Sil",
-    "deleteConfirm": "Bu toplantıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+    "deleteConfirm": "Bu toplantıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "prepSection": "Geçen Toplantıdan",
+    "pendingFromLast": "{{count}} bekleyen aksiyon",
+    "topicsFromLast": "Konuşulacak konular:",
+    "carryOver": "Notlara Ekle",
+    "fromLastMeeting": "Geçen Toplantıdan",
+    "nextTopics": "Sonraki Toplantı İçin",
+    "nextTopicsPlaceholder": "Sonraki toplantıda konuşulacak konular...",
+    "noNextTopics": "Henüz sonraki toplantı için konu eklenmemiş."
   },
   "actions": {
     "title": "Aksiyonlar",
@@ -139,7 +165,16 @@
     "importButton": "Verileri İçe Aktar",
     "exportSuccess": "Veriler başarıyla dışa aktarıldı!",
     "importSuccess": "Veriler başarıyla içe aktarıldı!",
-    "importWarning": "Dikkat: İçe aktarma mevcut tüm verilerinizi silecek ve yedek dosyasındaki verilerle değiştirecektir. Bu işlem geri alınamaz.",
+    "dangerZone": "Tehlikeli Bölge",
+    "dangerZoneDesc": "Dikkatli olun, bu işlemler geri alınamaz.",
+    "resetData": "Fabrika Ayarlarına Dön",
+    "resetDataDesc": "Tüm kişilerinizi, toplantılarınızı ve notlarınızı kalıcı olarak siler.",
+    "resetButton": "Verileri Sıfırla",
+    "resetConfirmTitle": "Tüm Verileri Sil?",
+    "resetConfirmDesc": "Bu işlem geri alınamaz. Bu işlem veritabanınızdaki tüm verileri kalıcı olarak silecektir.",
+    "resetWarning": "Bu işlem kişilerinizi, toplantılarınızı, aksiyonlarınızı ve özel şablonlarınızı SİLECEKTİR. Varsayılan şablonlar geri yüklenecektir.",
+    "confirmReset": "Evet, her şeyi sil",
+    "resetSuccess": "Uygulama başarıyla sıfırlandı.",
     "continue": "Devam Et",
     "about": "Hakkında",
     "version": "Versiyon",
@@ -148,7 +183,14 @@
     "language": "Dil",
     "languageDesc": "Tercih ettiğiniz dili seçin",
     "english": "İngilizce",
-    "turkish": "Türkçe"
+    "turkish": "Türkçe",
+    "notifications": "Bildirimler",
+    "notificationsDesc": "Toplantı ve aksiyon hatırlatıcıları",
+    "enableNotifications": "Bildirimleri etkinleştir",
+    "meetingReminders": "Toplantı hatırlatıcıları",
+    "actionReminders": "Aksiyon hatırlatıcıları",
+    "testNotification": "Test Bildirimi Gönder",
+    "notificationSent": "Test bildirimi gönderildi!"
   },
   "search": {
     "placeholder": "Kişi veya toplantı ara...",
@@ -158,6 +200,135 @@
     "navigate": "gezinme",
     "select": "seç",
     "close": "kapat"
+  },
+  "relationships": {
+    "health": "İlişki Durumu",
+    "onTrack": "Yolunda",
+    "good": "İyi",
+    "warning": "Dikkat",
+    "critical": "Kritik"
+  },
+  "quickAction": {
+    "title": "Hızlı Aksiyon Ekle",
+    "descriptionPlaceholder": "Aksiyon açıklaması...",
+    "meeting": "Toplantı",
+    "selectMeeting": "Toplantı seçin",
+    "today": "Bugün",
+    "tomorrow": "Yarın",
+    "nextWeek": "Haftaya",
+    "shortcut": "hızlı aksiyon"
+  },
+  "analytics": {
+    "title": "İstatistikler",
+    "thisMonth": "Bu Ay",
+    "completionRate": "Tamamlama",
+    "avgPerWeek": "Haftalık Ort.",
+    "meetings": "toplantı",
+    "last6Months": "Son 6 Ay",
+    "total": "toplam",
+    "trend": "Trend"
+  },
+  "personStats": {
+    "title": "İstatistikler",
+    "totalMeetings": "Toplam Toplantı",
+    "avgInterval": "Ortalama Aralık",
+    "days": "gün",
+    "actionSuccess": "Aksiyon Başarısı",
+    "lastMeeting": "Son Görüşme",
+    "daysAgo": "gün önce",
+    "relationshipHealth": "İlişki Sağlığı",
+    "onTrack": "Yolunda",
+    "behind": "Geride",
+    "overdue": "Gecikmiş",
+    "neverMet": "Henüz Görüşülmedi"
+  },
+  "shortcuts": {
+    "title": "Klavye Kısayolları",
+    "search": "Arama",
+    "quickAction": "Hızlı Aksiyon",
+    "newMeeting": "Yeni Toplantı",
+    "newPerson": "Yeni Kişi",
+    "help": "Kısayol Yardımı",
+    "closeModal": "Pencereyi Kapat",
+    "tip": "Kısayollar her sayfada aktiftir"
+  },
+  "streak": {
+    "title": "Aktivite",
+    "currentStreak": "Güncel Seri",
+    "longestStreak": "En Uzun Seri",
+    "weeklyGoal": "Haftalık Hedef",
+    "weeklyProgress": "Haftalık İlerleme",
+    "badges": "Rozetler",
+    "viewAll": "Tüm Rozetler",
+    "earned": "Kazanıldı",
+    "locked": "Kilitli",
+    "badgesTitle": "Başarıların",
+    "badgesDesc": "İlerlemeni ve tutarlılığını takip et",
+    "firstMeeting_name": "İlk Adım",
+    "firstMeeting_desc": "İlk toplantını tamamla",
+    "weekStreak_name": "Haftalık Seri",
+    "weekStreak_desc": "7 gün boyunca serini koru",
+    "tenMeetings_name": "10 Toplantı",
+    "tenMeetings_desc": "Toplam 10 toplantı gerçekleştir",
+    "actionHero_name": "Aksiyon Kahramanı",
+    "actionHero_desc": "25 aksiyon maddesini tamamla",
+    "consistent_name": "Tutarlılık",
+    "consistent_desc": "30 gün boyunca serini koru"
+  },
+  "focusMode": {
+    "title": "Odak Modu",
+    "notes": "Notlar",
+    "notesPlaceholder": "Toplantı notlarınızı buraya yazın...",
+    "actions": "Aksiyonlar",
+    "newActionPlaceholder": "Yeni aksiyon ekle...",
+    "completed": "Tamamlanan",
+    "noActions": "Henüz aksiyon eklenmemiş",
+    "exit": "çık",
+    "addAction": "aksiyon ekle",
+    "saveShortcut": "kaydet",
+    "unsavedChanges": "Kaydedilmemiş değişiklikler",
+    "new": "yeni"
+  },
+  "focus": {
+    "title": "Bugün Senden Beklenenler",
+    "subtitle": "Öncelikli görevlerin",
+    "allClear": "Harika gidiyorsun!",
+    "allClearDesc": "Şu an acil bir görevin yok. Harika iş!",
+    "overdueBy": "{{days}} gün gecikti",
+    "schedule": "Planla",
+    "overdue": "Gecikmiş",
+    "today": "Bugün",
+    "noOverduePersons": "Gecikmiş görüşme yok",
+    "noOverdueActions": "Gecikmiş aksiyon yok",
+    "noTodayMeetings": "Bugün planlanmış toplantı yok"
+  },
+  "relationship": {
+    "title": "İlişkilerim",
+    "subtitle": "{{count}} kişi takip ediliyor",
+    "noPeople": "Henüz kimse yok",
+    "addFirst": "İlk kişini ekleyerek başla",
+    "onTrack": "Yolunda",
+    "slightlyBehind": "Biraz geride",
+    "needsAttention": "İlgi bekliyor",
+    "neverMet": "Görüşülmedi",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "daysAgo": "{{days}} gün önce",
+    "scheduled": "Planlandı"
+  },
+  "miniAnalytics": {
+    "thisMonth": "Bu ay toplantı",
+    "completion": "Aksiyon başarısı",
+    "avgMeetings": "Haftalık ortalama",
+    "week": "hafta"
+  },
+  "personDetail": {
+    "meetingSoon": "Görüşme zamanı geldi",
+    "nextTomorrow": "Sonraki: Yarın",
+    "nextInDays": "Sonraki: {{days}} gün içinde",
+    "pendingActions": "{{count}} bekleyen aksiyon",
+    "meetingHistory": "Toplantı Geçmişi ({{count}})",
+    "noMeetings": "Henüz toplantı yok",
+    "noMeetingsDesc": "Bu kişiyle ilk toplantınızı oluşturun"
   }
 }
-

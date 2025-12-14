@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
-
 interface StatsCardProps {
   title: string
   value: string | number
@@ -11,7 +10,6 @@ interface StatsCardProps {
   }
   className?: string
 }
-
 export function StatsCard({ title, value, icon, trend, className }: StatsCardProps) {
   return (
     <motion.div
@@ -40,4 +38,3 @@ export function StatsCard({ title, value, icon, trend, className }: StatsCardPro
     </motion.div>
   )
 }
-

@@ -12,7 +12,9 @@
     "noResults": "No results found",
     "confirm": "Confirm",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "dismiss": "Dismiss",
+    "more": "more"
   },
   "nav": {
     "home": "Home",
@@ -46,7 +48,12 @@
     "createMeetingNote": "Create a meeting note",
     "viewAll": "View all",
     "actions_count": "{{count}} actions",
-    "overdue": "Overdue"
+    "overdue": "Overdue",
+    "needAttention": "Need Attention",
+    "needAttentionDesc": "People you should catch up with",
+    "allCaughtUp": "All caught up!",
+    "noAttentionNeeded": "No one needs attention right now.",
+    "people": "people"
   },
   "persons": {
     "title": "People",
@@ -68,7 +75,18 @@
     "notes": "Notes",
     "notesPlaceholder": "General notes about this person...",
     "deletePerson": "Delete Person",
-    "deleteConfirm": "Are you sure you want to delete this person? This action cannot be undone and all meeting notes will also be deleted."
+    "deleteConfirm": "Are you sure you want to delete this person? This action cannot be undone and all meeting notes will also be deleted.",
+    "meetingFrequency": "Meeting Frequency",
+    "noFrequencyGoal": "No goal set",
+    "weekly": "Weekly",
+    "biweekly": "Biweekly",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "lastMeeting": "Last Meeting",
+    "neverMet": "Never met",
+    "daysAgo": "{{days}} days ago",
+    "overdue": "Overdue",
+    "daysOverdue": "{{days}} days overdue"
   },
   "meetings": {
     "title": "Meetings",
@@ -88,7 +106,15 @@
     "notes": "Notes",
     "notesPlaceholder": "Meeting notes...",
     "deleteMeeting": "Delete Meeting",
-    "deleteConfirm": "Are you sure you want to delete this meeting? This action cannot be undone."
+    "deleteConfirm": "Are you sure you want to delete this meeting? This action cannot be undone.",
+    "prepSection": "From Last Meeting",
+    "pendingFromLast": "{{count}} pending actions",
+    "topicsFromLast": "Topics to discuss:",
+    "carryOver": "Add to Notes",
+    "fromLastMeeting": "From Last Meeting",
+    "nextTopics": "For Next Meeting",
+    "nextTopicsPlaceholder": "Topics to discuss in the next meeting...",
+    "noNextTopics": "No topics added for the next meeting yet."
   },
   "actions": {
     "title": "Actions",
@@ -139,8 +165,18 @@
     "importButton": "Import Data",
     "exportSuccess": "Data exported successfully!",
     "importSuccess": "Data imported successfully!",
-    "importWarning": "Warning: Importing will delete all existing data and replace with the backup file. This action cannot be undone.",
+    "importWarning": "This will replace all your current data with the backup file. This action cannot be undone. Are you sure you want to continue?",
     "continue": "Continue",
+    "dangerZone": "Danger Zone",
+    "dangerZoneDesc": "Be careful, these actions are irreversible.",
+    "resetData": "Factory Reset",
+    "resetDataDesc": "Permanently delete all persons, meetings, and notes.",
+    "resetButton": "Reset Data",
+    "resetConfirmTitle": "Delete All Data?",
+    "resetConfirmDesc": "This action cannot be undone. This will permanently delete all data from your database.",
+    "resetWarning": "This will DELETE all your persons, meetings, action items, and custom templates. Default templates will be restored.",
+    "confirmReset": "Yes, delete everything",
+    "resetSuccess": "Values reset successfully.",
     "about": "About",
     "version": "Version",
     "dataLocation": "Data Location",
@@ -148,7 +184,14 @@
     "language": "Language",
     "languageDesc": "Choose your preferred language",
     "english": "English",
-    "turkish": "Turkish"
+    "turkish": "Turkish",
+    "notifications": "Notifications",
+    "notificationsDesc": "Meeting and action reminders",
+    "enableNotifications": "Enable notifications",
+    "meetingReminders": "Meeting reminders",
+    "actionReminders": "Action reminders",
+    "testNotification": "Send Test Notification",
+    "notificationSent": "Test notification sent!"
   },
   "search": {
     "placeholder": "Search people or meetings...",
@@ -158,6 +201,135 @@
     "navigate": "navigate",
     "select": "select",
     "close": "close"
+  },
+  "relationships": {
+    "health": "Relationship Health",
+    "onTrack": "On track",
+    "good": "Good",
+    "warning": "Warning",
+    "critical": "Critical"
+  },
+  "quickAction": {
+    "title": "Quick Action",
+    "descriptionPlaceholder": "Action description...",
+    "meeting": "Meeting",
+    "selectMeeting": "Select meeting",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "nextWeek": "Next Week",
+    "shortcut": "quick action"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "thisMonth": "This Month",
+    "completionRate": "Completion",
+    "avgPerWeek": "Avg per Week",
+    "meetings": "meetings",
+    "last6Months": "Last 6 Months",
+    "total": "total",
+    "trend": "Trend"
+  },
+  "personStats": {
+    "title": "Statistics",
+    "totalMeetings": "Total Meetings",
+    "avgInterval": "Avg Interval",
+    "days": "days",
+    "actionSuccess": "Action Success",
+    "lastMeeting": "Last Meeting",
+    "daysAgo": "days ago",
+    "relationshipHealth": "Relationship Health",
+    "onTrack": "On Track",
+    "behind": "Behind",
+    "overdue": "Overdue",
+    "neverMet": "Never Met"
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "search": "Search",
+    "quickAction": "Quick Action",
+    "newMeeting": "New Meeting",
+    "newPerson": "New Person",
+    "help": "Shortcuts Help",
+    "closeModal": "Close Modal",
+    "tip": "Shortcuts are active on all pages"
+  },
+  "streak": {
+    "title": "Activity",
+    "currentStreak": "Current Streak",
+    "longestStreak": "Longest Streak",
+    "weeklyGoal": "Weekly Goal",
+    "weeklyProgress": "Weekly Progress",
+    "badges": "Badges",
+    "viewAll": "View All Badges",
+    "earned": "Earned",
+    "locked": "Locked",
+    "badgesTitle": "Your Achievements",
+    "badgesDesc": "Track your progress and consistency",
+    "firstMeeting_name": "First Step",
+    "firstMeeting_desc": "Complete your first meeting",
+    "weekStreak_name": "Weekly Streak",
+    "weekStreak_desc": "Maintain a streak for 7 days",
+    "tenMeetings_name": "10 Meetings",
+    "tenMeetings_desc": "Conduct 10 meetings in total",
+    "actionHero_name": "Action Hero",
+    "actionHero_desc": "Complete 25 action items",
+    "consistent_name": "Consistency",
+    "consistent_desc": "Maintain a streak for 30 days"
+  },
+  "focusMode": {
+    "title": "Focus Mode",
+    "notes": "Notes",
+    "notesPlaceholder": "Write your meeting notes here...",
+    "actions": "Actions",
+    "newActionPlaceholder": "Add new action...",
+    "completed": "Completed",
+    "noActions": "No actions added yet",
+    "exit": "exit",
+    "addAction": "add action",
+    "saveShortcut": "save",
+    "unsavedChanges": "Unsaved changes",
+    "new": "new"
+  },
+  "focus": {
+    "title": "Today's Focus",
+    "subtitle": "Your priority tasks",
+    "allClear": "You're doing great!",
+    "allClearDesc": "No urgent tasks right now. Great job!",
+    "overdueBy": "{{days}} days overdue",
+    "schedule": "Schedule",
+    "overdue": "Overdue",
+    "today": "Today",
+    "noOverduePersons": "No overdue meetings",
+    "noOverdueActions": "No overdue actions",
+    "noTodayMeetings": "No meetings scheduled today"
+  },
+  "relationship": {
+    "title": "My Relationships",
+    "subtitle": "Tracking {{count}} people",
+    "noPeople": "No one yet",
+    "addFirst": "Add your first person to get started",
+    "onTrack": "On track",
+    "slightlyBehind": "Slightly behind",
+    "needsAttention": "Needs attention",
+    "neverMet": "Never met",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{days}} days ago",
+    "scheduled": "Scheduled"
+  },
+  "miniAnalytics": {
+    "thisMonth": "Meetings this month",
+    "completion": "Action success",
+    "avgMeetings": "Weekly average",
+    "week": "week"
+  },
+  "personDetail": {
+    "meetingSoon": "Meeting time!",
+    "nextTomorrow": "Next: Tomorrow",
+    "nextInDays": "Next: in {{days}} days",
+    "pendingActions": "{{count}} pending actions",
+    "meetingHistory": "Meeting History ({{count}})",
+    "noMeetings": "No meetings yet",
+    "noMeetingsDesc": "Create your first meeting with this person"
   }
 }
-

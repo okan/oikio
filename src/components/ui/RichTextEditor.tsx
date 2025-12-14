@@ -4,7 +4,6 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { Bold, Italic, List, ListOrdered, Heading2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEffect } from 'react'
-
 interface RichTextEditorProps {
   label?: string
   placeholder?: string
@@ -12,7 +11,6 @@ interface RichTextEditorProps {
   onChange: (value: string) => void
   error?: string
 }
-
 function ToolbarButton({
   onClick,
   isActive,
@@ -40,7 +38,6 @@ function ToolbarButton({
     </button>
   )
 }
-
 export function RichTextEditor({
   label,
   placeholder = 'Yazmaya başlayın...',
@@ -61,9 +58,7 @@ export function RichTextEditor({
     ],
     content: value,
     onUpdate: ({ editor }) => {
-      // Get markdown-like content
       const html = editor.getHTML()
-      // Convert to simple markdown
       const markdown = htmlToMarkdown(html)
       onChange(markdown)
     },
@@ -73,18 +68,14 @@ export function RichTextEditor({
       },
     },
   })
-
-  // Update editor when value changes externally (e.g., template selection)
   useEffect(() => {
     if (editor && value !== htmlToMarkdown(editor.getHTML())) {
       editor.commands.setContent(markdownToHtml(value))
     }
   }, [value, editor])
-
   if (!editor) {
     return null
   }
-
   return (
     <div className="space-y-1.5">
       {label && <label className="label">{label}</label>}
@@ -96,7 +87,7 @@ export function RichTextEditor({
           error && 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/20'
         )}
       >
-        {/* Toolbar */}
+        { }
         <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-slate-200 bg-slate-50">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -135,16 +126,13 @@ export function RichTextEditor({
             <ListOrdered className="w-4 h-4" />
           </ToolbarButton>
         </div>
-
-        {/* Editor */}
+        { }
         <EditorContent editor={editor} />
       </div>
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   )
 }
-
-// Simple HTML to Markdown converter
 function htmlToMarkdown(html: string): string {
   return html
     .replace(/<h2>(.*?)<\/h2>/g, '## $1\n')
@@ -163,11 +151,8 @@ function htmlToMarkdown(html: string): string {
     .replace(/\n\n+/g, '\n\n')
     .trim()
 }
-
-// Simple Markdown to HTML converter
 function markdownToHtml(markdown: string): string {
   if (!markdown) return ''
-  
   return markdown
     .split('\n')
     .map((line) => {
@@ -190,4 +175,3 @@ function markdownToHtml(markdown: string): string {
     })
     .join('')
 }
-

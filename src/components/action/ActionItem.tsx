@@ -1,10 +1,10 @@
+import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Clock, Trash2 } from 'lucide-react'
 import type { ActionItem as ActionItemType } from '@/types'
 import { Checkbox, Badge } from '@/components/ui'
 import { getRelativeTime, isOverdue } from '@/lib/utils'
-
 interface ActionItemProps {
   action: ActionItemType
   onToggle: () => void
@@ -12,8 +12,7 @@ interface ActionItemProps {
   showMeeting?: boolean
   index?: number
 }
-
-export function ActionItem({
+export const ActionItem = memo(function ActionItem({
   action,
   onToggle,
   onDelete,
@@ -21,7 +20,14 @@ export function ActionItem({
   index = 0,
 }: ActionItemProps) {
   const { t } = useTranslation()
-
+  const isActionOverdue = useMemo(
+    () => action.dueDate && isOverdue(action.dueDate) && !action.completed,
+    [action.dueDate, action.completed]
+  )
+  const relativeTime = useMemo(
+    () => action.dueDate ? getRelativeTime(action.dueDate) : null,
+    [action.dueDate]
+  )
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -30,7 +36,11 @@ export function ActionItem({
       transition={{ delay: index * 0.05 }}
       className="card p-4 flex items-start gap-3 group"
     >
-      <Checkbox checked={action.completed} onCheckedChange={onToggle} />
+      <Checkbox
+        checked={action.completed}
+        onCheckedChange={onToggle}
+        className="mt-0.5"
+      />
       <div className="flex-1 min-w-0">
         <p
           className={`text-sm ${action.completed ? 'line-through text-slate-400' : 'text-slate-900'}`}
@@ -47,24 +57,20 @@ export function ActionItem({
               <span className="text-xs text-slate-500">{action.assignee}</span>
             </>
           )}
-          {action.dueDate && (
+          {relativeTime && (
             <>
               <span className="text-slate-300">•</span>
               <span
-                className={`text-xs flex items-center gap-1 ${
-                  isOverdue(action.dueDate) && !action.completed
-                    ? 'text-red-500'
-                    : 'text-slate-500'
-                }`}
+                className={`text-xs flex items-center gap-1 ${isActionOverdue ? 'text-red-500' : 'text-slate-500'}`}
               >
                 <Clock className="w-3 h-3" />
-                {getRelativeTime(action.dueDate)}
+                {relativeTime}
               </span>
             </>
           )}
         </div>
       </div>
-      {action.dueDate && isOverdue(action.dueDate) && !action.completed && (
+      {isActionOverdue && (
         <Badge variant="error">{t('dashboard.overdue')}</Badge>
       )}
       <button
@@ -75,4 +81,4 @@ export function ActionItem({
       </button>
     </motion.div>
   )
-}
+})

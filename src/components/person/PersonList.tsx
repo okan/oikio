@@ -1,17 +1,15 @@
 import { useTranslation } from 'react-i18next'
 import { Users } from 'lucide-react'
-import type { Person } from '@/types'
+import type { Person, Meeting } from '@/types'
 import { EmptyState, Button } from '@/components/ui'
 import { PersonCard } from './PersonCard'
-
 interface PersonListProps {
   persons: Person[]
   onAddClick: () => void
+  futureMeetings?: Meeting[]
 }
-
-export function PersonList({ persons, onAddClick }: PersonListProps) {
+export function PersonList({ persons, onAddClick, futureMeetings = [] }: PersonListProps) {
   const { t } = useTranslation()
-
   if (persons.length === 0) {
     return (
       <EmptyState
@@ -22,11 +20,21 @@ export function PersonList({ persons, onAddClick }: PersonListProps) {
       />
     )
   }
-
   return (
     <div className="space-y-3">
       {persons.map((person, index) => (
-        <PersonCard key={person.id} person={person} index={index} />
+        <PersonCard
+          key={person.id}
+          person={person}
+          index={index}
+          futureMeeting={futureMeetings.find(m => {
+            const meetingDate = new Date(m.date)
+            meetingDate.setHours(0, 0, 0, 0)
+            const today = new Date()
+            today.setHours(0, 0, 0, 0)
+            return m.personId === person.id && meetingDate > today
+          })}
+        />
       ))}
     </div>
   )

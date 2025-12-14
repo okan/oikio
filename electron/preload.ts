@@ -1,10 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type { Person, Meeting, ActionItem, Template, DashboardStats } from '../src/types'
-
-// Expose protected methods that allow the renderer process to use
-// the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('api', {
-  // Person operations
   persons: {
     getAll: (): Promise<Person[]> => ipcRenderer.invoke('db:persons:getAll'),
     getById: (id: number): Promise<Person | null> => ipcRenderer.invoke('db:persons:getById', id),
@@ -13,9 +9,8 @@ contextBridge.exposeInMainWorld('api', {
     update: (id: number, data: Partial<Person>): Promise<Person> =>
       ipcRenderer.invoke('db:persons:update', id, data),
     delete: (id: number): Promise<void> => ipcRenderer.invoke('db:persons:delete', id),
+    getNeedingAttention: (): Promise<Person[]> => ipcRenderer.invoke('db:persons:needingAttention'),
   },
-
-  // Meeting operations
   meetings: {
     getAll: (): Promise<Meeting[]> => ipcRenderer.invoke('db:meetings:getAll'),
     getByPerson: (personId: number): Promise<Meeting[]> =>
@@ -31,8 +26,6 @@ contextBridge.exposeInMainWorld('api', {
     getRecent: (limit: number): Promise<Meeting[]> =>
       ipcRenderer.invoke('db:meetings:getRecent', limit),
   },
-
-  // Action item operations
   actions: {
     getAll: (): Promise<ActionItem[]> => ipcRenderer.invoke('db:actions:getAll'),
     getByMeeting: (meetingId: number): Promise<ActionItem[]> =>
@@ -46,8 +39,6 @@ contextBridge.exposeInMainWorld('api', {
     toggleComplete: (id: number): Promise<ActionItem> =>
       ipcRenderer.invoke('db:actions:toggleComplete', id),
   },
-
-  // Template operations
   templates: {
     getAll: (): Promise<Template[]> => ipcRenderer.invoke('db:templates:getAll'),
     getById: (id: number): Promise<Template | null> =>
@@ -58,20 +49,20 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.invoke('db:templates:update', id, data),
     delete: (id: number): Promise<void> => ipcRenderer.invoke('db:templates:delete', id),
   },
-
-  // Stats
   stats: {
     getDashboard: (): Promise<DashboardStats> => ipcRenderer.invoke('db:stats:getDashboard'),
   },
-
-  // Export/Import
   data: {
     export: (): Promise<string> => ipcRenderer.invoke('db:export'),
     import: (data: string): Promise<void> => ipcRenderer.invoke('db:import', data),
+    reset: (): Promise<void> => ipcRenderer.invoke('db:reset'),
   },
-
-  // Search
   search: (query: string): Promise<{ persons: Person[]; meetings: Meeting[] }> =>
     ipcRenderer.invoke('db:search', query),
+  notifications: {
+    getSettings: () => ipcRenderer.invoke('notifications:getSettings'),
+    updateSettings: (settings: Record<string, unknown>) =>
+      ipcRenderer.invoke('notifications:updateSettings', settings),
+    test: () => ipcRenderer.invoke('notifications:test'),
+  },
 })
-

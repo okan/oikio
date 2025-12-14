@@ -1,7 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
 interface ModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -10,7 +9,6 @@ interface ModalProps {
   children: React.ReactNode
   className?: string
 }
-
 export function Modal({ open, onOpenChange, title, description, children, className }: ModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>

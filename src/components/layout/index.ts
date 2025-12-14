@@ -2,4 +2,5 @@ export { Layout } from './Layout'
 export { Sidebar } from './Sidebar'
 export { Header } from './Header'
 export { SearchModal } from './SearchModal'
-
+export { QuickActionModal } from './QuickActionModal'
+export { KeyboardShortcutsHelp } from './KeyboardShortcutsHelp'

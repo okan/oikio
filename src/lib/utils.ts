@@ -1,10 +1,8 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-
 export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
   const d = typeof date === 'string' ? new Date(date) : date
   return d.toLocaleDateString('tr-TR', {
@@ -14,7 +12,6 @@ export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOpt
     ...options,
   })
 }
-
 export function formatDateShort(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
   return d.toLocaleDateString('tr-TR', {
@@ -22,7 +19,6 @@ export function formatDateShort(date: string | Date): string {
     day: 'numeric',
   })
 }
-
 export function formatDateTime(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
   return d.toLocaleDateString('tr-TR', {
@@ -33,38 +29,31 @@ export function formatDateTime(date: string | Date): string {
     minute: '2-digit',
   })
 }
-
 export function getRelativeTime(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
   const now = new Date()
   const diffInMs = d.getTime() - now.getTime()
   const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24))
-
   if (diffInDays === 0) return 'Bugün'
   if (diffInDays === 1) return 'Yarın'
   if (diffInDays === -1) return 'Dün'
   if (diffInDays > 0 && diffInDays <= 7) return `${diffInDays} gün sonra`
   if (diffInDays < 0 && diffInDays >= -7) return `${Math.abs(diffInDays)} gün önce`
-
   return formatDateShort(d)
 }
-
 export function isOverdue(date: string | Date): boolean {
   const d = typeof date === 'string' ? new Date(date) : date
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   return d < today
 }
-
 export function toInputDate(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
   return d.toISOString().split('T')[0]
 }
-
 export function getRoleLabel(role: 'manager' | 'teammate'): string {
   return role === 'manager' ? 'Yönetici' : 'Ekip Arkadaşı'
 }
-
 export function getInitials(name: string): string {
   return name
     .split(' ')
@@ -73,4 +62,28 @@ export function getInitials(name: string): string {
     .toUpperCase()
     .slice(0, 2)
 }
-
+export function formatMeetingTitle(title: string | undefined, date: string, locale: string = 'tr'): string {
+  if (title) return title
+  const d = new Date(date)
+  return d.toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    weekday: 'long',
+  })
+}
+export function stripMarkdown(text: string): string {
+  if (!text) return ''
+  return text
+    .replace(/#{1,6}\s?/g, '')  
+    .replace(/(\*\*|__)(.*?)\1/g, '$2')  
+    .replace(/(\*|_)(.*?)\1/g, '$2')  
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')  
+    .replace(/`{3}[\s\S]*?`{3}/g, '')  
+    .replace(/`([^`]+)`/g, '$1')  
+    .replace(/^\s*[-+*]\s/gm, '')  
+    .replace(/^\s*\d+\.\s/gm, '')  
+    .replace(/\n/g, ' ')  
+    .replace(/\s+/g, ' ')  
+    .trim()
+}

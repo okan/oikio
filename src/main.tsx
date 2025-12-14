@@ -4,7 +4,6 @@ import { HashRouter } from 'react-router-dom'
 import App from './App'
 import './i18n'
 import './styles/globals.css'
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
@@ -12,4 +11,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </HashRouter>
   </React.StrictMode>
 )
-

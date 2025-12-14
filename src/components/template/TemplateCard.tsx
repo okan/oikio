@@ -3,17 +3,14 @@ import { motion } from 'framer-motion'
 import { FileText, Edit2, Trash2 } from 'lucide-react'
 import type { Template } from '@/types'
 import { Badge } from '@/components/ui'
-
 interface TemplateCardProps {
   template: Template
   onEdit: () => void
   onDelete: () => void
   index?: number
 }
-
 export function TemplateCard({ template, onEdit, onDelete, index = 0 }: TemplateCardProps) {
   const { t } = useTranslation()
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -42,14 +39,12 @@ export function TemplateCard({ template, onEdit, onDelete, index = 0 }: Template
           >
             <Edit2 className="w-4 h-4" />
           </button>
-          {!template.isDefault && (
-            <button
-              onClick={onDelete}
-              className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          )}
+          <button
+            onClick={onDelete}
+            className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </motion.div>

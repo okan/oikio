@@ -1,7 +1,6 @@
 import { forwardRef } from 'react'
 import { Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
   size?: 'sm' | 'md' | 'lg'
@@ -9,7 +8,6 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
 }
-
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -31,13 +29,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ghost: 'btn-ghost',
       danger: 'btn-danger',
     }
-
     const sizes = {
       sm: 'px-3 py-1.5 text-xs',
       md: 'px-4 py-2 text-sm',
       lg: 'px-6 py-3 text-base',
     }
-
     return (
       <button
         ref={ref}
@@ -61,5 +57,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     )
   }
 )
-
 Button.displayName = 'Button'

@@ -5,24 +5,19 @@ import { useActionStore } from '@/store'
 import { Header } from '@/components/layout'
 import { ActionList } from '@/components/action'
 import { cn } from '@/lib/utils'
-
 export function Actions() {
   const { t } = useTranslation()
   const { actions, pendingActions, fetchActions, fetchPendingActions, toggleComplete, deleteAction } =
     useActionStore()
   const [activeTab, setActiveTab] = useState('pending')
-
   useEffect(() => {
     fetchActions()
     fetchPendingActions()
   }, [fetchActions, fetchPendingActions])
-
   const completedActions = actions.filter((a) => a.completed)
-
   return (
     <div className="space-y-6">
       <Header title={t('actions.title')} description={t('actions.description')} />
-
       <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
         <Tabs.List className="flex gap-2 border-b border-slate-200 pb-2">
           <Tabs.Trigger
@@ -59,7 +54,6 @@ export function Actions() {
             {t('actions.all')} ({actions.length})
           </Tabs.Trigger>
         </Tabs.List>
-
         <Tabs.Content value="pending" className="pt-6">
           <ActionList
             actions={pendingActions}
@@ -70,7 +64,6 @@ export function Actions() {
             emptyDescription={t('actions.noPendingDesc')}
           />
         </Tabs.Content>
-
         <Tabs.Content value="completed" className="pt-6">
           <ActionList
             actions={completedActions}
@@ -81,7 +74,6 @@ export function Actions() {
             emptyDescription={t('actions.noCompletedDesc')}
           />
         </Tabs.Content>
-
         <Tabs.Content value="all" className="pt-6">
           <ActionList
             actions={actions}
@@ -96,3 +88,4 @@ export function Actions() {
     </div>
   )
 }
+export default Actions

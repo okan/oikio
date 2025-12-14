@@ -3,21 +3,15 @@ import { motion } from 'framer-motion'
 import { Calendar, ChevronRight, CheckCircle2 } from 'lucide-react'
 import type { Meeting } from '@/types'
 import { formatDate } from '@/lib/utils'
-
 interface MeetingCardProps {
   meeting: Meeting
   index?: number
   showPerson?: boolean
 }
-
 export function MeetingCard({ meeting, index = 0, showPerson = true }: MeetingCardProps) {
   const navigate = useNavigate()
-
-  // Başlık yoksa tarihi kullan
   const displayTitle = meeting.title || formatDate(meeting.date)
-
   const hasActions = meeting.actionStats && meeting.actionStats.total > 0
-
   return (
     <motion.button
       initial={{ opacity: 0, y: 10 }}

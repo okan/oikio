@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { Plus } from 'lucide-react'
 import { Button, Input } from '@/components/ui'
 import { toInputDate } from '@/lib/utils'
-
 interface ActionFormProps {
   onSubmit: (data: { description: string; assignee?: string; dueDate?: string }) => Promise<void>
 }
-
 export function ActionForm({ onSubmit }: ActionFormProps) {
   const { t } = useTranslation()
   const [description, setDescription] = useState('')
@@ -15,11 +13,9 @@ export function ActionForm({ onSubmit }: ActionFormProps) {
   const [dueDate, setDueDate] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!description.trim()) return
-
     setIsSubmitting(true)
     try {
       await onSubmit({
@@ -37,7 +33,6 @@ export function ActionForm({ onSubmit }: ActionFormProps) {
       setIsSubmitting(false)
     }
   }
-
   if (!isExpanded) {
     return (
       <button
@@ -49,7 +44,6 @@ export function ActionForm({ onSubmit }: ActionFormProps) {
       </button>
     )
   }
-
   return (
     <form onSubmit={handleSubmit} className="card p-4 space-y-3">
       <Input

@@ -3,16 +3,13 @@ import { Calendar } from 'lucide-react'
 import type { Meeting } from '@/types'
 import { EmptyState, Button } from '@/components/ui'
 import { MeetingCard } from './MeetingCard'
-
 interface MeetingListProps {
   meetings: Meeting[]
   onAddClick: () => void
   showPerson?: boolean
 }
-
 export function MeetingList({ meetings, onAddClick, showPerson = true }: MeetingListProps) {
   const { t } = useTranslation()
-
   if (meetings.length === 0) {
     return (
       <EmptyState
@@ -23,7 +20,6 @@ export function MeetingList({ meetings, onAddClick, showPerson = true }: Meeting
       />
     )
   }
-
   return (
     <div className="space-y-3">
       {meetings.map((meeting, index) => (

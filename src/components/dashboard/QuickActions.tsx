@@ -2,11 +2,9 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { UserPlus, CalendarPlus } from 'lucide-react'
-
 export function QuickActions() {
   const navigate = useNavigate()
   const { t } = useTranslation()
-
   const actions = [
     {
       icon: UserPlus,
@@ -23,7 +21,6 @@ export function QuickActions() {
       color: 'bg-primary-500',
     },
   ]
-
   return (
     <div className="grid grid-cols-2 gap-4">
       {actions.map((action, index) => (

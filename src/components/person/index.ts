@@ -1,4 +1,7 @@
 export { PersonCard } from './PersonCard'
 export { PersonForm } from './PersonForm'
 export { PersonList } from './PersonList'
-
+export { PersonStatsCard } from './PersonStatsCard'
+export { PersonDetailHeader } from './PersonDetailHeader'
+export { PersonPendingActions } from './PersonPendingActions'
+export { PersonMeetingTimeline } from './PersonMeetingTimeline'
