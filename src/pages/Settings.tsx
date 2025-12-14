@@ -276,7 +276,7 @@ export function Settings() {
         </div>
         <div className="space-y-2 text-sm text-slate-600">
           <p>
-            <span className="font-medium">{t('settings.version')}:</span> 1.0.0
+            <span className="font-medium">{t('settings.version')}:</span> {__APP_VERSION__}
           </p>
           <p>
             <span className="font-medium">{t('settings.dataLocation')}:</span> ~/Library/Application Support/oikio/

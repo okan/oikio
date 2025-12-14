@@ -9,17 +9,21 @@ A local-first desktop application for managing 1-1 meeting notes with your manag
 - **Action Items** – Track follow-ups and to-dos from your meetings
 - **Templates** – Create reusable meeting templates
 - **Dashboard** – Overview of upcoming meetings and pending actions
+- **Notifications** - Meeting and action item reminders
+- **Data Management** - Export/Import your data (JSON backup)
 - **Multi-language** – English and Turkish support
-- **Local-first** – All data stays on your machine, no cloud sync
+- **Local-first** – All data stays on your machine (JSON file storage), no cloud sync
 
 ## Tech Stack
 
 - Electron + React 18
 - TypeScript
+- Vite
 - TailwindCSS + Radix UI
+- Framer Motion
 - Zustand (state management)
 - TipTap (rich text editor)
-- JSON file storage
+- i18next (internationalization)
 
 ## Getting Started
 
@@ -27,14 +31,28 @@ A local-first desktop application for managing 1-1 meeting notes with your manag
 # Install dependencies
 npm install
 
-# Run in development
+# Run in development (concurrently runs Vite and Electron)
+npm run electron:dev
+
+# Run just the Vite dev server (web mode)
 npm run dev
+
+# Lint code
+npm run lint
+
+# Format code
+npm run format
 
 # Build for production
 npm run build
 ```
 
+## Structure
+
+- `src/` - React application source code
+- `electron/` - Electron main and preload scripts
+- `dist-electron/` - Compiled Electron scripts
+
 ## License
 
 MIT
-
