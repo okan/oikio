@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Trash2 } from 'lucide-react'
@@ -27,13 +27,13 @@ export function PersonDetail() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editingMeeting, setEditingMeeting] = useState<Meeting | null>(null)
   const [futureMeetings, setFutureMeetings] = useState<Meeting[]>([])
-  const loadActions = async () => {
+  const loadActions = useCallback(async () => {
     if (!id) return
     const allActions = await window.api.actions.getAll()
     const meetingIds = meetings.map((m) => m.id)
     const personActions = allActions.filter((a) => meetingIds.includes(a.meetingId))
     setActions(personActions)
-  }
+  }, [id, meetings])
   useEffect(() => {
     const loadData = async () => {
       if (!id) return
@@ -59,7 +59,7 @@ export function PersonDetail() {
     if (meetings.length > 0) {
       loadActions()
     }
-  }, [meetings])
+  }, [meetings, loadActions])
   useEffect(() => {
     if (id && persons.length > 0) {
       const foundPerson = persons.find((p) => p.id === parseInt(id))
@@ -85,7 +85,7 @@ export function PersonDetail() {
     }
     const updatedMeetings = await fetchMeetingsByPerson(person.id)
     setMeetings(updatedMeetings)
-    await fetchPersons()  
+    await fetchPersons()
   }
   const handleNewMeeting = () => {
     setEditingMeeting(null)

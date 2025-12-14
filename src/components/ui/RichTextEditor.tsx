@@ -166,7 +166,7 @@ function markdownToHtml(markdown: string): string {
         return `<ol><li><p>${line.replace(/^\d+\. /, '')}</p></li></ol>`
       }
       if (line.trim()) {
-        let processed = line
+        const processed = line
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
           .replace(/\*(.*?)\*/g, '<em>$1</em>')
         return `<p>${processed}</p>`

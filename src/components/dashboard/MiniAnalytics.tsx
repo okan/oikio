@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { TrendingUp, TrendingDown, Minus, Calendar, CheckCircle, Target } from 'lucide-react'
-import type { Meeting as _Meeting, ActionItem as _ActionItem } from '@/types'
+
 import { calculateOverallAnalytics, type OverallAnalytics } from '@/lib/analytics'
 export function MiniAnalytics() {
   const { t } = useTranslation()
@@ -41,20 +41,20 @@ export function MiniAnalytics() {
     analytics.meetingsTrend > 0
       ? TrendingUp
       : analytics.meetingsTrend < 0
-      ? TrendingDown
-      : Minus
+        ? TrendingDown
+        : Minus
   const trendColor =
     analytics.meetingsTrend > 0
       ? 'text-green-600'
       : analytics.meetingsTrend < 0
-      ? 'text-red-600'
-      : 'text-slate-500'
+        ? 'text-red-600'
+        : 'text-slate-500'
   const completionColor =
     analytics.actionCompletionRate >= 80
       ? 'text-green-600'
       : analytics.actionCompletionRate >= 50
-      ? 'text-amber-600'
-      : 'text-red-600'
+        ? 'text-amber-600'
+        : 'text-red-600'
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}

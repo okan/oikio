@@ -33,7 +33,8 @@ function calculateStreakData(meetings: Meeting[], actions: ActionItem[]): Streak
     }
   })
   let currentStreak = 0
-  let checkDate = new Date(today)
+  const checkDate = new Date(today)
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const dateStr = checkDate.toISOString().split('T')[0]
     if (activityDays.has(dateStr)) {
@@ -61,7 +62,7 @@ function calculateStreakData(meetings: Meeting[], actions: ActionItem[]): Streak
   }
   longestStreak = Math.max(longestStreak, tempStreak)
   const weekStart = new Date(today)
-  weekStart.setDate(today.getDate() - today.getDay())  
+  weekStart.setDate(today.getDate() - today.getDay())
   const weeklyMeetings = meetings.filter((m) => {
     const date = new Date(m.createdAt)
     return date >= weekStart && date <= today
@@ -113,7 +114,7 @@ function calculateStreakData(meetings: Meeting[], actions: ActionItem[]): Streak
     longestStreak,
     weeklyMeetings,
     weeklyActions,
-    weeklyGoal: 3,  
+    weeklyGoal: 3,
     badges,
   }
 }

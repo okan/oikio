@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { BarChart3, TrendingUp, TrendingDown, Minus, CheckCircle, Calendar } from 'lucide-react'
-import type { Meeting as _Meeting, ActionItem as _ActionItem } from '@/types'
+
 import {
   calculateOverallAnalytics,
   formatTrend,
@@ -45,8 +45,8 @@ export function AnalyticsWidget() {
     analytics.meetingsTrend > 0
       ? TrendingUp
       : analytics.meetingsTrend < 0
-      ? TrendingDown
-      : Minus
+        ? TrendingDown
+        : Minus
   const maxMeetings = Math.max(...analytics.monthlyStats.map((s) => s.meetingsCount), 1)
   const barHeights = analytics.monthlyStats.map((s) =>
     Math.max(4, Math.round((s.meetingsCount / maxMeetings) * 60))

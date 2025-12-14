@@ -17,7 +17,7 @@ function calculateStreakData(meetings: Meeting[], actions: ActionItem[]): Streak
   today.setHours(0, 0, 0, 0)
   const activityDays = new Set<string>()
   meetings.forEach((m) => {
-    const meetingDate = new Date(m.date)  
+    const meetingDate = new Date(m.date)
     if (meetingDate > today) return
     const date = meetingDate.toISOString().split('T')[0]
     activityDays.add(date)
@@ -29,7 +29,8 @@ function calculateStreakData(meetings: Meeting[], actions: ActionItem[]): Streak
     }
   })
   let currentStreak = 0
-  let checkDate = new Date(today)
+  const checkDate = new Date(today)
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const dateStr = checkDate.toISOString().split('T')[0]
     if (activityDays.has(dateStr)) {
