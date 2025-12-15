@@ -39,10 +39,6 @@ function initializeServices(): void {
   registerAllHandlers(db, notificationService)
 }
 app.whenReady().then(() => {
-  if (process.platform === 'darwin' && app.dock) {
-    const iconPath = path.join(app.getAppPath(), 'build/icon.png')
-    app.dock.setIcon(iconPath)
-  }
   initializeServices()
   createWindow()
 })
