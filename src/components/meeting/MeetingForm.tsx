@@ -49,7 +49,7 @@ export function MeetingForm({
           setLastMeetingContext(null)
           return
         }
-        const lastMeeting = meetings[0]  
+        const lastMeeting = meetings[0]
         const actions = await window.api.actions.getByMeeting(lastMeeting.id)
         const pendingActions = actions.filter((a) => !a.completed)
         setLastMeetingContext({
@@ -134,7 +134,7 @@ export function MeetingForm({
       setNotes((prev) => carryOverText + prev)
     }
   }
-  const hasContext = lastMeetingContext && 
+  const hasContext = lastMeetingContext &&
     (lastMeetingContext.pendingActions.length > 0 || lastMeetingContext.nextTopics)
   return (
     <Modal
@@ -160,7 +160,6 @@ export function MeetingForm({
             error={errors.date}
           />
         </div>
-        { }
         {!meeting && hasContext && showPrepSection && (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
             <div className="flex items-center justify-between">
@@ -205,9 +204,9 @@ export function MeetingForm({
                 <p className="text-sm text-amber-700 pl-6 line-clamp-2">
                   {lastMeetingContext.nextTopics}
                 </p>
-                <Button 
-                  type="button" 
-                  variant="ghost" 
+                <Button
+                  type="button"
+                  variant="ghost"
                   size="sm"
                   onClick={handleCarryOverTopics}
                   className="ml-6 text-amber-700 hover:text-amber-900"

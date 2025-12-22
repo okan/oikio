@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('api', {
     getByMeeting: (meetingId: number): Promise<ActionItem[]> =>
       ipcRenderer.invoke('db:actions:getByMeeting', meetingId),
     getPending: (): Promise<ActionItem[]> => ipcRenderer.invoke('db:actions:getPending'),
+    getAllTags: (): Promise<string[]> => ipcRenderer.invoke('db:actions:getAllTags'),
     create: (data: Omit<ActionItem, 'id' | 'createdAt'>): Promise<ActionItem> =>
       ipcRenderer.invoke('db:actions:create', data),
     update: (id: number, data: Partial<ActionItem>): Promise<ActionItem> =>
@@ -57,7 +58,7 @@ contextBridge.exposeInMainWorld('api', {
     import: (data: string): Promise<void> => ipcRenderer.invoke('db:import', data),
     reset: (): Promise<void> => ipcRenderer.invoke('db:reset'),
   },
-  search: (query: string): Promise<{ persons: Person[]; meetings: Meeting[] }> =>
+  search: (query: string): Promise<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }> =>
     ipcRenderer.invoke('db:search', query),
   notifications: {
     getSettings: () => ipcRenderer.invoke('notifications:getSettings'),

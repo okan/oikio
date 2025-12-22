@@ -73,13 +73,11 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
       <div className="divide-y divide-slate-100">
         {Object.entries(groupedMeetings).map(([monthKey, monthMeetings]) => (
           <div key={monthKey}>
-            { }
             <div className="px-4 py-2 bg-slate-50 sticky top-0">
               <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
                 {formatMonthYear(monthKey)}
               </span>
             </div>
-            { }
             {monthMeetings.map((meeting, index) => {
               const hasAllActionsCompleted =
                 meeting.actionStats &&
@@ -95,12 +93,10 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
                   onClick={() => navigate(`/meetings/${meeting.id}`)}
                   className="w-full flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors text-left"
                 >
-                  { }
                   <div className="w-12 text-center">
                     <div className="text-lg font-bold text-slate-900">{formatDay(meeting.date)}</div>
                     <div className="text-xs text-slate-500">{formatDayName(meeting.date)}</div>
                   </div>
-                  { }
                   <div className="relative flex flex-col items-center">
                     <div
                       className={`w-3 h-3 rounded-full ${hasAllActionsCompleted ? 'bg-green-500' : 'bg-primary-500'
@@ -110,7 +106,6 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
                       <div className="absolute top-3 w-0.5 h-8 bg-slate-200" />
                     )}
                   </div>
-                  { }
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-slate-900 truncate">
                       {formatMeetingTitle(meeting.title, meeting.date, i18n.language)}
@@ -122,7 +117,6 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
                       </p>
                     )}
                   </div>
-                  { }
                   {meeting.actionStats && meeting.actionStats.total > 0 && (
                     <div
                       className={`flex items-center gap-1 text-xs ${hasAllActionsCompleted ? 'text-green-600' : 'text-slate-500'

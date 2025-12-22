@@ -165,21 +165,18 @@ export function StreakCard() {
         <h2 className="font-semibold text-slate-900">{t('streak.title')}</h2>
       </div>
       <div className="grid grid-cols-3 gap-4 mb-4">
-        { }
         <div className="bg-orange-50 rounded-lg p-3 text-center">
           <div className="text-3xl font-bold text-orange-600">
             {streakData.currentStreak}
           </div>
           <div className="text-xs text-orange-700">{t('streak.currentStreak')}</div>
         </div>
-        { }
         <div className="bg-slate-50 rounded-lg p-3 text-center">
           <div className="text-3xl font-bold text-slate-700">
             {streakData.weeklyMeetings}/{streakData.weeklyGoal}
           </div>
           <div className="text-xs text-slate-500">{t('streak.weeklyGoal')}</div>
         </div>
-        { }
         <div className="bg-amber-50 rounded-lg p-3 text-center">
           <div className="text-3xl font-bold text-amber-600">
             {streakData.longestStreak}
@@ -187,7 +184,6 @@ export function StreakCard() {
           <div className="text-xs text-amber-700">{t('streak.longestStreak')}</div>
         </div>
       </div>
-      { }
       <div className="mb-4">
         <div className="flex items-center justify-between mb-1">
           <span className="text-xs text-slate-500">{t('streak.weeklyProgress')}</span>
@@ -202,7 +198,6 @@ export function StreakCard() {
           />
         </div>
       </div>
-      { }
       {earnedBadges.length > 0 && (
         <div>
           <div className="text-xs text-slate-500 mb-2">{t('streak.badges')}</div>

@@ -101,6 +101,7 @@
     "date": "Tarih",
     "meetingTitle": "Başlık",
     "titlePlaceholder": "Toplantı başlığı",
+    "untitled": "Başlıksız Toplantı",
     "template": "Şablon",
     "selectTemplate": "Şablon seçin",
     "notes": "Notlar",
@@ -119,9 +120,10 @@
   "actions": {
     "title": "Aksiyonlar",
     "description": "Tüm aksiyon maddeleri",
-    "pending": "Bekleyen",
-    "completed": "Tamamlanan",
-    "all": "Tümü",
+    "pending": "Yapılacaklar",
+    "completed": "Tamamlananlar",
+    "all": "Hepsi",
+    "active": "Aktif",
     "noActions": "Aksiyon yok",
     "noPending": "Tüm aksiyonlar tamamlandı!",
     "noPendingDesc": "Bekleyen aksiyon maddesi bulunmuyor.",
@@ -131,9 +133,17 @@
     "addAction": "Yeni Aksiyon Ekle",
     "description_label": "Açıklama",
     "descriptionPlaceholder": "Aksiyon açıklaması...",
-    "assignee": "Sorumlu",
-    "assigneePlaceholder": "Sorumlu (opsiyonel)",
-    "dueDate": "Son Tarih"
+    "dueDate": "Son Tarih",
+    "assignedTo": "Sorumlu Kim?",
+    "me": "Ben yapacağım",
+    "other": "Başkalarında"
+  },
+  "tags": {
+    "label": "Etiketler",
+    "placeholder": "Etiket ekle...",
+    "all": "Tüm etiketler",
+    "noTags": "Etiket yok",
+    "filter": "Etikete göre filtrele"
   },
   "templates": {
     "title": "Şablonlar",
@@ -196,6 +206,7 @@
     "placeholder": "Kişi veya toplantı ara...",
     "people": "Kişiler",
     "meetings": "Toplantılar",
+    "actions": "Aksiyonlar",
     "minChars": "Aramaya başlamak için en az 2 karakter yazın",
     "navigate": "gezinme",
     "select": "seç",

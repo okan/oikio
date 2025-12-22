@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* TipTap Editor Styles */
+
 .tiptap {
   outline: none;
 }
@@ -69,7 +69,7 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Custom scrollbar */
+  
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -144,13 +144,14 @@
       opacity: 0;
       transform: translateY(4px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
 
-  /* Modal animations */
+  
   .animate-fade-in {
     animation: fadeIn 150ms ease-out;
   }
@@ -168,13 +169,23 @@
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
   }
 
   @keyframes modalIn {
@@ -182,6 +193,7 @@
       opacity: 0;
       transform: translate(-50%, -50%) scale(0.96);
     }
+
     to {
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
@@ -193,6 +205,7 @@
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
     }
+
     to {
       opacity: 0;
       transform: translate(-50%, -50%) scale(0.96);
@@ -212,6 +225,7 @@
       opacity: 0;
       transform: translateX(-50%) translateY(-10px);
     }
+
     to {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
@@ -223,10 +237,10 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+
     to {
       opacity: 0;
       transform: translateX(-50%) translateY(-10px);
     }
   }
 }
-

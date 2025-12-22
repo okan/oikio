@@ -4,6 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Zap, X, Calendar } from 'lucide-react'
 import type { Person, Meeting } from '@/types'
 import { Button, Input, Select, Textarea } from '@/components/ui'
+import { cn } from '@/lib/utils'
 interface QuickActionModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -14,6 +15,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
   const [personId, setPersonId] = useState('')
   const [meetingId, setMeetingId] = useState('')
   const [dueDate, setDueDate] = useState('')
+  const [assignedTo, setAssignedTo] = useState<'me' | 'other'>('me')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [persons, setPersons] = useState<Person[]>([])
   const [meetings, setMeetings] = useState<Meeting[]>([])
@@ -30,7 +32,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
     if (personId) {
       const loadMeetings = async () => {
         const personMeetings = await window.api.meetings.getByPerson(parseInt(personId))
-        setMeetings(personMeetings.slice(0, 5))  
+        setMeetings(personMeetings.slice(0, 5))
       }
       loadMeetings()
     } else {
@@ -44,6 +46,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
       setPersonId('')
       setMeetingId('')
       setDueDate('')
+      setAssignedTo('me')
     }
   }, [open])
   const handleQuickDueDate = (days: number) => {
@@ -60,6 +63,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
         meetingId: parseInt(meetingId),
         description: description.trim(),
         dueDate: dueDate || undefined,
+        assignedTo,
         completed: false,
       })
       onOpenChange(false)
@@ -73,17 +77,19 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
     value: p.id.toString(),
     label: p.name,
   }))
-  const meetingOptions = meetings.map((m) => ({
-    value: m.id.toString(),
-    label: `${m.title} (${new Date(m.date).toLocaleDateString()})`,
-  }))
+  const meetingOptions = meetings.map((m) => {
+    const title = m.title && m.title !== 'undefined' ? m.title : t('meetings.untitled');
+    return {
+      value: m.id.toString(),
+      label: `${title} (${new Date(m.date).toLocaleDateString()})`,
+    };
+  })
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
         <Dialog.Content className="fixed left-1/2 top-[15%] -translate-x-1/2 z-50 w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none data-[state=open]:animate-search-in data-[state=closed]:animate-search-out">
-          { }
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-primary-50">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white">
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-primary-600" />
               <Dialog.Title className="font-semibold text-slate-900">
@@ -96,7 +102,6 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
               </button>
             </Dialog.Close>
           </div>
-          { }
           <form onSubmit={handleSubmit} className="p-4 space-y-4">
             <Textarea
               value={description}
@@ -122,7 +127,37 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
                 disabled={!personId || meetings.length === 0}
               />
             </div>
-            { }
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-slate-700">
+                {t('actions.assignedTo')}
+              </label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setAssignedTo('me')}
+                  className={cn(
+                    'flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition-colors',
+                    assignedTo === 'me'
+                      ? 'bg-primary-600 border-primary-600 text-white shadow-sm'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  )}
+                >
+                  {t('actions.me')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAssignedTo('other')}
+                  className={cn(
+                    'flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition-colors',
+                    assignedTo === 'other'
+                      ? 'bg-amber-600 border-amber-600 text-white shadow-sm'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  )}
+                >
+                  {t('actions.other')}
+                </button>
+              </div>
+            </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 {t('actions.dueDate')}
@@ -167,8 +202,8 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
               <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
                 {t('common.cancel')}
               </Button>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 isLoading={isSubmitting}
                 disabled={!description.trim() || !meetingId}
               >
@@ -176,7 +211,6 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
               </Button>
             </div>
           </form>
-          { }
           <div className="px-4 py-2 border-t border-slate-200 bg-slate-50">
             <div className="flex items-center gap-4 text-xs text-slate-500">
               <span>

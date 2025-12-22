@@ -164,7 +164,6 @@ export function WelcomeHero() {
             {t('dashboard.summary')}
           </p>
         </div>
-        { }
         <div
           className="flex gap-1 cursor-pointer hover:bg-slate-50 p-1 rounded-xl transition-colors"
           onClick={() => setBadgesModalOpen(true)}
@@ -196,21 +195,18 @@ export function WelcomeHero() {
       { }
       {streakData && (
         <div className="flex items-center gap-6 mb-6 py-3 px-4 bg-slate-50 rounded-xl">
-          { }
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5 text-orange-500" />
             <span className="text-lg font-bold text-orange-600">{streakData.currentStreak}</span>
             <span className="text-sm text-slate-500">{t('streak.currentStreak')}</span>
           </div>
           <div className="w-px h-6 bg-slate-200" />
-          { }
           <div className="flex items-center gap-2">
             <Trophy className="w-5 h-5 text-amber-500" />
             <span className="text-lg font-bold text-amber-600">{streakData.longestStreak}</span>
             <span className="text-sm text-slate-500">{t('streak.longestStreak')}</span>
           </div>
           <div className="w-px h-6 bg-slate-200" />
-          { }
           <div className="flex items-center gap-3 flex-1">
             <span className="text-sm text-slate-500">{t('streak.weeklyProgress')}</span>
             <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden max-w-[200px]">
@@ -227,7 +223,6 @@ export function WelcomeHero() {
           </div>
         </div>
       )}
-      { }
       <div className="flex gap-3">
         <button
           onClick={() => navigate('/persons?new=true')}

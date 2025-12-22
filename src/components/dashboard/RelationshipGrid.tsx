@@ -123,7 +123,6 @@ export function RelationshipGrid() {
               onClick={() => navigate(`/persons/${person.id}`)}
               className="flex items-center gap-3 p-3 hover:bg-slate-50 cursor-pointer transition-colors"
             >
-              { }
               <div className="relative">
                 <Avatar name={person.name} size="sm" />
                 <div
@@ -135,11 +134,9 @@ export function RelationshipGrid() {
                     }`}
                 />
               </div>
-              { }
               <p className="flex-1 font-medium text-slate-900 text-sm truncate">
                 {person.name}
               </p>
-              { }
               {(() => {
                 const futureMeeting = getPersonFutureMeeting(person.id)
                 if (futureMeeting) {

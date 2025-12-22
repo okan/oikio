@@ -1,7 +1,7 @@
 import type { ActionItem } from '../../../src/types'
 import type { DataStore } from './DataStore'
 export class ActionRepository {
-  constructor(private store: DataStore) {}
+  constructor(private store: DataStore) { }
   private enrichAction(action: ActionItem): ActionItem {
     const meeting = this.store.meetings.find((m) => m.id === action.meetingId)
     const person = meeting ? this.store.persons.find((p) => p.id === meeting.personId) : null
@@ -60,5 +60,11 @@ export class ActionRepository {
     this.store.actionItems[index].completed = !this.store.actionItems[index].completed
     this.store.save()
     return this.store.actionItems[index]
+  }
+  getAllTags(): string[] {
+    const allTags = this.store.actionItems
+      .flatMap((a) => a.tags || [])
+      .filter((tag) => tag.trim() !== '')
+    return Array.from(new Set(allTags)).sort()
   }
 }

@@ -62,6 +62,9 @@ export const actionService = {
   getPending: (): Promise<ActionItem[]> => {
     return window.api.actions.getPending()
   },
+  getAllTags: (): Promise<string[]> => {
+    return window.api.actions.getAllTags()
+  },
   create: (data: Omit<ActionItem, 'id' | 'createdAt'>): Promise<ActionItem> => {
     return window.api.actions.create(data)
   },
@@ -109,7 +112,7 @@ export const dataService = {
   },
 }
 export const searchService = {
-  search: (query: string): Promise<{ persons: Person[]; meetings: Meeting[] }> => {
+  search: (query: string): Promise<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }> => {
     return window.api.search(query)
   },
 }

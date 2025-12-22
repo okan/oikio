@@ -4,10 +4,12 @@ import { actionService } from '@/services'
 interface ActionState {
   actions: ActionItem[]
   pendingActions: ActionItem[]
+  allTags: string[]
   isLoading: boolean
   error: string | null
   fetchActions: () => Promise<void>
   fetchPendingActions: () => Promise<void>
+  fetchAllTags: () => Promise<void>
   fetchActionsByMeeting: (meetingId: number) => Promise<ActionItem[]>
   createAction: (data: Omit<ActionItem, 'id' | 'createdAt'>) => Promise<ActionItem>
   updateAction: (id: number, data: Partial<ActionItem>) => Promise<ActionItem>
@@ -15,9 +17,10 @@ interface ActionState {
   toggleComplete: (id: number) => Promise<void>
   clearError: () => void
 }
-export const useActionStore = create<ActionState>((set) => ({
+export const useActionStore = create<ActionState>((set, get) => ({
   actions: [],
   pendingActions: [],
+  allTags: [],
   isLoading: false,
   error: null,
   fetchActions: async () => {
@@ -36,6 +39,15 @@ export const useActionStore = create<ActionState>((set) => ({
       set({ pendingActions })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to fetch pending actions'
+      set({ error: message })
+    }
+  },
+  fetchAllTags: async () => {
+    try {
+      const allTags = await actionService.getAllTags()
+      set({ allTags })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to fetch tags'
       set({ error: message })
     }
   },
@@ -60,6 +72,10 @@ export const useActionStore = create<ActionState>((set) => ({
           : [...state.pendingActions, action],
         isLoading: false,
       }))
+      
+      if (data.tags && data.tags.length > 0) {
+        get().fetchAllTags()
+      }
       return action
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to create action'

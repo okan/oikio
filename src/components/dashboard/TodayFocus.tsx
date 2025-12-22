@@ -119,7 +119,7 @@ export function TodayFocus() {
         const [persons, actions, meetings] = await Promise.all([
           window.api.persons.getAll(),
           window.api.actions.getPending(),
-          window.api.meetings.getUpcoming(365),  
+          window.api.meetings.getUpcoming(365),
         ])
         const prioritized = prioritizeItems(persons, actions, meetings)
         setItems(prioritized)

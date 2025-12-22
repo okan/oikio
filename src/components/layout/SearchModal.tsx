@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Search, User, Calendar, X } from 'lucide-react'
-import type { Person, Meeting } from '@/types'
+import { Search, User, Calendar, X, CheckSquare } from 'lucide-react'
+import type { Person, Meeting, ActionItem } from '@/types'
 import { formatDateShort, formatMeetingTitle } from '@/lib/utils'
+import { Tag } from '@/components/ui'
 interface SearchModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -13,23 +14,24 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState<{ persons: Person[]; meetings: Meeting[] }>({
+  const [results, setResults] = useState<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }>({
     persons: [],
     meetings: [],
+    actions: [],
   })
   const [isSearching, setIsSearching] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const resultsRef = useRef<HTMLDivElement>(null)
   const search = useCallback(async (searchQuery: string) => {
     if (searchQuery.trim().length < 2) {
-      setResults({ persons: [], meetings: [] })
+      setResults({ persons: [], meetings: [], actions: [] })
       return
     }
     setIsSearching(true)
     try {
       const data = await window.api.search(searchQuery)
       setResults(data)
-      setSelectedIndex(0)  
+      setSelectedIndex(0)
     } catch (error) {
       console.error('Search error:', error)
     } finally {
@@ -45,22 +47,25 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   useEffect(() => {
     if (!open) {
       setQuery('')
-      setResults({ persons: [], meetings: [] })
+      setResults({ persons: [], meetings: [], actions: [] })
       setSelectedIndex(0)
     }
   }, [open])
-  const handleSelect = (type: 'person' | 'meeting', id: number) => {
+  const handleSelect = (type: 'person' | 'meeting' | 'action', id: number) => {
     onOpenChange(false)
     if (type === 'person') {
       navigate(`/persons/${id}`)
-    } else {
+    } else if (type === 'meeting') {
       navigate(`/meetings/${id}`)
+    } else {
+      navigate(`/actions`)
     }
   }
   const getAllItems = () => {
     return [
       ...results.persons.map((p) => ({ type: 'person' as const, data: p })),
       ...results.meetings.map((m) => ({ type: 'meeting' as const, data: m })),
+      ...results.actions.map((a) => ({ type: 'action' as const, data: a })),
     ]
   }
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -87,7 +92,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
       }
     }
   }, [selectedIndex])
-  const hasResults = results.persons.length > 0 || results.meetings.length > 0
+  const hasResults = results.persons.length > 0 || results.meetings.length > 0 || results.actions.length > 0
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -96,7 +101,6 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
           className="fixed left-1/2 top-[15%] -translate-x-1/2 z-50 w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none data-[state=open]:animate-search-in data-[state=closed]:animate-search-out"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
-          { }
           <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200">
             <Search className="w-5 h-5 text-slate-400" />
             <input
@@ -114,7 +118,6 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
               </button>
             </Dialog.Close>
           </div>
-          { }
           <div className="max-h-[400px] overflow-y-auto" ref={resultsRef}>
             {isSearching ? (
               <div className="p-8 text-center text-slate-500">{t('common.loading')}</div>
@@ -188,6 +191,46 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                     })}
                   </div>
                 )}
+                {results.actions.length > 0 && (
+                  <div>
+                    <div className="px-3 py-1.5 text-xs font-medium text-slate-500 uppercase">
+                      {t('search.actions')}
+                    </div>
+                    {results.actions.map((action, index) => {
+                      const absoluteIndex = results.persons.length + results.meetings.length + index
+                      const isSelected = selectedIndex === absoluteIndex
+                      return (
+                        <button
+                          key={action.id}
+                          data-index={absoluteIndex}
+                          onClick={() => handleSelect('action', action.id)}
+                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-primary-50' : 'hover:bg-slate-100'
+                            }`}
+                        >
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-primary-100 text-primary-600' : 'bg-slate-100 text-slate-500'
+                            }`}>
+                            <CheckSquare className="w-4 h-4" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className={`text-sm font-medium truncate ${isSelected ? 'text-primary-900' : 'text-slate-900'}`}>
+                              {action.description}
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-slate-500">
+                              <span>{action.personName}</span>
+                              {action.tags && action.tags.length > 0 && (
+                                <div className="flex gap-1">
+                                  {action.tags.slice(0, 2).map((tag) => (
+                                    <Tag key={tag} name={tag} />
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="p-8 text-center text-slate-500">
@@ -195,7 +238,6 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
               </div>
             )}
           </div>
-          { }
           <div className="px-4 py-2 border-t border-slate-200 bg-slate-50">
             <div className="flex items-center gap-4 text-xs text-slate-500">
               <span>

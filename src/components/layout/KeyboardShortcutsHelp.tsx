@@ -20,7 +20,6 @@ export function KeyboardShortcutsHelp({ open, onOpenChange }: KeyboardShortcutsH
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
         <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none data-[state=open]:animate-modal-in data-[state=closed]:animate-modal-out">
-          { }
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <Keyboard className="w-5 h-5 text-primary-600" />
@@ -34,7 +33,6 @@ export function KeyboardShortcutsHelp({ open, onOpenChange }: KeyboardShortcutsH
               </button>
             </Dialog.Close>
           </div>
-          { }
           <div className="p-4 space-y-2">
             {shortcuts.map((shortcut, index) => (
               <div
@@ -55,7 +53,6 @@ export function KeyboardShortcutsHelp({ open, onOpenChange }: KeyboardShortcutsH
               </div>
             ))}
           </div>
-          { }
           <div className="px-6 py-3 border-t border-slate-200 bg-slate-50">
             <p className="text-xs text-slate-500 text-center">
               {t('shortcuts.tip')}

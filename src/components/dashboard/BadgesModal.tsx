@@ -26,7 +26,6 @@ export function BadgesModal({ open, onOpenChange, badges }: BadgesModalProps) {
             description={t('streak.badgesDesc')}
         >
             <div className="space-y-6">
-                { }
                 {earnedBadges.length > 0 && (
                     <div>
                         <h3 className="text-sm font-medium text-slate-500 mb-3 flex items-center gap-2">
@@ -52,7 +51,6 @@ export function BadgesModal({ open, onOpenChange, badges }: BadgesModalProps) {
                         </div>
                     </div>
                 )}
-                { }
                 {lockedBadges.length > 0 && (
                     <div className={earnedBadges.length > 0 ? "pt-4 border-t border-slate-100" : ""}>
                         <h3 className="text-sm font-medium text-slate-500 mb-3 flex items-center gap-2">

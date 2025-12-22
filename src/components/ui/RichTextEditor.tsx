@@ -87,7 +87,6 @@ export function RichTextEditor({
           error && 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/20'
         )}
       >
-        { }
         <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-slate-200 bg-slate-50">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -126,7 +125,6 @@ export function RichTextEditor({
             <ListOrdered className="w-4 h-4" />
           </ToolbarButton>
         </div>
-        { }
         <EditorContent editor={editor} />
       </div>
       {error && <p className="text-sm text-red-500">{error}</p>}

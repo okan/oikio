@@ -11,7 +11,7 @@ export interface Person {
   createdAt: string
 }
 export interface RelationshipHealth {
-  score: number  
+  score: number
   status: 'good' | 'warning' | 'critical'
   daysSinceLastMeeting: number | null
   isOverdue: boolean
@@ -39,8 +39,9 @@ export interface ActionItem {
   meetingTitle?: string
   personName?: string
   description: string
-  assignee?: string
+  tags?: string[]
   dueDate?: string
+  assignedTo?: 'me' | 'other'
   completed: boolean
   createdAt: string
 }
@@ -79,6 +80,7 @@ export interface ElectronAPI {
     getAll: () => Promise<ActionItem[]>
     getByMeeting: (meetingId: number) => Promise<ActionItem[]>
     getPending: () => Promise<ActionItem[]>
+    getAllTags: () => Promise<string[]>
     create: (data: Omit<ActionItem, 'id' | 'createdAt'>) => Promise<ActionItem>
     update: (id: number, data: Partial<ActionItem>) => Promise<ActionItem>
     delete: (id: number) => Promise<void>
@@ -99,7 +101,7 @@ export interface ElectronAPI {
     import: (data: string) => Promise<void>
     reset: () => Promise<void>
   }
-  search: (query: string) => Promise<{ persons: Person[]; meetings: Meeting[] }>
+  search: (query: string) => Promise<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }>
   notifications: {
     getSettings: () => Promise<NotificationSettings>
     updateSettings: (settings: Partial<NotificationSettings>) => Promise<NotificationSettings>

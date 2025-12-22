@@ -63,7 +63,7 @@ export function MeetingDetail() {
   }
   const handleActionCreate = async (data: {
     description: string
-    assignee?: string
+    tags?: string[]
     dueDate?: string
   }) => {
     await createAction({

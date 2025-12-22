@@ -63,7 +63,6 @@ export function MiniAnalytics() {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-8">
-          { }
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
               <Calendar className="w-5 h-5 text-primary-600" />
@@ -82,9 +81,7 @@ export function MiniAnalytics() {
               <span className="text-xs text-slate-500">{t('miniAnalytics.thisMonth')}</span>
             </div>
           </div>
-          { }
           <div className="w-px h-10 bg-slate-200" />
-          { }
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
               <CheckCircle className="w-5 h-5 text-green-600" />
@@ -101,9 +98,7 @@ export function MiniAnalytics() {
               <span className="text-xs text-slate-500">{t('miniAnalytics.completion')}</span>
             </div>
           </div>
-          { }
           <div className="w-px h-10 bg-slate-200" />
-          { }
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
               <Target className="w-5 h-5 text-amber-600" />
@@ -119,7 +114,6 @@ export function MiniAnalytics() {
             </div>
           </div>
         </div>
-        { }
         <div className="flex items-end gap-1 h-8">
           {analytics.monthlyStats.slice(-4).map((stat, index) => {
             const maxMeetings = Math.max(

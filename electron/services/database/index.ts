@@ -83,6 +83,9 @@ export class DatabaseService {
   toggleActionItemComplete(id: number): ActionItem {
     return this.actionRepo.toggleComplete(id)
   }
+  getAllActionTags(): string[] {
+    return this.actionRepo.getAllTags()
+  }
   getAllTemplates(): Template[] {
     return this.templateRepo.getAll()
   }
@@ -106,7 +109,7 @@ export class DatabaseService {
       pendingActions: this.store.actionItems.filter((a) => !a.completed).length,
     }
   }
-  search(query: string): { persons: Person[]; meetings: Meeting[] } {
+  search(query: string): { persons: Person[]; meetings: Meeting[]; actions: ActionItem[] } {
     const lowerQuery = query.toLowerCase()
     const persons = this.store.persons.filter(
       (p) => p.name.toLowerCase().includes(lowerQuery)
@@ -122,7 +125,24 @@ export class DatabaseService {
         ...m,
         personName: this.store.persons.find((p) => p.id === m.personId)?.name,
       }))
-    return { persons, meetings }
+
+    const actions = this.store.actionItems
+      .filter(
+        (a) =>
+          a.description.toLowerCase().includes(lowerQuery) ||
+          (a.tags || []).some((tag) => tag.toLowerCase().includes(lowerQuery))
+      )
+      .map((a) => {
+        const meeting = this.store.meetings.find((m) => m.id === a.meetingId)
+        const person = meeting ? this.store.persons.find((p) => p.id === meeting.personId) : null
+        return {
+          ...a,
+          meetingTitle: meeting?.title,
+          personName: person?.name,
+        }
+      })
+
+    return { persons, meetings, actions }
   }
   exportData(): string {
     return this.store.exportData()

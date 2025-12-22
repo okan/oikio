@@ -67,7 +67,7 @@ export class DatabaseService {
     for (const person of this.data.persons) {
       const personMeetings = this.data.meetings
         .filter((m) => m.personId === person.id)
-        .filter((m) => new Date(m.date) <= new Date())  
+        .filter((m) => new Date(m.date) <= new Date())
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       const latestMeeting = personMeetings[0]
       if (latestMeeting) {
@@ -221,7 +221,7 @@ export class DatabaseService {
     today.setHours(23, 59, 59, 999)
     const personMeetings = this.data.meetings
       .filter((m) => m.personId === personId)
-      .filter((m) => new Date(m.date) <= today)  
+      .filter((m) => new Date(m.date) <= today)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     const personIndex = this.data.persons.findIndex((p) => p.id === personId)
     if (personIndex !== -1) {
@@ -235,7 +235,7 @@ export class DatabaseService {
       .filter((person) => {
         if (!person.meetingFrequencyGoal) return false
         const lastMeeting = person.lastMeetingDate ? new Date(person.lastMeetingDate) : null
-        if (!lastMeeting) return true  
+        if (!lastMeeting) return true
         const daysSinceLastMeeting = Math.floor(
           (today.getTime() - lastMeeting.getTime()) / (1000 * 60 * 60 * 24)
         )
@@ -343,6 +343,12 @@ export class DatabaseService {
     this.save()
     return this.data.actionItems[index]
   }
+  getAllActionTags(): string[] {
+    const allTags = this.data.actionItems
+      .flatMap((a) => a.tags || [])
+      .filter((tag) => tag.trim() !== '')
+    return Array.from(new Set(allTags)).sort()
+  }
   getAllTemplates(): Template[] {
     return [...this.data.templates].sort((a, b) => {
       if (a.isDefault && !b.isDefault) return -1
@@ -409,7 +415,7 @@ export class DatabaseService {
     this.seedDefaultTemplates()
     this.save()
   }
-  search(query: string): { persons: Person[]; meetings: Meeting[] } {
+  search(query: string): { persons: Person[]; meetings: Meeting[]; actions: ActionItem[] } {
     const lowerQuery = query.toLowerCase()
     const persons = this.data.persons.filter(
       (p) =>
@@ -428,6 +434,21 @@ export class DatabaseService {
         ...m,
         personName: this.data.persons.find((p) => p.id === m.personId)?.name,
       }))
-    return { persons, meetings }
+    const actions = this.data.actionItems
+      .filter(
+        (a) =>
+          a.description.toLowerCase().includes(lowerQuery) ||
+          (a.tags || []).some((tag) => tag.toLowerCase().includes(lowerQuery))
+      )
+      .map((a) => {
+        const meeting = this.data.meetings.find((m) => m.id === a.meetingId)
+        const person = meeting ? this.data.persons.find((p) => p.id === meeting.personId) : null
+        return {
+          ...a,
+          meetingTitle: meeting?.title,
+          personName: person?.name,
+        }
+      })
+    return { persons, meetings, actions }
   }
 }

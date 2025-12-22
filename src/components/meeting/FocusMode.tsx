@@ -154,9 +154,7 @@ export function FocusMode({
           </Button>
         </div>
       </div>
-      { }
       <div className="flex-1 flex overflow-hidden">
-        { }
         <div className="flex-1 p-6 overflow-auto bg-white">
           <h2 className="text-sm font-medium text-slate-500 mb-3">
             {t('focusMode.notes')}
@@ -167,12 +165,10 @@ export function FocusMode({
             placeholder={t('focusMode.notesPlaceholder')}
           />
         </div>
-        { }
         <div className="w-96 border-l border-slate-200 p-6 overflow-auto bg-slate-50">
           <h2 className="text-sm font-medium text-slate-500 mb-3">
             {t('focusMode.actions')}
           </h2>
-          { }
           <div className="flex gap-2 mb-4">
             <Input
               value={newAction}
@@ -185,7 +181,6 @@ export function FocusMode({
               <Plus className="w-4 h-4" />
             </Button>
           </div>
-          { }
           {pendingActions.length > 0 && (
             <div className="space-y-2 mb-4">
               {pendingActions.map((action) => (
@@ -193,9 +188,8 @@ export function FocusMode({
                   key={action.id}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className={`flex items-start gap-3 p-3 bg-white rounded-lg border ${
-                    action.id < 0 ? 'border-amber-300 border-dashed' : 'border-slate-200'
-                  }`}
+                  className={`flex items-start gap-3 p-3 bg-white rounded-lg border ${action.id < 0 ? 'border-amber-300 border-dashed' : 'border-slate-200'
+                    }`}
                 >
                   <button
                     onClick={() => handleToggle(action.id)}
@@ -211,7 +205,6 @@ export function FocusMode({
               ))}
             </div>
           )}
-          { }
           {completedActions.length > 0 && (
             <div>
               <h3 className="text-xs font-medium text-slate-400 mb-2">
@@ -221,9 +214,8 @@ export function FocusMode({
                 {completedActions.map((action) => (
                   <div
                     key={action.id}
-                    className={`flex items-start gap-3 p-3 rounded-lg opacity-60 ${
-                      action.id < 0 ? 'bg-amber-50 border border-amber-200 border-dashed' : 'bg-slate-100'
-                    }`}
+                    className={`flex items-start gap-3 p-3 rounded-lg opacity-60 ${action.id < 0 ? 'bg-amber-50 border border-amber-200 border-dashed' : 'bg-slate-100'
+                      }`}
                   >
                     <button
                       onClick={() => handleToggle(action.id)}

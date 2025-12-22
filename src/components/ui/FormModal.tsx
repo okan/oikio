@@ -64,7 +64,6 @@ export function FormModal({
             className
           )}
         >
-          { }
           <div className="flex items-center justify-between p-6 border-b border-slate-200 flex-shrink-0">
             <div>
               <Dialog.Title className="text-lg font-semibold text-slate-900">
@@ -86,10 +85,8 @@ export function FormModal({
               </button>
             </Dialog.Close>
           </div>
-          { }
           <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
             <div className="p-6 overflow-y-auto flex-1">{children}</div>
-            { }
             {showFooter && (
               <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-200 flex-shrink-0 bg-slate-50 rounded-b-xl">
                 {footerContent || (

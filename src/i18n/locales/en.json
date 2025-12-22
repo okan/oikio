@@ -101,6 +101,7 @@
     "date": "Date",
     "meetingTitle": "Title",
     "titlePlaceholder": "Meeting title",
+    "untitled": "Untitled Meeting",
     "template": "Template",
     "selectTemplate": "Select template",
     "notes": "Notes",
@@ -119,9 +120,10 @@
   "actions": {
     "title": "Actions",
     "description": "All action items",
-    "pending": "Pending",
+    "pending": "To-do",
     "completed": "Completed",
     "all": "All",
+    "active": "Active",
     "noActions": "No actions",
     "noPending": "All actions completed!",
     "noPendingDesc": "No pending action items.",
@@ -131,9 +133,17 @@
     "addAction": "Add New Action",
     "description_label": "Description",
     "descriptionPlaceholder": "Action description...",
-    "assignee": "Assignee",
-    "assigneePlaceholder": "Assignee (optional)",
-    "dueDate": "Due Date"
+    "dueDate": "Due Date",
+    "assignedTo": "Who is responsible?",
+    "me": "Me",
+    "other": "Assigned to Others"
+  },
+  "tags": {
+    "label": "Tags",
+    "placeholder": "Add tag...",
+    "all": "All tags",
+    "noTags": "No tags",
+    "filter": "Filter by tag"
   },
   "templates": {
     "title": "Templates",
@@ -197,6 +207,7 @@
     "placeholder": "Search people or meetings...",
     "people": "People",
     "meetings": "Meetings",
+    "actions": "Actions",
     "minChars": "Type at least 2 characters to search",
     "navigate": "navigate",
     "select": "select",

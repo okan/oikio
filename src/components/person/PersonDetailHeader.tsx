@@ -52,7 +52,6 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
       className="card p-6"
     >
       <div className="flex items-start gap-6">
-        { }
         <div className="relative">
           <Avatar name={person.name} size="lg" className="w-20 h-20 text-2xl" />
           <div
@@ -62,7 +61,6 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
             )}
           />
         </div>
-        { }
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1">
             <h1 className="text-2xl font-bold text-slate-900 truncate">{person.name}</h1>
@@ -70,7 +68,6 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
               {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
             </Badge>
           </div>
-          { }
           <div className="mb-3">
             <div className="flex items-center justify-between mb-1">
               <span className={cn('text-sm font-medium', getHealthTextColor(health.status))}>
@@ -98,7 +95,6 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
               </div>
             )}
           </div>
-          { }
           <div className="flex items-center gap-4 text-sm text-slate-500">
             {getFrequencyText() && (
               <span className="flex items-center gap-1">
@@ -114,7 +110,6 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
             )}
           </div>
         </div>
-        { }
         <div className="flex gap-2">
           <Button variant="secondary" size="sm" onClick={onEdit}>
             <Edit2 className="w-4 h-4" />

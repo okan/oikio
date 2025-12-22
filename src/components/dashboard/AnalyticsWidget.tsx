@@ -62,7 +62,6 @@ export function AnalyticsWidget() {
         <h2 className="font-semibold text-slate-900">{t('analytics.title')}</h2>
       </div>
       <div className="grid grid-cols-3 gap-4 mb-6">
-        { }
         <div className="bg-slate-50 rounded-lg p-3">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <Calendar className="w-4 h-4" />
@@ -78,7 +77,6 @@ export function AnalyticsWidget() {
             </span>
           </div>
         </div>
-        { }
         <div className="bg-slate-50 rounded-lg p-3">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <CheckCircle className="w-4 h-4" />
@@ -93,7 +91,6 @@ export function AnalyticsWidget() {
             </span>
           </div>
         </div>
-        { }
         <div className="bg-slate-50 rounded-lg p-3">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <BarChart3 className="w-4 h-4" />

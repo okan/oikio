@@ -80,7 +80,6 @@ export function PersonStatsCard({ person }: PersonStatsCardProps) {
         )}
       </div>
       <div className="grid grid-cols-2 gap-4">
-        { }
         <div className="bg-slate-50 rounded-lg p-3">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <Calendar className="w-4 h-4" />
@@ -88,7 +87,6 @@ export function PersonStatsCard({ person }: PersonStatsCardProps) {
           </div>
           <span className="text-2xl font-bold text-slate-900">{analytics.totalMeetings}</span>
         </div>
-        { }
         <div className="bg-slate-50 rounded-lg p-3">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <Clock className="w-4 h-4" />
@@ -103,7 +101,6 @@ export function PersonStatsCard({ person }: PersonStatsCardProps) {
             )}
           </div>
         </div>
-        { }
         <div className="bg-slate-50 rounded-lg p-3">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <CheckCircle className="w-4 h-4" />
@@ -118,7 +115,6 @@ export function PersonStatsCard({ person }: PersonStatsCardProps) {
             </span>
           </div>
         </div>
-        { }
         <div className="bg-slate-50 rounded-lg p-3">
           <div className="flex items-center gap-2 text-slate-500 mb-1">
             <TrendingUp className="w-4 h-4" />

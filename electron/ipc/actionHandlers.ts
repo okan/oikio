@@ -22,4 +22,7 @@ export function registerActionHandlers(db: DatabaseService): void {
   ipcMain.handle('db:actions:toggleComplete', (_, id: number) => {
     return db.toggleActionItemComplete(id)
   })
+  ipcMain.handle('db:actions:getAllTags', () => {
+    return db.getAllActionTags()
+  })
 }
