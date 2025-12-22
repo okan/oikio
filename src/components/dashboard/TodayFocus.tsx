@@ -56,7 +56,7 @@ function prioritizeItems(
     }
   })
   actions
-    .filter((a) => !a.completed && a.dueDate && isOverdue(a.dueDate))
+    .filter((a) => !a.completed && a.dueDate && isOverdue(a.dueDate) && a.assignedTo !== 'other')
     .forEach((action) => {
       const dueDate = new Date(action.dueDate!)
       const today = new Date()
@@ -70,7 +70,7 @@ function prioritizeItems(
     })
   actions
     .filter((a) => {
-      if (a.completed || !a.dueDate) return false
+      if (a.completed || !a.dueDate || a.assignedTo === 'other') return false
       const dueDate = new Date(a.dueDate)
       const today = new Date()
       const daysUntil = Math.floor((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))

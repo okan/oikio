@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Zap, Clock } from 'lucide-react'
+import { Zap, Clock, User, ExternalLink } from 'lucide-react'
 import type { ActionItem } from '@/types'
 import { Checkbox, Badge } from '@/components/ui'
 import { useActionStore } from '@/store'
-import { isOverdue, getRelativeTime } from '@/lib/utils'
+import { isOverdue, getRelativeTime, cn } from '@/lib/utils'
 interface PersonPendingActionsProps {
   actions: ActionItem[]
   onActionToggle?: () => void
@@ -44,12 +44,31 @@ export function PersonPendingActions({ actions, onActionToggle }: PersonPendingA
             className="flex items-center gap-3 p-3 hover:bg-slate-50 transition-colors"
           >
             <Checkbox checked={false} onCheckedChange={() => handleToggle(action.id)} />
-            <span className="flex-1 text-sm text-slate-900">{action.description}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-slate-900">{action.description}</p>
+              <div
+                className={cn(
+                  'flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider mt-0.5',
+                  action.assignedTo === 'other' ? 'text-amber-600' : 'text-primary-600'
+                )}
+              >
+                {action.assignedTo === 'other' ? (
+                  <>
+                    <ExternalLink className="w-3 h-3" />
+                    {t('actions.other')}
+                  </>
+                ) : (
+                  <>
+                    <User className="w-3 h-3" />
+                    {t('actions.me')}
+                  </>
+                )}
+              </div>
+            </div>
             {action.dueDate && (
               <span
-                className={`text-xs flex items-center gap-1 ${
-                  isOverdue(action.dueDate) ? 'text-red-600' : 'text-slate-500'
-                }`}
+                className={`text-xs flex items-center gap-1 ${isOverdue(action.dueDate) ? 'text-red-600' : 'text-slate-500'
+                  }`}
               >
                 <Clock className="w-3 h-3" />
                 {getRelativeTime(action.dueDate)}

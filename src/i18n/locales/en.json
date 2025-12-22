@@ -136,7 +136,7 @@
     "dueDate": "Due Date",
     "assignedTo": "Who is responsible?",
     "me": "Me",
-    "other": "Assigned to Others"
+    "other": "Them"
   },
   "tags": {
     "label": "Tags",
