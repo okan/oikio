@@ -2,6 +2,8 @@
 
 A local-first desktop application for managing 1-1 meeting notes with your managers, reports, and teammates.
 
+![oikio Dashboard](assets/app-screenshot.png)
+
 ## Features
 
 - **Person Management** – Keep track of people you have 1-1s with
