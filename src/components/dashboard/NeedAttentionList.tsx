@@ -25,7 +25,7 @@ function getFrequencyThreshold(frequency?: MeetingFrequency): number {
 }
 function getDaysOverdue(lastMeetingDate?: string, frequency?: MeetingFrequency): number {
   const days = getDaysSinceLastMeeting(lastMeetingDate)
-  if (days === null) return 999  
+  if (days === null) return 0
   const threshold = getFrequencyThreshold(frequency)
   return Math.max(0, days - threshold)
 }

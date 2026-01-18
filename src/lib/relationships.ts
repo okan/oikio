@@ -33,8 +33,8 @@ export function calculateRelationshipHealth(person: Person): RelationshipHealth 
       score: 0,
       status: 'critical',
       daysSinceLastMeeting: null,
-      isOverdue: true,
-      daysOverdue: expectedDays,
+      isOverdue: false,
+      daysOverdue: 0,
     }
   }
   const progress = daysSince / expectedDays

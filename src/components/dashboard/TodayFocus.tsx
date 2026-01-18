@@ -39,7 +39,7 @@ function prioritizeItems(
   todayStart.setHours(0, 0, 0, 0)
   persons.forEach((person) => {
     const health = calculateRelationshipHealth(person)
-    if (health.status === 'critical' && health.isOverdue) {
+    if (health.status === 'critical' && (health.isOverdue || health.daysSinceLastMeeting === null)) {
       const hasFutureMeeting = meetings.some((m) => {
         const meetingDate = new Date(m.date)
         meetingDate.setHours(0, 0, 0, 0)
@@ -243,7 +243,9 @@ export function TodayFocus() {
                       {item.data.person.name}
                     </p>
                     <p className="text-xs text-red-600">
-                      {t('focus.overdueBy', { days: item.data.daysOverdue })}
+                      {item.data.person!.lastMeetingDate
+                        ? t('focus.overdueBy', { days: item.data.daysOverdue })
+                        : t('persons.neverMet')}
                     </p>
                   </div>
                   <button
