@@ -80,12 +80,14 @@ export function PersonDetail() {
   const handleMeetingSubmit = async (data: Omit<Meeting, 'id' | 'createdAt'>) => {
     if (editingMeeting) {
       await updateMeeting(editingMeeting.id, data)
+      const updatedMeetings = await fetchMeetingsByPerson(person.id)
+      setMeetings(updatedMeetings)
+      await fetchPersons()
     } else {
-      await createMeeting({ ...data, personId: person.id })
+      const newMeeting = await createMeeting({ ...data, personId: person.id })
+      navigate(`/meetings/${newMeeting.id}`)
+      return newMeeting
     }
-    const updatedMeetings = await fetchMeetingsByPerson(person.id)
-    setMeetings(updatedMeetings)
-    await fetchPersons()
   }
   const handleNewMeeting = () => {
     setEditingMeeting(null)

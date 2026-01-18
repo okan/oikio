@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { FileText } from 'lucide-react'
 import { useMeetingStore, usePersonStore, useTemplateStore } from '@/store'
@@ -10,6 +10,7 @@ import { Modal } from '@/components/ui'
 import type { Meeting, Template } from '@/types'
 export function Meetings() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { meetings, fetchMeetings, createMeeting, updateMeeting } = useMeetingStore()
   const { persons, fetchPersons } = usePersonStore()
@@ -38,7 +39,9 @@ export function Meetings() {
     if (editingMeeting) {
       await updateMeeting(editingMeeting.id, data)
     } else {
-      await createMeeting(data)
+      const newMeeting = await createMeeting(data)
+      navigate(`/meetings/${newMeeting.id}`)
+      return newMeeting
     }
   }
   const handleAddTemplate = () => {

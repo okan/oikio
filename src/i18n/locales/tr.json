@@ -213,7 +213,7 @@
     "close": "kapat"
   },
   "relationships": {
-    "health": "İlişki Durumu",
+    "health": "Görüşme Durumu",
     "onTrack": "Yolunda",
     "good": "İyi",
     "warning": "Dikkat",
@@ -247,7 +247,7 @@
     "actionSuccess": "Aksiyon Başarısı",
     "lastMeeting": "Son Görüşme",
     "daysAgo": "gün önce",
-    "relationshipHealth": "İlişki Sağlığı",
+    "relationshipHealth": "Görüşme Durumu",
     "onTrack": "Yolunda",
     "behind": "Geride",
     "overdue": "Gecikmiş",
@@ -340,6 +340,8 @@
     "pendingActions": "{{count}} bekleyen aksiyon",
     "meetingHistory": "Toplantı Geçmişi ({{count}})",
     "noMeetings": "Henüz toplantı yok",
-    "noMeetingsDesc": "Bu kişiyle ilk toplantınızı oluşturun"
+    "noMeetingsDesc": "Bu kişiyle ilk toplantınızı oluşturun",
+    "lastMet": "Son görüşme",
+    "nextDue": "Sonraki hedef"
   }
 }

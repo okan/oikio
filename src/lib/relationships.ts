@@ -21,7 +21,7 @@ export function calculateRelationshipHealth(person: Person): RelationshipHealth 
   const expectedDays = getFrequencyDays(person.meetingFrequencyGoal)
   if (!person.meetingFrequencyGoal && daysSince === null) {
     return {
-      score: 50,
+      score: 0,
       status: 'warning',
       daysSinceLastMeeting: null,
       isOverdue: false,
@@ -37,26 +37,19 @@ export function calculateRelationshipHealth(person: Person): RelationshipHealth 
       daysOverdue: 0,
     }
   }
-  const progress = daysSince / expectedDays
-  const gracePeriod = expectedDays * 0.2  
+  const progress = Math.min(100, Math.round((daysSince / expectedDays) * 100))
   const isOverdue = daysSince > expectedDays
   const daysOverdue = Math.max(0, daysSince - expectedDays)
-  let score: number
   let status: 'good' | 'warning' | 'critical'
-  if (daysSince <= expectedDays) {
-    score = Math.round(100 - (progress * 30))  
+  if (daysSince <= expectedDays * 0.8) {
     status = 'good'
-  } else if (daysSince <= expectedDays + gracePeriod) {
-    const graceProgress = (daysSince - expectedDays) / gracePeriod
-    score = Math.round(70 - (graceProgress * 20))  
+  } else if (daysSince <= expectedDays) {
     status = 'warning'
   } else {
-    const overdueRatio = daysOverdue / expectedDays
-    score = Math.max(0, Math.round(50 - (overdueRatio * 50)))  
     status = 'critical'
   }
   return {
-    score,
+    score: progress,
     status,
     daysSinceLastMeeting: daysSince,
     isOverdue,

@@ -11,7 +11,7 @@ interface MeetingFormProps {
   persons: Person[]
   templates: Template[]
   defaultPersonId?: number
-  onSubmit: (data: Omit<Meeting, 'id' | 'createdAt'>) => Promise<void>
+  onSubmit: (data: Omit<Meeting, 'id' | 'createdAt'>) => Promise<Meeting | void>
 }
 interface LastMeetingContext {
   meeting: Meeting | null
@@ -83,13 +83,15 @@ export function MeetingForm({
   }, [meeting, open, defaultPersonId])
   const handleTemplateChange = (value: string) => {
     setTemplateId(value)
-    if (value) {
+    if (value && meeting) {
       const template = templates.find((t) => t.id.toString() === value)
       if (template) {
         setNotes(template.content)
       }
     }
   }
+  const isCreating = !meeting
+  const hasPreselectedPerson = isCreating && defaultPersonId !== undefined
   const validate = () => {
     const newErrors: Record<string, string> = {}
     if (!personId) {
@@ -106,14 +108,22 @@ export function MeetingForm({
     if (!validate()) return
     setIsSubmitting(true)
     try {
-      await onSubmit({
+      let notesContent = notes.trim() || undefined
+      if (isCreating && templateId) {
+        const template = templates.find((t) => t.id.toString() === templateId)
+        if (template) {
+          notesContent = template.content
+        }
+      }
+      const result = await onSubmit({
         personId: parseInt(personId),
         templateId: templateId ? parseInt(templateId) : undefined,
         date,
         title: title.trim() || undefined,
-        notes: notes.trim() || undefined,
+        notes: notesContent,
       })
       onOpenChange(false)
+      return result
     } catch (error) {
       console.error('Error saving meeting:', error)
     } finally {
@@ -128,12 +138,6 @@ export function MeetingForm({
     value: t.id.toString(),
     label: t.name,
   }))
-  const handleCarryOverTopics = () => {
-    if (lastMeetingContext?.nextTopics) {
-      const carryOverText = `## ${t('meetings.fromLastMeeting')}\n${lastMeetingContext.nextTopics}\n\n`
-      setNotes((prev) => carryOverText + prev)
-    }
-  }
   const hasContext = lastMeetingContext &&
     (lastMeetingContext.pendingActions.length > 0 || lastMeetingContext.nextTopics)
   return (
@@ -144,14 +148,24 @@ export function MeetingForm({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <Select
-            label={t('meetings.person')}
-            placeholder={t('meetings.selectPerson')}
-            value={personId}
-            onValueChange={setPersonId}
-            options={personOptions}
-            error={errors.personId}
-          />
+          {hasPreselectedPerson ? (
+            <div className="space-y-1.5">
+              <label className="label">{t('meetings.person')}</label>
+              <div className="input bg-slate-50 text-slate-700">
+                {persons.find(p => p.id === defaultPersonId)?.name}
+              </div>
+            </div>
+          ) : (
+            <Select
+              label={t('meetings.person')}
+              placeholder={t('meetings.selectPerson')}
+              value={personId}
+              onValueChange={setPersonId}
+              options={personOptions}
+              error={errors.personId}
+              disabled={!!meeting}
+            />
+          )}
           <Input
             label={t('meetings.date')}
             type="date"
@@ -160,7 +174,7 @@ export function MeetingForm({
             error={errors.date}
           />
         </div>
-        {!meeting && hasContext && showPrepSection && (
+        {isCreating && hasContext && showPrepSection && (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-amber-800">
@@ -204,27 +218,11 @@ export function MeetingForm({
                 <p className="text-sm text-amber-700 pl-6 line-clamp-2">
                   {lastMeetingContext.nextTopics}
                 </p>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleCarryOverTopics}
-                  className="ml-6 text-amber-700 hover:text-amber-900"
-                >
-                  {t('meetings.carryOver')}
-                </Button>
               </div>
             )}
           </div>
         )}
-        <div className="grid grid-cols-2 gap-4">
-          <Input
-            label={t('meetings.meetingTitle')}
-            placeholder={t('meetings.titlePlaceholder')}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            error={errors.title}
-          />
+        {isCreating ? (
           <Select
             label={t('meetings.template')}
             placeholder={t('meetings.selectTemplate')}
@@ -232,13 +230,32 @@ export function MeetingForm({
             onValueChange={handleTemplateChange}
             options={templateOptions}
           />
-        </div>
-        <RichTextEditor
-          label={t('meetings.notes')}
-          placeholder={t('meetings.notesPlaceholder')}
-          value={notes}
-          onChange={setNotes}
-        />
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label={t('meetings.meetingTitle')}
+                placeholder={t('meetings.titlePlaceholder')}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                error={errors.title}
+              />
+              <Select
+                label={t('meetings.template')}
+                placeholder={t('meetings.selectTemplate')}
+                value={templateId}
+                onValueChange={handleTemplateChange}
+                options={templateOptions}
+              />
+            </div>
+            <RichTextEditor
+              label={t('meetings.notes')}
+              placeholder={t('meetings.notesPlaceholder')}
+              value={notes}
+              onChange={setNotes}
+            />
+          </>
+        )}
         <div className="flex justify-end gap-3 pt-2">
           <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
             {t('common.cancel')}

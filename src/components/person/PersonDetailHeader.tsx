@@ -80,18 +80,21 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
                   getLastMeetingText()
                 )}
               </span>
-              {person.meetingFrequencyGoal && (
-                <span className="text-xs text-slate-500">{health.score}/100</span>
-              )}
             </div>
-            {person.meetingFrequencyGoal && (
-              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${health.score}%` }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
-                  className={cn('h-full rounded-full', getHealthColor(health.status))}
-                />
+            {person.meetingFrequencyGoal && person.lastMeetingDate && (
+              <div>
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${health.score}%` }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    className={cn('h-full rounded-full', getHealthColor(health.status))}
+                  />
+                </div>
+                <div className="flex justify-between mt-1 text-xs text-slate-400">
+                  <span>{t('personDetail.lastMet')}</span>
+                  <span>{t('personDetail.nextDue')}</span>
+                </div>
               </div>
             )}
           </div>

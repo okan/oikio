@@ -135,11 +135,10 @@ export function PersonStatsCard({ person }: PersonStatsCardProps) {
         </div>
       </div>
       { }
-      {person.meetingFrequencyGoal && (
+      {person.meetingFrequencyGoal && person.lastMeetingDate && (
         <div className="mt-4 pt-4 border-t border-slate-200">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs text-slate-500">{t('personStats.relationshipHealth')}</span>
-            <span className="text-xs font-medium text-slate-700">{health.score}/100</span>
           </div>
           <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
             <motion.div
@@ -148,6 +147,10 @@ export function PersonStatsCard({ person }: PersonStatsCardProps) {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className={`h-full ${getHealthColor(health.status)}`}
             />
+          </div>
+          <div className="flex justify-between mt-1 text-xs text-slate-400">
+            <span>{t('personDetail.lastMet')}</span>
+            <span>{t('personDetail.nextDue')}</span>
           </div>
         </div>
       )}
