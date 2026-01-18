@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { Download, Upload, Database, Info, Globe, Bell, AlertTriangle } from 'lucide-react'
 import { Header } from '@/components/layout'
 import { Button, Modal, Select, Checkbox } from '@/components/ui'
@@ -10,7 +11,6 @@ export function Settings() {
   const [isImporting, setIsImporting] = useState(false)
   const [importModalOpen, setImportModalOpen] = useState(false)
   const [resetModalOpen, setResetModalOpen] = useState(false)
-  const [successMessage, setSuccessMessage] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings | null>(null)
   useEffect(() => {
@@ -41,10 +41,10 @@ export function Settings() {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-      setSuccessMessage(t('settings.exportSuccess'))
-      setTimeout(() => setSuccessMessage(''), 3000)
+      toast.success(t('settings.exportSuccess'))
     } catch (error) {
       console.error('Export error:', error)
+      toast.error(t('common.error'))
     } finally {
       setIsExporting(false)
     }
@@ -63,14 +63,13 @@ export function Settings() {
     try {
       const text = await file.text()
       await window.api.data.import(text)
-      setSuccessMessage(t('settings.importSuccess'))
+      toast.success(t('settings.importSuccess'))
       setTimeout(() => {
-        setSuccessMessage('')
         window.location.reload()
-      }, 2000)
+      }, 1500)
     } catch (error) {
       console.error('Import error:', error)
-      alert('Import failed. Check the file format.')
+      toast.error(t('settings.importError'))
     } finally {
       setIsImporting(false)
       if (fileInputRef.current) {
@@ -80,9 +79,8 @@ export function Settings() {
   }
   useEffect(() => {
     if (localStorage.getItem('resetSuccess') === 'true') {
-      setSuccessMessage(t('settings.resetSuccess'))
+      toast.success(t('settings.resetSuccess'))
       localStorage.removeItem('resetSuccess')
-      setTimeout(() => setSuccessMessage(''), 5000)
     }
   }, [t])
   const handleResetConfirm = async () => {
@@ -112,20 +110,15 @@ export function Settings() {
   const handleTestNotification = async () => {
     try {
       await window.api.notifications.test()
-      setSuccessMessage(t('settings.notificationSent'))
-      setTimeout(() => setSuccessMessage(''), 3000)
+      toast.success(t('settings.notificationSent'))
     } catch (error) {
       console.error('Error sending test notification:', error)
+      toast.error(t('common.error'))
     }
   }
   return (
     <div className="space-y-6">
       <Header title={t('settings.title')} description={t('settings.description')} />
-      {successMessage && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-          {successMessage}
-        </div>
-      )}
       { }
       <div className="card p-6">
         <div className="flex items-start gap-4">

@@ -85,7 +85,7 @@ export function PersonDetail() {
       await fetchPersons()
     } else {
       const newMeeting = await createMeeting({ ...data, personId: person.id })
-      navigate(`/meetings/${newMeeting.id}`)
+      navigate(`/meetings/${newMeeting.id}?focus=true`)
       return newMeeting
     }
   }

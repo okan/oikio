@@ -14,7 +14,8 @@
     "yes": "Evet",
     "no": "Hayır",
     "dismiss": "Kapat",
-    "more": "daha"
+    "more": "daha",
+    "error": "Bir hata oluştu"
   },
   "nav": {
     "home": "Ana Sayfa",
@@ -23,6 +24,9 @@
     "actions": "Aksiyonlar",
     "templates": "Şablonlar",
     "settings": "Ayarlar"
+  },
+  "sidebar": {
+    "tagline": "1-1 toplantı arkadaşınız"
   },
   "dashboard": {
     "welcome": "Hoş Geldiniz!",
@@ -175,6 +179,7 @@
     "importButton": "Verileri İçe Aktar",
     "exportSuccess": "Veriler başarıyla dışa aktarıldı!",
     "importSuccess": "Veriler başarıyla içe aktarıldı!",
+    "importError": "İçe aktarma başarısız. Lütfen dosya formatını kontrol edin.",
     "dangerZone": "Tehlikeli Bölge",
     "dangerZoneDesc": "Dikkatli olun, bu işlemler geri alınamaz.",
     "resetData": "Fabrika Ayarlarına Dön",
@@ -298,6 +303,7 @@
     "addAction": "aksiyon ekle",
     "saveShortcut": "kaydet",
     "unsavedChanges": "Kaydedilmemiş değişiklikler",
+    "autoSaved": "Otomatik kaydedildi",
     "new": "yeni"
   },
   "focus": {

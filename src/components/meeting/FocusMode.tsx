@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { motion } from 'framer-motion'
-import { X, Save, Plus, Check, Clock, User, AlertCircle } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, Save, Plus, Check, Clock, User, AlertCircle, CheckCircle2 } from 'lucide-react'
 import type { Meeting, ActionItem } from '@/types'
 import { Button, Input, Avatar, RichTextEditor } from '@/components/ui'
 import { formatDate, formatMeetingTitle } from '@/lib/utils'
@@ -28,30 +28,54 @@ export function FocusMode({
   const [localActions, setLocalActions] = useState<ActionItem[]>(actions)
   const [pendingNewActions, setPendingNewActions] = useState<string[]>([])
   const [toggledActionIds, setToggledActionIds] = useState<Set<number>>(new Set())
+  const [lastSavedNotes, setLastSavedNotes] = useState(meeting.notes || '')
+  const [showAutoSaved, setShowAutoSaved] = useState(false)
+  const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null)
   const hasUnsavedChanges =
-    notes !== (meeting.notes || '') ||
+    notes !== lastSavedNotes ||
     pendingNewActions.length > 0 ||
     toggledActionIds.size > 0
-  const handleSave = useCallback(async () => {
+  const handleSave = useCallback(async (isAutoSave = false) => {
     setIsSaving(true)
     try {
       await onSaveNotes(notes)
-      for (const desc of pendingNewActions) {
-        await onAddAction(desc)
-      }
-      for (const actionId of toggledActionIds) {
-        if (actionId > 0) {
-          await onToggleAction(actionId)
+      setLastSavedNotes(notes)
+      if (!isAutoSave) {
+        for (const desc of pendingNewActions) {
+          await onAddAction(desc)
         }
+        for (const actionId of toggledActionIds) {
+          if (actionId > 0) {
+            await onToggleAction(actionId)
+          }
+        }
+        setPendingNewActions([])
+        setToggledActionIds(new Set())
+      } else {
+        setShowAutoSaved(true)
+        setTimeout(() => setShowAutoSaved(false), 2000)
       }
-      setPendingNewActions([])
-      setToggledActionIds(new Set())
     } catch (error) {
       console.error('Error saving:', error)
     } finally {
       setIsSaving(false)
     }
   }, [notes, pendingNewActions, toggledActionIds, onSaveNotes, onAddAction, onToggleAction])
+  useEffect(() => {
+    if (notes !== lastSavedNotes) {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current)
+      }
+      autoSaveTimerRef.current = setTimeout(() => {
+        handleSave(true)
+      }, 3000)
+    }
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current)
+      }
+    }
+  }, [notes, lastSavedNotes, handleSave])
   const handleAddAction = () => {
     if (!newAction.trim()) return
     const description = newAction.trim()
@@ -135,15 +159,34 @@ export function FocusMode({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {hasUnsavedChanges && (
-            <span className="flex items-center gap-1 text-xs text-amber-600">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {t('focusMode.unsavedChanges')}
-            </span>
-          )}
+          <AnimatePresence mode="wait">
+            {showAutoSaved ? (
+              <motion.span
+                key="saved"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 5 }}
+                className="flex items-center gap-1 text-xs text-green-600"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                {t('focusMode.autoSaved')}
+              </motion.span>
+            ) : hasUnsavedChanges ? (
+              <motion.span
+                key="unsaved"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 5 }}
+                className="flex items-center gap-1 text-xs text-amber-600"
+              >
+                <AlertCircle className="w-3.5 h-3.5" />
+                {t('focusMode.unsavedChanges')}
+              </motion.span>
+            ) : null}
+          </AnimatePresence>
           <Button
             variant={hasUnsavedChanges ? 'primary' : 'secondary'}
-            onClick={handleSave}
+            onClick={() => handleSave(false)}
             isLoading={isSaving}
             leftIcon={<Save className="w-4 h-4" />}
           >

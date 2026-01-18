@@ -40,7 +40,7 @@ export function Meetings() {
       await updateMeeting(editingMeeting.id, data)
     } else {
       const newMeeting = await createMeeting(data)
-      navigate(`/meetings/${newMeeting.id}`)
+      navigate(`/meetings/${newMeeting.id}?focus=true`)
       return newMeeting
     }
   }

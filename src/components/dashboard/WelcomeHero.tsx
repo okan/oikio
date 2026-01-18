@@ -68,35 +68,35 @@ function calculateStreakData(meetings: Meeting[], actions: ActionItem[]): Streak
   const badges: Badge[] = [
     {
       id: 'first-meeting',
-      name: 'İlk Adım',
+      nameKey: 'firstMeeting_name',
       descriptionKey: 'firstMeeting_desc',
       icon: '🎯',
       earned: meetings.length >= 1,
     },
     {
       id: 'week-streak',
-      name: 'Haftalık Seri',
+      nameKey: 'weekStreak_name',
       descriptionKey: 'weekStreak_desc',
       icon: '🔥',
       earned: longestStreak >= 7,
     },
     {
       id: 'ten-meetings',
-      name: '10 Toplantı',
+      nameKey: 'tenMeetings_name',
       descriptionKey: 'tenMeetings_desc',
       icon: '📝',
       earned: meetings.length >= 10,
     },
     {
       id: 'action-hero',
-      name: 'Aksiyon Kahramanı',
+      nameKey: 'actionHero_name',
       descriptionKey: 'actionHero_desc',
       icon: '⚡',
       earned: actions.filter((a) => a.completed).length >= 25,
     },
     {
       id: 'consistent',
-      name: 'Tutarlılık',
+      nameKey: 'consistent_name',
       descriptionKey: 'consistent_desc',
       icon: '🏆',
       earned: longestStreak >= 30,
@@ -173,7 +173,7 @@ export function WelcomeHero() {
               {earnedBadges.slice(0, 3).map((badge) => (
                 <div
                   key={badge.id}
-                  title={badge.name}
+                  title={t(`streak.${badge.nameKey}`)}
                   className="w-8 h-8 flex items-center justify-center bg-amber-50 rounded-full text-lg hover:scale-110 transition-transform cursor-pointer"
                 >
                   {badge.icon}

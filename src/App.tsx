@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import { Layout } from '@/components/layout'
 import { ErrorBoundary } from '@/components/ui'
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
@@ -22,6 +23,13 @@ function PageLoader() {
 function App() {
   return (
     <ErrorBoundary>
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          className: 'text-sm',
+          duration: 3000,
+        }}
+      />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route

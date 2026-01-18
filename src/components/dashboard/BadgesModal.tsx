@@ -4,7 +4,7 @@ import { Modal } from '@/components/ui'
 import { Lock } from 'lucide-react'
 export interface Badge {
     id: string
-    name: string
+    nameKey: string
     descriptionKey: string
     icon: string
     earned: boolean
@@ -43,7 +43,7 @@ export function BadgesModal({ open, onOpenChange, badges }: BadgesModalProps) {
                                         {badge.icon}
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-slate-900">{badge.name}</h4>
+                                        <h4 className="font-medium text-slate-900">{t(`streak.${badge.nameKey}`)}</h4>
                                         <p className="text-xs text-slate-600">{t(`streak.${badge.descriptionKey}`)}</p>
                                     </div>
                                 </motion.div>
@@ -69,7 +69,7 @@ export function BadgesModal({ open, onOpenChange, badges }: BadgesModalProps) {
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-slate-700">{badge.name}</h4>
+                                        <h4 className="font-medium text-slate-700">{t(`streak.${badge.nameKey}`)}</h4>
                                         <p className="text-xs text-slate-500">{t(`streak.${badge.descriptionKey}`)}</p>
                                     </div>
                                 </div>

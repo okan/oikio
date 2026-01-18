@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import { ArrowLeft, Edit2, Trash2, Calendar, User, ListTodo, Plus, Maximize2 } from 'lucide-react'
@@ -12,6 +12,7 @@ import { formatDate, formatMeetingTitle } from '@/lib/utils'
 export function MeetingDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { t } = useTranslation()
   const { meetings, fetchMeetings, updateMeeting, deleteMeeting } = useMeetingStore()
   const { persons, fetchPersons } = usePersonStore()
@@ -42,9 +43,13 @@ export function MeetingDetail() {
       setMeeting(foundMeeting || null)
       if (foundMeeting) {
         setNextTopics(foundMeeting.nextTopics || '')
+        if (searchParams.get('focus') === 'true') {
+          setFocusModeOpen(true)
+          setSearchParams({})
+        }
       }
     }
-  }, [id, meetings])
+  }, [id, meetings, searchParams, setSearchParams])
   const refreshActions = async () => {
     if (!id) return
     const meetingActions = await fetchActionsByMeeting(parseInt(id))

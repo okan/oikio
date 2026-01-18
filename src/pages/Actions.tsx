@@ -33,6 +33,12 @@ export function Actions() {
     waiting: actions.filter(a => !a.completed && a.assignedTo === 'other').length,
   }
 
+  const tabCounts = {
+    pending: actions.filter(a => !a.completed).length,
+    completed: actions.filter(a => a.completed).length,
+    all: actions.length,
+  }
+
   const filteredActions = actions.filter((a) => {
     const matchesTag = !selectedTag || a.tags?.includes(selectedTag)
     const matchesSearch = !searchQuery || a.description.toLowerCase().includes(searchQuery.toLowerCase())
@@ -89,19 +95,31 @@ export function Actions() {
             leftIcon={<Search className="w-4 h-4" />}
             className="flex-1"
           />
-          <div className="flex bg-slate-100 p-1 rounded-lg">
-            {['pending', 'completed', 'all'].map((tab) => (
+          <div className="flex bg-slate-100 p-1 rounded-xl">
+            {(['pending', 'completed', 'all'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  'px-4 py-1.5 text-xs font-medium rounded-md transition-all',
+                  'px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
                   activeTab === tab
                     ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
+                    : 'text-slate-500 hover:text-slate-700'
                 )}
               >
                 {t(`actions.${tab}`)}
+                <span
+                  className={cn(
+                    'text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center',
+                    activeTab === tab
+                      ? tab === 'pending' && tabCounts[tab] > 0
+                        ? 'bg-primary-100 text-primary-700'
+                        : 'bg-slate-100 text-slate-600'
+                      : 'bg-slate-200 text-slate-500'
+                  )}
+                >
+                  {tabCounts[tab]}
+                </span>
               </button>
             ))}
           </div>

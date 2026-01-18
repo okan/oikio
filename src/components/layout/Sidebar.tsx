@@ -26,7 +26,14 @@ export function Sidebar({ onSearchClick }: SidebarProps) {
       { }
       <div className="h-10" style={{ WebkitAppRegion: 'drag' } as React.CSSProperties} />
       { }
-      <div className="px-4 py-3">
+      <div className="px-4 pt-1 pb-4">
+        <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+          oikio
+        </h1>
+        <p className="text-xs text-slate-400">{t('sidebar.tagline')}</p>
+      </div>
+      { }
+      <div className="px-4 pb-3">
         <button
           onClick={onSearchClick}
           className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-500 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"

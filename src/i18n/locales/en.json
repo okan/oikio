@@ -14,7 +14,8 @@
     "yes": "Yes",
     "no": "No",
     "dismiss": "Dismiss",
-    "more": "more"
+    "more": "more",
+    "error": "An error occurred"
   },
   "nav": {
     "home": "Home",
@@ -23,6 +24,9 @@
     "actions": "Actions",
     "templates": "Templates",
     "settings": "Settings"
+  },
+  "sidebar": {
+    "tagline": "1-1 meeting companion"
   },
   "dashboard": {
     "welcome": "Welcome!",
@@ -175,6 +179,7 @@
     "importButton": "Import Data",
     "exportSuccess": "Data exported successfully!",
     "importSuccess": "Data imported successfully!",
+    "importError": "Import failed. Please check the file format.",
     "importWarning": "This will replace all your current data with the backup file. This action cannot be undone. Are you sure you want to continue?",
     "continue": "Continue",
     "dangerZone": "Danger Zone",
@@ -299,6 +304,7 @@
     "addAction": "add action",
     "saveShortcut": "save",
     "unsavedChanges": "Unsaved changes",
+    "autoSaved": "Auto-saved",
     "new": "new"
   },
   "focus": {
