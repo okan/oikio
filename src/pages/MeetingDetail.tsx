@@ -134,7 +134,9 @@ export function MeetingDetail() {
           <div className="flex items-start gap-4">
             <Avatar name={meeting.personName || ''} size="lg" />
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">{formatMeetingTitle(meeting.title, meeting.date)}</h1>
+              <h1 className="text-2xl font-bold text-slate-900">
+                {formatMeetingTitle(meeting.title, meeting.date)}
+              </h1>
               <div className="flex items-center gap-4 mt-2 text-slate-500">
                 <span className="flex items-center gap-1">
                   <User className="w-4 h-4" />
@@ -172,28 +174,35 @@ export function MeetingDetail() {
           </div>
         </div>
       </div>
-      { }
       {meeting.notes && (
-        <div className="card p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">{t('meetings.notes')}</h2>
-          <div className="prose prose-slate prose-sm max-w-none prose-headings:text-slate-900 prose-p:text-slate-700 prose-li:text-slate-700 prose-strong:text-slate-900">
+        <div className="card overflow-hidden">
+          <div className="flex items-center gap-2 px-6 py-3 bg-slate-50 border-b border-slate-100">
+            <Edit2 className="w-4 h-4 text-slate-400" />
+            <h2 className="text-sm font-medium text-slate-600 uppercase tracking-wide">{t('meetings.notes')}</h2>
+          </div>
+          <div className="p-6 prose prose-slate max-w-none prose-headings:text-slate-800 prose-headings:font-semibold prose-headings:mt-4 prose-headings:mb-2 prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-li:my-1 prose-ul:my-2 prose-ol:my-2 prose-strong:text-slate-700 prose-a:text-primary-600">
             <ReactMarkdown>{meeting.notes}</ReactMarkdown>
           </div>
         </div>
       )}
-      { }
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-slate-900">{t('nav.actions')}</h2>
-        <ActionList
-          actions={actions}
-          onToggle={handleToggle}
-          onDelete={handleDeleteAction}
-          emptyTitle={t('actions.noActions')}
-          emptyDescription={t('actions.noActionsDesc')}
-        />
-        <ActionForm onSubmit={handleActionCreate} />
+      <div className="card overflow-hidden">
+        <div className="flex items-center gap-2 px-6 py-3 bg-slate-50 border-b border-slate-100">
+          <ListTodo className="w-4 h-4 text-slate-400" />
+          <h2 className="text-sm font-medium text-slate-600 uppercase tracking-wide">{t('nav.actions')}</h2>
+        </div>
+        <div className="p-4">
+          <ActionList
+            actions={actions}
+            onToggle={handleToggle}
+            onDelete={handleDeleteAction}
+            emptyTitle={t('actions.noActions')}
+            emptyDescription={t('actions.noActionsDesc')}
+          />
+          <div className="mt-3">
+            <ActionForm onSubmit={handleActionCreate} />
+          </div>
+        </div>
       </div>
-      { }
       <div className="card p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
