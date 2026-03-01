@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { ArrowLeft } from 'lucide-react'
 import { useTemplateStore } from '@/store'
 import { Header } from '@/components/layout'
 import { TemplateList, TemplateForm } from '@/components/template'
+import { PageTransition } from '@/components/ui'
 import type { Template } from '@/types'
 export function Templates() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { templates, fetchTemplates, createTemplate, updateTemplate, deleteTemplate } =
     useTemplateStore()
   const [formOpen, setFormOpen] = useState(false)
@@ -32,7 +36,14 @@ export function Templates() {
     await deleteTemplate(id)
   }
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
+      <button
+        onClick={() => navigate('/meetings')}
+        className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-stone-700 transition-colors mb-2"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        {t('meetings.title')}
+      </button>
       <Header
         title={t('templates.title')}
         description={t('templates.description')}
@@ -50,6 +61,7 @@ export function Templates() {
         template={editingTemplate}
         onSubmit={handleSubmit}
       />
-    </div>
+    </PageTransition>
   )
 }
+export default Templates

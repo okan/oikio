@@ -6,21 +6,17 @@ import { FileText } from 'lucide-react'
 import { useMeetingStore, usePersonStore, useTemplateStore } from '@/store'
 import { Header } from '@/components/layout'
 import { MeetingList, MeetingForm } from '@/components/meeting'
-import { TemplateList, TemplateForm } from '@/components/template'
-import { Modal, PageTransition } from '@/components/ui'
-import type { Meeting, Template } from '@/types'
+import { PageTransition } from '@/components/ui'
+import type { Meeting } from '@/types'
 export function Meetings() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { meetings, fetchMeetings, createMeeting, updateMeeting } = useMeetingStore()
   const { persons, fetchPersons } = usePersonStore()
-  const { templates, fetchTemplates, createTemplate, updateTemplate, deleteTemplate } = useTemplateStore()
+  const { templates, fetchTemplates } = useTemplateStore()
   const [meetingFormOpen, setMeetingFormOpen] = useState(false)
   const [editingMeeting, setEditingMeeting] = useState<Meeting | null>(null)
-  const [templateFormOpen, setTemplateFormOpen] = useState(false)
-  const [editingTemplate, setEditingTemplate] = useState<Template | null>(null)
-  const [templateManagerOpen, setTemplateManagerOpen] = useState(false)
   useEffect(() => {
     fetchMeetings()
     fetchPersons()
@@ -46,24 +42,6 @@ export function Meetings() {
       return newMeeting
     }
   }
-  const handleAddTemplate = () => {
-    setEditingTemplate(null)
-    setTemplateFormOpen(true)
-  }
-  const handleEditTemplate = (template: Template) => {
-    setEditingTemplate(template)
-    setTemplateFormOpen(true)
-  }
-  const handleTemplateSubmit = async (data: Omit<Template, 'id'>) => {
-    if (editingTemplate) {
-      await updateTemplate(editingTemplate.id, data)
-    } else {
-      await createTemplate(data)
-    }
-  }
-  const handleDeleteTemplate = async (id: number) => {
-    await deleteTemplate(id)
-  }
   return (
     <PageTransition className="space-y-6">
       <Header
@@ -72,7 +50,7 @@ export function Meetings() {
         action={{ label: t('meetings.newMeeting'), onClick: handleAddMeeting }}
         secondaryAction={{
           label: t('nav.templates'),
-          onClick: () => setTemplateManagerOpen(true),
+          onClick: () => navigate('/templates'),
           icon: <FileText className="w-4 h-4" />,
         }}
       />
@@ -84,35 +62,6 @@ export function Meetings() {
         persons={persons}
         templates={templates}
         onSubmit={handleMeetingSubmit}
-      />
-      <Modal
-        open={templateManagerOpen}
-        onOpenChange={setTemplateManagerOpen}
-        title={t('templates.title')}
-        className="max-w-3xl"
-      >
-        <div className="space-y-4">
-          <div className="flex justify-end">
-            <button
-              onClick={handleAddTemplate}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-stone-800 rounded-lg hover:bg-stone-900 transition-colors"
-            >
-              {t('templates.newTemplate')}
-            </button>
-          </div>
-          <TemplateList
-            templates={templates}
-            onAddClick={handleAddTemplate}
-            onEdit={handleEditTemplate}
-            onDelete={handleDeleteTemplate}
-          />
-        </div>
-      </Modal>
-      <TemplateForm
-        open={templateFormOpen}
-        onOpenChange={setTemplateFormOpen}
-        template={editingTemplate}
-        onSubmit={handleTemplateSubmit}
       />
     </PageTransition>
   )

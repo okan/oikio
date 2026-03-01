@@ -10,6 +10,7 @@ const Meetings = lazy(() => import('@/pages/Meetings'))
 const MeetingDetail = lazy(() => import('@/pages/MeetingDetail'))
 const Actions = lazy(() => import('@/pages/Actions'))
 const Settings = lazy(() => import('@/pages/Settings'))
+const Templates = lazy(() => import('@/pages/Templates'))
 function PageLoader() {
   return (
     <div className="flex items-center justify-center min-h-[400px]">
@@ -85,6 +86,14 @@ function App() {
             element={
               <Suspense fallback={<PageLoader />}>
                 <Settings />
+              </Suspense>
+            }
+          />
+          <Route
+            path="templates"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <Templates />
               </Suspense>
             }
           />
