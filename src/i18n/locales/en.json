@@ -168,7 +168,12 @@
     "templateDescription": "Description",
     "descPlaceholder": "What is this template for?",
     "content": "Template Content (Markdown)",
-    "contentPlaceholder": "Write template content in Markdown format..."
+    "contentPlaceholder": "Write template content in Markdown format...",
+    "category": "Category",
+    "categoryManager": "Manager",
+    "categoryTeammate": "Teammate",
+    "categoryGeneral": "General",
+    "recommended": "Recommended"
   },
   "settings": {
     "title": "Settings",

@@ -134,10 +134,23 @@ export function MeetingForm({
     value: p.id.toString(),
     label: p.name,
   }))
-  const templateOptions = templates.map((t) => ({
-    value: t.id.toString(),
-    label: t.name,
-  }))
+  const selectedPerson = personId ? persons.find((p) => p.id.toString() === personId) : null
+  const sortedTemplates = [...templates].sort((a, b) => {
+    if (!selectedPerson) return 0
+    const role = selectedPerson.role
+    const aMatch = a.category === role || a.category === 'general'
+    const bMatch = b.category === role || b.category === 'general'
+    if (aMatch && !bMatch) return -1
+    if (!aMatch && bMatch) return 1
+    return 0
+  })
+  const templateOptions = sortedTemplates.map((tpl) => {
+    const isRecommended = selectedPerson && (tpl.category === selectedPerson.role || tpl.category === 'general')
+    return {
+      value: tpl.id.toString(),
+      label: isRecommended ? `★ ${tpl.name}` : tpl.name,
+    }
+  })
   const hasContext = lastMeetingContext &&
     (lastMeetingContext.pendingActions.length > 0 || lastMeetingContext.nextTopics)
   return (

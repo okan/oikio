@@ -9,8 +9,22 @@ interface TemplateCardProps {
   onDelete: () => void
   index?: number
 }
+const CATEGORY_COLORS: Record<string, string> = {
+  manager: 'bg-purple-50 text-purple-700 border-purple-200',
+  teammate: 'bg-blue-50 text-blue-700 border-blue-200',
+  general: 'bg-stone-50 text-stone-600 border-stone-200',
+}
 export function TemplateCard({ template, onEdit, onDelete, index = 0 }: TemplateCardProps) {
   const { t } = useTranslation()
+  const getCategoryColor = (category?: string) => CATEGORY_COLORS[category || 'general'] || CATEGORY_COLORS.general
+  const getCategoryLabel = (category?: string) => {
+    const labels: Record<string, string> = {
+      manager: t('templates.categoryManager'),
+      teammate: t('templates.categoryTeammate'),
+      general: t('templates.categoryGeneral'),
+    }
+    return labels[category || 'general'] || labels.general
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -26,6 +40,9 @@ export function TemplateCard({ template, onEdit, onDelete, index = 0 }: Template
           <div className="flex items-center gap-2">
             <h3 className="font-semibold text-stone-900">{template.name}</h3>
             {template.isDefault && <Badge variant="primary">{t('templates.default')}</Badge>}
+            <Badge variant="default" size="sm" className={getCategoryColor(template.category)}>
+              {getCategoryLabel(template.category)}
+            </Badge>
           </div>
           {template.description && (
             <p className="text-sm text-stone-500 mt-1">{template.description}</p>

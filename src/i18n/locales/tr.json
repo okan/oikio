@@ -168,7 +168,12 @@
     "templateDescription": "Açıklama",
     "descPlaceholder": "Bu şablon ne için kullanılır?",
     "content": "Şablon İçeriği (Markdown)",
-    "contentPlaceholder": "Şablon içeriğini Markdown formatında yazın..."
+    "contentPlaceholder": "Şablon içeriğini Markdown formatında yazın...",
+    "category": "Kategori",
+    "categoryManager": "Yönetici",
+    "categoryTeammate": "Takım Arkadaşı",
+    "categoryGeneral": "Genel",
+    "recommended": "Önerilen"
   },
   "settings": {
     "title": "Ayarlar",

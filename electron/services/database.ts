@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import path from 'path'
 import fs from 'fs'
-import type { Person, Meeting, ActionItem, Template, DashboardStats, MeetingSkip } from '../../src/types'
+import type { Person, Meeting, ActionItem, Template, DashboardStats, MeetingSkip, TemplateCategory } from '../../src/types'
 interface DatabaseData {
   persons: Person[]
   meetings: Meeting[]
@@ -79,32 +79,108 @@ export class DatabaseService {
       }
     }
   }
-  private seedDefaultTemplates(): void {
-    const hasDefaultTemplates = this.data.templates.some((t) => t.isDefault)
-    if (!hasDefaultTemplates) {
-      const defaultTemplates = [
+  private getDefaultTemplates(locale: string): Array<{ name: string; description: string; content: string; category: TemplateCategory }> {
+    if (locale === 'tr') {
+      return [
         {
           name: 'Haftalık Sync',
           description: 'Haftalık düzenli 1-1 toplantıları için',
-          content: '## Bu Hafta\n- \n\n## Engelleyiciler\n- \n\n## Sonraki Hafta\n- ',
+          category: 'general',
+          content: '## Bu Hafta Neler Oldu?\n- \n\n## Engelleyiciler & Zorluklar\n- \n\n## Sonraki Hafta Planı\n- \n\n## Notlar\n- ',
         },
         {
           name: 'Performans Görüşmesi',
-          description: 'Performans değerlendirme toplantıları için',
-          content: '## Başarılar\n- \n\n## Gelişim Alanları\n- \n\n## Hedefler\n- \n\n## Geri Bildirim\n- ',
+          description: 'Hedef takibi, geri bildirim ve değerlendirme',
+          category: 'manager',
+          content: '## Dönem Değerlendirmesi\n- \n\n## Başarılar & Güçlü Yanlar\n- \n\n## Gelişim Alanları\n- \n\n## Hedef Takibi\n- [ ] \n\n## Geri Bildirim\n### Benden Ona\n- \n\n### Ondan Bana\n- ',
         },
         {
           name: 'Kariyer Görüşmesi',
-          description: 'Kariyer gelişimi ve hedefler için',
-          content: '## Kısa Vadeli Hedefler\n- \n\n## Uzun Vadeli Hedefler\n- \n\n## Gelişim Planı\n- \n\n## Destek İhtiyaçları\n- ',
+          description: 'Uzun vadeli hedefler ve gelişim planı',
+          category: 'manager',
+          content: '## Mevcut Durum\n- Rolden memnuniyet: \n- Motivasyon seviyesi: \n\n## Kısa Vadeli Hedefler (3 ay)\n- [ ] \n\n## Uzun Vadeli Hedefler (1 yıl)\n- [ ] \n\n## Gelişim Planı\n- Öğrenilecek beceriler: \n- Deneyim fırsatları: \n\n## Destek İhtiyaçları\n- ',
+        },
+        {
+          name: 'Proje Durumu',
+          description: 'Sprint veya proje ilerleme takibi',
+          category: 'teammate',
+          content: '## Proje İlerlemesi\n- Tamamlanan: \n- Devam eden: \n- Bekleyen: \n\n## Teknik Zorluklar\n- \n\n## Bağımlılıklar & Riskler\n- \n\n## Sonraki Adımlar\n- [ ] ',
+        },
+        {
+          name: 'Beyin Fırtınası',
+          description: 'Yaratıcı tartışma ve fikir paylaşımı',
+          category: 'teammate',
+          content: '## Konu / Problem\n- \n\n## Fikirler\n1. \n2. \n3. \n\n## Artılar & Eksiler\n| Fikir | Artı | Eksi |\n|-------|------|------|\n|  |  |  |\n\n## Karar & Sonraki Adımlar\n- ',
+        },
+        {
+          name: 'İlk Tanışma',
+          description: 'Yeni iş ilişkisi başlangıcı',
+          category: 'general',
+          content: '## Tanışma\n- İsim & Rol: \n- Deneyim: \n\n## Beklentiler\n- Benden beklentileri: \n- Benim beklentilerim: \n\n## Çalışma Tarzı\n- İletişim tercihi: \n- Toplantı sıklığı: \n\n## Notlar\n- ',
         },
       ]
-      for (const template of defaultTemplates) {
+    }
+    return [
+      {
+        name: 'Weekly Sync',
+        description: 'For regular weekly 1-1 meetings',
+        category: 'general',
+        content: '## What Happened This Week?\n- \n\n## Blockers & Challenges\n- \n\n## Next Week Plan\n- \n\n## Notes\n- ',
+      },
+      {
+        name: 'Performance Review',
+        description: 'Goal tracking, feedback, and evaluation',
+        category: 'manager',
+        content: '## Period Review\n- \n\n## Achievements & Strengths\n- \n\n## Areas for Improvement\n- \n\n## Goal Tracking\n- [ ] \n\n## Feedback\n### From Me\n- \n\n### From Them\n- ',
+      },
+      {
+        name: 'Career Growth',
+        description: 'Long-term goals and development plan',
+        category: 'manager',
+        content: '## Current State\n- Role satisfaction: \n- Motivation level: \n\n## Short-term Goals (3 months)\n- [ ] \n\n## Long-term Goals (1 year)\n- [ ] \n\n## Development Plan\n- Skills to learn: \n- Experience opportunities: \n\n## Support Needed\n- ',
+      },
+      {
+        name: 'Project Status',
+        description: 'Sprint or project progress tracking',
+        category: 'teammate',
+        content: '## Project Progress\n- Completed: \n- In progress: \n- Blocked: \n\n## Technical Challenges\n- \n\n## Dependencies & Risks\n- \n\n## Next Steps\n- [ ] ',
+      },
+      {
+        name: 'Brainstorm',
+        description: 'Creative discussion and idea sharing',
+        category: 'teammate',
+        content: '## Topic / Problem\n- \n\n## Ideas\n1. \n2. \n3. \n\n## Pros & Cons\n| Idea | Pro | Con |\n|------|-----|-----|\n|  |  |  |\n\n## Decision & Next Steps\n- ',
+      },
+      {
+        name: 'First Meeting',
+        description: 'Starting a new working relationship',
+        category: 'general',
+        content: '## Introduction\n- Name & Role: \n- Background: \n\n## Expectations\n- Their expectations: \n- My expectations: \n\n## Working Style\n- Communication preference: \n- Meeting frequency: \n\n## Notes\n- ',
+      },
+    ]
+  }
+  private seedDefaultTemplates(): void {
+    const locale = app.getLocale().startsWith('tr') ? 'tr' : 'en'
+    const newDefaults = this.getDefaultTemplates(locale)
+    const existingDefaults = this.data.templates.filter((t) => t.isDefault)
+    const needsReseed = existingDefaults.length !== newDefaults.length ||
+      existingDefaults.some((t) => !t.category)
+    if (needsReseed) {
+      this.data.templates = this.data.templates.filter((t) => !t.isDefault)
+      for (const template of newDefaults) {
         this.data.templates.push({
           id: this.getNextId('templates'),
           ...template,
           isDefault: true,
         })
+      }
+    }
+    this.migrateTemplateCategories()
+  }
+  private migrateTemplateCategories(): void {
+    for (const template of this.data.templates) {
+      if (!template.category) {
+        (template as Template).category = 'general'
       }
     }
   }

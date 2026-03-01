@@ -54,11 +54,13 @@ export interface ActionItem {
   completed: boolean
   createdAt: string
 }
+export type TemplateCategory = 'manager' | 'teammate' | 'general'
 export interface Template {
   id: number
   name: string
   description?: string
   content: string
+  category: TemplateCategory
   isDefault: boolean
 }
 export interface ElectronAPI {

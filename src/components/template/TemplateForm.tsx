@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Template } from '@/types'
-import { Button, Input, Textarea, Modal } from '@/components/ui'
+import type { Template, TemplateCategory } from '@/types'
+import { Button, Input, Select, Textarea, Modal } from '@/components/ui'
 interface TemplateFormProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -13,6 +13,7 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [content, setContent] = useState('')
+  const [category, setCategory] = useState<TemplateCategory>('general')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   useEffect(() => {
@@ -20,10 +21,12 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
       setName(template.name)
       setDescription(template.description || '')
       setContent(template.content)
+      setCategory(template.category || 'general')
     } else {
       setName('')
       setDescription('')
       setContent('## Topic 1\n- \n\n## Topic 2\n- ')
+      setCategory('general')
     }
     setErrors({})
   }, [template, open])
@@ -47,6 +50,7 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
         name: name.trim(),
         description: description.trim() || undefined,
         content: content.trim(),
+        category,
         isDefault: false,
       })
       onOpenChange(false)
@@ -72,12 +76,24 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
           error={errors.name}
           autoFocus
         />
-        <Input
-          label={t('templates.templateDescription')}
-          placeholder={t('templates.descPlaceholder')}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label={t('templates.templateDescription')}
+            placeholder={t('templates.descPlaceholder')}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <Select
+            label={t('templates.category')}
+            value={category}
+            onValueChange={(v) => setCategory(v as TemplateCategory)}
+            options={[
+              { value: 'general', label: t('templates.categoryGeneral') },
+              { value: 'manager', label: t('templates.categoryManager') },
+              { value: 'teammate', label: t('templates.categoryTeammate') },
+            ]}
+          />
+        </div>
         <Textarea
           label={t('templates.content')}
           placeholder={t('templates.contentPlaceholder')}
