@@ -52,11 +52,6 @@ export interface Template {
   content: string
   isDefault: boolean
 }
-export interface DashboardStats {
-  totalPersons: number
-  meetingsThisMonth: number
-  pendingActions: number
-}
 export interface ElectronAPI {
   persons: {
     getAll: () => Promise<Person[]>
@@ -94,7 +89,7 @@ export interface ElectronAPI {
     delete: (id: number) => Promise<void>
   }
   stats: {
-    getDashboard: () => Promise<DashboardStats>
+    getDashboard: () => Promise<{ totalPersons: number; meetingsThisMonth: number; pendingActions: number }>
   }
   data: {
     export: () => Promise<string>

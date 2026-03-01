@@ -30,8 +30,8 @@ function ToolbarButton({
       className={cn(
         'p-1.5 rounded transition-colors',
         isActive
-          ? 'bg-primary-100 text-primary-600'
-          : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
+          ? 'bg-stone-100 text-stone-700'
+          : 'text-stone-500 hover:bg-stone-100 hover:text-stone-700'
       )}
     >
       {children}
@@ -81,13 +81,13 @@ export function RichTextEditor({
       {label && <label className="label">{label}</label>}
       <div
         className={cn(
-          'rounded-lg border border-slate-300 bg-white overflow-hidden',
-          'focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20',
+          'rounded-lg border border-stone-300 bg-white overflow-hidden',
+          'focus-within:border-stone-400 focus-within:ring-2 focus-within:ring-stone-500/20',
           'transition-all duration-150',
           error && 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/20'
         )}
       >
-        <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-slate-200 bg-slate-50">
+        <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-stone-200 bg-stone-50">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             isActive={editor.isActive('heading', { level: 2 })}
@@ -109,7 +109,7 @@ export function RichTextEditor({
           >
             <Italic className="w-4 h-4" />
           </ToolbarButton>
-          <div className="w-px h-4 bg-slate-300 mx-1" />
+          <div className="w-px h-4 bg-stone-300 mx-1" />
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             isActive={editor.isActive('bulletList')}

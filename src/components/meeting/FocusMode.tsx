@@ -138,15 +138,15 @@ export function FocusMode({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-slate-50 z-50 flex flex-col"
+      className="fixed inset-0 bg-stone-50 z-50 flex flex-col"
     >
       { }
-      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-stone-200 bg-white">
         <div className="flex items-center gap-4">
           <Avatar name={meeting.personName || ''} size="md" />
           <div>
-            <h1 className="text-lg font-semibold text-slate-900">{formatMeetingTitle(meeting.title, meeting.date)}</h1>
-            <div className="flex items-center gap-3 text-sm text-slate-500">
+            <h1 className="text-lg font-semibold text-stone-900">{formatMeetingTitle(meeting.title, meeting.date)}</h1>
+            <div className="flex items-center gap-3 text-sm text-stone-500">
               <span className="flex items-center gap-1">
                 <User className="w-4 h-4" />
                 {meeting.personName}
@@ -193,13 +193,13 @@ export function FocusMode({
             {t('common.save')}
           </Button>
           <Button variant="ghost" onClick={onClose}>
-            <X className="w-5 h-5 text-slate-500" />
+            <X className="w-5 h-5 text-stone-500" />
           </Button>
         </div>
       </div>
       <div className="flex-1 flex overflow-hidden">
         <div className="flex-1 p-6 overflow-auto bg-white">
-          <h2 className="text-sm font-medium text-slate-500 mb-3">
+          <h2 className="text-sm font-medium text-stone-500 mb-3">
             {t('focusMode.notes')}
           </h2>
           <RichTextEditor
@@ -208,8 +208,8 @@ export function FocusMode({
             placeholder={t('focusMode.notesPlaceholder')}
           />
         </div>
-        <div className="w-96 border-l border-slate-200 p-6 overflow-auto bg-slate-50">
-          <h2 className="text-sm font-medium text-slate-500 mb-3">
+        <div className="w-96 border-l border-stone-200 p-6 overflow-auto bg-stone-50">
+          <h2 className="text-sm font-medium text-stone-500 mb-3">
             {t('focusMode.actions')}
           </h2>
           <div className="flex gap-2 mb-4">
@@ -231,16 +231,16 @@ export function FocusMode({
                   key={action.id}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className={`flex items-start gap-3 p-3 bg-white rounded-lg border ${action.id < 0 ? 'border-amber-300 border-dashed' : 'border-slate-200'
+                  className={`flex items-start gap-3 p-3 bg-white rounded-lg border ${action.id < 0 ? 'border-amber-300 border-dashed' : 'border-stone-200'
                     }`}
                 >
                   <button
                     onClick={() => handleToggle(action.id)}
-                    className="mt-0.5 w-5 h-5 rounded border-2 border-slate-300 hover:border-primary-500 transition-colors flex items-center justify-center"
+                    className="mt-0.5 w-5 h-5 rounded border-2 border-stone-300 hover:border-stone-500 transition-colors flex items-center justify-center"
                   >
-                    {action.completed && <Check className="w-3 h-3 text-primary-500" />}
+                    {action.completed && <Check className="w-3 h-3 text-stone-700" />}
                   </button>
-                  <span className="text-sm text-slate-700">{action.description}</span>
+                  <span className="text-sm text-stone-700">{action.description}</span>
                   {action.id < 0 && (
                     <span className="ml-auto text-xs text-amber-600">{t('focusMode.new')}</span>
                   )}
@@ -250,23 +250,23 @@ export function FocusMode({
           )}
           {completedActions.length > 0 && (
             <div>
-              <h3 className="text-xs font-medium text-slate-400 mb-2">
+              <h3 className="text-xs font-medium text-stone-400 mb-2">
                 {t('focusMode.completed')} ({completedActions.length})
               </h3>
               <div className="space-y-2">
                 {completedActions.map((action) => (
                   <div
                     key={action.id}
-                    className={`flex items-start gap-3 p-3 rounded-lg opacity-60 ${action.id < 0 ? 'bg-amber-50 border border-amber-200 border-dashed' : 'bg-slate-100'
+                    className={`flex items-start gap-3 p-3 rounded-lg opacity-60 ${action.id < 0 ? 'bg-amber-50 border border-amber-200 border-dashed' : 'bg-stone-100'
                       }`}
                   >
                     <button
                       onClick={() => handleToggle(action.id)}
-                      className="mt-0.5 w-5 h-5 rounded bg-primary-500 flex items-center justify-center"
+                      className="mt-0.5 w-5 h-5 rounded bg-stone-800 flex items-center justify-center"
                     >
                       <Check className="w-3 h-3 text-white" />
                     </button>
-                    <span className="text-sm text-slate-500 line-through">
+                    <span className="text-sm text-stone-500 line-through">
                       {action.description}
                     </span>
                   </div>
@@ -275,25 +275,25 @@ export function FocusMode({
             </div>
           )}
           {localActions.length === 0 && (
-            <div className="text-center py-8 text-slate-400">
+            <div className="text-center py-8 text-stone-400">
               <p className="text-sm">{t('focusMode.noActions')}</p>
             </div>
           )}
         </div>
       </div>
       { }
-      <div className="px-6 py-2 border-t border-slate-200 bg-white">
-        <div className="flex items-center gap-4 text-xs text-slate-500">
+      <div className="px-6 py-2 border-t border-stone-200 bg-white">
+        <div className="flex items-center gap-4 text-xs text-stone-500">
           <span>
-            <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded">Esc</kbd>{' '}
+            <kbd className="px-1.5 py-0.5 bg-stone-100 border border-stone-200 rounded">Esc</kbd>{' '}
             {t('focusMode.exit')}
           </span>
           <span>
-            <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded">Enter</kbd>{' '}
+            <kbd className="px-1.5 py-0.5 bg-stone-100 border border-stone-200 rounded">Enter</kbd>{' '}
             {t('focusMode.addAction')}
           </span>
           <span>
-            <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded">⌘S</kbd>{' '}
+            <kbd className="px-1.5 py-0.5 bg-stone-100 border border-stone-200 rounded">⌘S</kbd>{' '}
             {t('focusMode.saveShortcut')}
           </span>
         </div>

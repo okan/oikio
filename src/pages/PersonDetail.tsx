@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { usePersonStore, useMeetingStore, useTemplateStore } from '@/store'
 import type { Person, Meeting, ActionItem } from '@/types'
-import { Button, Modal } from '@/components/ui'
+import { Button, Modal, PageTransition } from '@/components/ui'
 import { MeetingForm } from '@/components/meeting'
 import {
   PersonForm,
@@ -69,7 +69,7 @@ export function PersonDetail() {
   if (!person) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-slate-500">{t('common.loading')}</p>
+        <p className="text-stone-500">{t('common.loading')}</p>
       </div>
     )
   }
@@ -94,37 +94,40 @@ export function PersonDetail() {
     setMeetingFormOpen(true)
   }
   return (
-    <div className="space-y-6">
-      { }
+    <PageTransition className="space-y-5">
       <button
         onClick={() => navigate('/persons')}
-        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+        className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-700 transition-colors"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="w-3.5 h-3.5" />
         <span>{t('nav.persons')}</span>
       </button>
-      { }
-      <PersonDetailHeader
-        person={person}
-        onEdit={() => setEditFormOpen(true)}
-        onNewMeeting={handleNewMeeting}
-        futureMeeting={futureMeetings[0]}
-      />
-      { }
-      <PersonPendingActions actions={actions} onActionToggle={loadActions} />
-      { }
-      <PersonMeetingTimeline meetings={meetings} onAddClick={handleNewMeeting} />
-      { }
-      <div className="flex justify-end pt-4 border-t border-slate-200">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setDeleteModalOpen(true)}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-        >
-          <Trash2 className="w-4 h-4 mr-2" />
-          {t('persons.deletePerson')}
-        </Button>
+
+      <div className="grid grid-cols-5 gap-4">
+        <div className="col-span-3 space-y-4">
+          <PersonPendingActions actions={actions} onActionToggle={loadActions} />
+          <PersonMeetingTimeline meetings={meetings} onAddClick={handleNewMeeting} />
+        </div>
+
+        <div className="col-span-2 space-y-4">
+          <PersonDetailHeader
+            person={person}
+            onEdit={() => setEditFormOpen(true)}
+            onNewMeeting={handleNewMeeting}
+            futureMeeting={futureMeetings[0]}
+          />
+          <div className="flex justify-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setDeleteModalOpen(true)}
+              className="text-red-500 hover:text-red-600 hover:bg-red-50 text-xs"
+            >
+              <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+              {t('persons.deletePerson')}
+            </Button>
+          </div>
+        </div>
       </div>
       { }
       <PersonForm
@@ -161,7 +164,7 @@ export function PersonDetail() {
           </Button>
         </div>
       </Modal>
-    </div>
+    </PageTransition>
   )
 }
 export default PersonDetail

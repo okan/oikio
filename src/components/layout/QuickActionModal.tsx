@@ -89,15 +89,15 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
         <Dialog.Content className="fixed left-1/2 top-[15%] -translate-x-1/2 z-50 w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none data-[state=open]:animate-search-in data-[state=closed]:animate-search-out">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-stone-200 bg-white">
             <div className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-primary-600" />
-              <Dialog.Title className="font-semibold text-slate-900">
+              <Zap className="w-5 h-5 text-stone-600" />
+              <Dialog.Title className="font-semibold text-stone-900">
                 {t('quickAction.title')}
               </Dialog.Title>
             </div>
             <Dialog.Close asChild>
-              <button className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100">
+              <button className="p-1 rounded text-stone-400 hover:text-stone-600 hover:bg-stone-100">
                 <X className="w-4 h-4" />
               </button>
             </Dialog.Close>
@@ -128,7 +128,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-slate-700">
+              <label className="text-sm font-medium text-stone-700">
                 {t('actions.assignedTo')}
               </label>
               <div className="flex gap-2">
@@ -138,8 +138,8 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
                   className={cn(
                     'flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition-colors',
                     assignedTo === 'me'
-                      ? 'bg-primary-600 border-primary-600 text-white shadow-sm'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                      ? 'bg-stone-800 border-stone-800 text-white shadow-sm'
+                      : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
                   )}
                 >
                   {t('actions.me')}
@@ -151,7 +151,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
                     'flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition-colors',
                     assignedTo === 'other'
                       ? 'bg-amber-600 border-amber-600 text-white shadow-sm'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                      : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
                   )}
                 >
                   {t('actions.other')}
@@ -159,7 +159,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-stone-700 mb-2">
                 {t('actions.dueDate')}
               </label>
               <div className="flex gap-2 mb-2">
@@ -211,13 +211,13 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
               </Button>
             </div>
           </form>
-          <div className="px-4 py-2 border-t border-slate-200 bg-slate-50">
-            <div className="flex items-center gap-4 text-xs text-slate-500">
+          <div className="px-4 py-2 border-t border-stone-200 bg-stone-50">
+            <div className="flex items-center gap-4 text-xs text-stone-500">
               <span>
-                <kbd className="px-1.5 py-0.5 bg-slate-200 rounded">⌘⇧A</kbd> {t('quickAction.shortcut')}
+                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded">⌘⇧A</kbd> {t('quickAction.shortcut')}
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 bg-slate-200 rounded">Esc</kbd> {t('search.close')}
+                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded">Esc</kbd> {t('search.close')}
               </span>
             </div>
           </div>

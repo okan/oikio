@@ -7,16 +7,16 @@ export interface BadgeProps {
 }
 export function Badge({ variant = 'default', size = 'md', children, className }: BadgeProps) {
   const variants = {
-    default: 'bg-slate-100 text-slate-700',
-    success: 'bg-green-100 text-green-700',
-    warning: 'bg-amber-100 text-amber-700',
-    error: 'bg-red-100 text-red-700',
-    primary: 'bg-primary-100 text-primary-700',
+    default: 'bg-stone-100 text-stone-600',
+    success: 'bg-emerald-50 text-emerald-700',
+    warning: 'bg-amber-50 text-amber-700',
+    error: 'bg-red-50 text-red-700',
+    primary: 'bg-blue-50 text-blue-700',
   }
   const sizes = {
-    sm: 'px-1.5 py-0.5 text-[10px]',
-    md: 'px-2 py-0.5 text-xs',
-    lg: 'px-2.5 py-1 text-sm',
+    sm: 'px-2 py-0.5 text-[10px]',
+    md: 'px-2.5 py-1 text-xs',
+    lg: 'px-3 py-1.5 text-sm',
   }
   return (
     <span

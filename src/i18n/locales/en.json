@@ -269,29 +269,6 @@
     "closeModal": "Close Modal",
     "tip": "Shortcuts are active on all pages"
   },
-  "streak": {
-    "title": "Activity",
-    "currentStreak": "Current Streak",
-    "longestStreak": "Longest Streak",
-    "weeklyGoal": "Weekly Goal",
-    "weeklyProgress": "Weekly Progress",
-    "badges": "Badges",
-    "viewAll": "View All Badges",
-    "earned": "Earned",
-    "locked": "Locked",
-    "badgesTitle": "Your Achievements",
-    "badgesDesc": "Track your progress and consistency",
-    "firstMeeting_name": "First Step",
-    "firstMeeting_desc": "Complete your first meeting",
-    "weekStreak_name": "Weekly Streak",
-    "weekStreak_desc": "Maintain a streak for 7 days",
-    "tenMeetings_name": "10 Meetings",
-    "tenMeetings_desc": "Conduct 10 meetings in total",
-    "actionHero_name": "Action Hero",
-    "actionHero_desc": "Complete 25 action items",
-    "consistent_name": "Consistency",
-    "consistent_desc": "Maintain a streak for 30 days"
-  },
   "focusMode": {
     "title": "Focus Mode",
     "notes": "Notes",
@@ -341,6 +318,9 @@
     "week": "week"
   },
   "personDetail": {
+    "status": "Status",
+    "frequency": "Frequency",
+    "nextMeeting": "Next Meeting",
     "meetingSoon": "Meeting time!",
     "nextTomorrow": "Next: Tomorrow",
     "nextInDays": "Next: in {{days}} days",

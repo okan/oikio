@@ -39,12 +39,12 @@ export function RelationshipGrid() {
   }, [])
   if (isLoading) {
     return (
-      <div className="card p-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-slate-200 rounded w-1/3" />
-          <div className="grid grid-cols-3 gap-3">
+      <div className="card p-5 h-full">
+        <div className="animate-pulse space-y-3">
+          <div className="h-5 bg-stone-100 rounded w-2/3" />
+          <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-24 bg-slate-100 rounded-xl" />
+              <div key={i} className="h-12 bg-stone-50 rounded-lg" />
             ))}
           </div>
         </div>
@@ -56,15 +56,15 @@ export function RelationshipGrid() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="card p-8 text-center"
+        className="card p-6 text-center h-full flex flex-col items-center justify-center"
       >
-        <div className="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center">
-          <Users className="w-8 h-8 text-slate-400" />
+        <div className="w-12 h-12 mx-auto mb-3 bg-stone-100 rounded-xl flex items-center justify-center">
+          <Users className="w-6 h-6 text-stone-400" />
         </div>
-        <h3 className="font-semibold text-slate-900 mb-1">{t('relationship.noPeople')}</h3>
-        <p className="text-sm text-slate-500 mb-4">{t('relationship.addFirst')}</p>
-        <Button onClick={() => navigate('/persons?new=true')}>
-          <UserPlus className="w-4 h-4 mr-2" />
+        <h3 className="font-medium text-stone-800 mb-1">{t('relationship.noPeople')}</h3>
+        <p className="text-xs text-stone-500 mb-3">{t('relationship.addFirst')}</p>
+        <Button onClick={() => navigate('/persons?new=true')} size="sm">
+          <UserPlus className="w-3.5 h-3.5 mr-1.5" />
           {t('dashboard.newPerson')}
         </Button>
       </motion.div>
@@ -87,32 +87,26 @@ export function RelationshipGrid() {
   }
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="card overflow-hidden"
+      transition={{ delay: 0.1 }}
+      className="card overflow-hidden h-full flex flex-col"
     >
-      <div className="p-4 border-b border-slate-200 flex items-center justify-between">
+      <div className="px-5 pt-5 pb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-            <Users className="w-4 h-4 text-slate-600" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-slate-900">{t('relationship.title')}</h2>
-            <p className="text-xs text-slate-500">
-              {t('relationship.subtitle', { count: persons.length })}
-            </p>
-          </div>
+          <Users className="w-4 h-4 text-stone-400" />
+          <h2 className="text-sm font-medium text-stone-500">{t('relationship.title')}</h2>
         </div>
         <button
           onClick={() => navigate('/persons')}
-          className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1"
+          className="text-xs text-stone-400 hover:text-stone-600 flex items-center gap-0.5 transition-colors"
         >
           {t('dashboard.viewAll')}
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
-      <div className="divide-y divide-slate-100">
-        {persons.slice(0, 3).map((person, index) => {
+      <div className="flex-1 px-5 pb-3 space-y-1">
+        {persons.slice(0, 4).map((person, index) => {
           const health = calculateRelationshipHealth(person)
           return (
             <motion.div
@@ -121,50 +115,48 @@ export function RelationshipGrid() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => navigate(`/persons/${person.id}`)}
-              className="flex items-center gap-3 p-3 hover:bg-slate-50 cursor-pointer transition-colors"
+              className="flex items-center gap-2.5 p-2 -mx-2 rounded-lg hover:bg-stone-50 cursor-pointer transition-colors"
             >
               <div className="relative">
                 <Avatar name={person.name} size="sm" />
                 <div
-                  className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${health.status === 'critical'
+                  className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${health.status === 'critical'
                     ? 'bg-red-500'
                     : health.status === 'warning'
                       ? 'bg-amber-500'
-                      : 'bg-green-500'
+                      : 'bg-emerald-500'
                     }`}
                 />
               </div>
-              <p className="flex-1 font-medium text-slate-900 text-sm truncate">
+              <p className="flex-1 font-medium text-stone-800 text-sm truncate">
                 {person.name}
               </p>
               {(() => {
                 const futureMeeting = getPersonFutureMeeting(person.id)
                 if (futureMeeting) {
                   return (
-                    <span className="text-xs text-primary-600 flex items-center gap-1">
+                    <span className="text-[11px] text-blue-600 flex items-center gap-0.5">
                       <CalendarCheck className="w-3 h-3" />
-                      {t('relationship.scheduled')}
                     </span>
                   )
                 }
                 return (
-                  <span className={`text-xs ${getHealthTextColor(health.status)}`}>
+                  <span className={`text-[11px] ${getHealthTextColor(health.status)}`}>
                     {getLastMeetingText(health.daysSinceLastMeeting)}
                   </span>
                 )
               })()}
-              <ChevronRight className="w-4 h-4 text-slate-300" />
             </motion.div>
           )
         })}
       </div>
-      {persons.length > 3 && (
-        <div className="p-3 border-t border-slate-100">
+      {persons.length > 4 && (
+        <div className="px-5 pb-4">
           <button
             onClick={() => navigate('/persons')}
-            className="w-full py-1.5 text-sm text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors"
+            className="w-full py-1.5 text-xs text-stone-400 hover:text-stone-600 hover:bg-stone-50 rounded-lg transition-colors"
           >
-            +{persons.length - 3} {t('common.more')}
+            +{persons.length - 4} {t('common.more')}
           </button>
         </div>
       )}

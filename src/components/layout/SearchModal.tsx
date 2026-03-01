@@ -96,38 +96,38 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
+        <Dialog.Overlay className="fixed inset-0 bg-stone-900/40 z-50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
         <Dialog.Content
-          className="fixed left-1/2 top-[15%] -translate-x-1/2 z-50 w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none data-[state=open]:animate-search-in data-[state=closed]:animate-search-out"
+          className="fixed left-1/2 top-[15%] -translate-x-1/2 z-50 w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none border border-stone-200 data-[state=open]:animate-search-in data-[state=closed]:animate-search-out"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200">
-            <Search className="w-5 h-5 text-slate-400" />
+          <div className="flex items-center gap-3 px-4 py-3 border-b border-stone-100">
+            <Search className="w-5 h-5 text-stone-400" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={t('search.placeholder')}
-              className="flex-1 bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none"
+              className="flex-1 bg-transparent text-stone-900 placeholder:text-stone-400 focus:outline-none"
               autoFocus
             />
             <Dialog.Close asChild>
-              <button className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100">
+              <button className="p-1 rounded text-stone-400 hover:text-stone-600 hover:bg-stone-100">
                 <X className="w-4 h-4" />
               </button>
             </Dialog.Close>
           </div>
           <div className="max-h-[400px] overflow-y-auto" ref={resultsRef}>
             {isSearching ? (
-              <div className="p-8 text-center text-slate-500">{t('common.loading')}</div>
+              <div className="p-8 text-center text-stone-500">{t('common.loading')}</div>
             ) : query.length >= 2 && !hasResults ? (
-              <div className="p-8 text-center text-slate-500">{t('common.noResults')}</div>
+              <div className="p-8 text-center text-stone-500">{t('common.noResults')}</div>
             ) : hasResults ? (
               <div className="p-2">
                 {results.persons.length > 0 && (
                   <div className="mb-4">
-                    <div className="px-3 py-1.5 text-xs font-medium text-slate-500 uppercase">
+                    <div className="px-3 py-1.5 text-xs font-medium text-stone-500 uppercase">
                       {t('search.people')}
                     </div>
                     {results.persons.map((person, index) => {
@@ -138,18 +138,18 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                           key={person.id}
                           data-index={absoluteIndex}
                           onClick={() => handleSelect('person', person.id)}
-                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-primary-50' : 'hover:bg-slate-100'
+                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-stone-100' : 'hover:bg-stone-50'
                             }`}
                         >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-primary-100 text-primary-600' : 'bg-slate-100 text-slate-500'
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
                             }`}>
                             <User className="w-4 h-4" />
                           </div>
                           <div>
-                            <div className={`text-sm font-medium ${isSelected ? 'text-primary-900' : 'text-slate-900'}`}>
+                            <div className={`text-sm font-medium ${isSelected ? 'text-stone-900' : 'text-stone-800'}`}>
                               {person.name}
                             </div>
-                            <div className="text-xs text-slate-500">
+                            <div className="text-xs text-stone-500">
                               {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
                             </div>
                           </div>
@@ -160,7 +160,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                 )}
                 {results.meetings.length > 0 && (
                   <div>
-                    <div className="px-3 py-1.5 text-xs font-medium text-slate-500 uppercase">
+                    <div className="px-3 py-1.5 text-xs font-medium text-stone-500 uppercase">
                       {t('search.meetings')}
                     </div>
                     {results.meetings.map((meeting, index) => {
@@ -171,18 +171,18 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                           key={meeting.id}
                           data-index={absoluteIndex}
                           onClick={() => handleSelect('meeting', meeting.id)}
-                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-primary-50' : 'hover:bg-slate-100'
+                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-stone-100' : 'hover:bg-stone-50'
                             }`}
                         >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-primary-100 text-primary-600' : 'bg-slate-100 text-slate-500'
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
                             }`}>
                             <Calendar className="w-4 h-4" />
                           </div>
                           <div>
-                            <div className={`text-sm font-medium ${isSelected ? 'text-primary-900' : 'text-slate-900'}`}>
+                            <div className={`text-sm font-medium ${isSelected ? 'text-stone-900' : 'text-stone-800'}`}>
                               {formatMeetingTitle(meeting.title, meeting.date)}
                             </div>
-                            <div className="text-xs text-slate-500">
+                            <div className="text-xs text-stone-500">
                               {meeting.personName} • {formatDateShort(meeting.date)}
                             </div>
                           </div>
@@ -193,7 +193,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                 )}
                 {results.actions.length > 0 && (
                   <div>
-                    <div className="px-3 py-1.5 text-xs font-medium text-slate-500 uppercase">
+                    <div className="px-3 py-1.5 text-xs font-medium text-stone-500 uppercase">
                       {t('search.actions')}
                     </div>
                     {results.actions.map((action, index) => {
@@ -204,18 +204,18 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                           key={action.id}
                           data-index={absoluteIndex}
                           onClick={() => handleSelect('action', action.id)}
-                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-primary-50' : 'hover:bg-slate-100'
+                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-stone-100' : 'hover:bg-stone-50'
                             }`}
                         >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-primary-100 text-primary-600' : 'bg-slate-100 text-slate-500'
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
                             }`}>
                             <CheckSquare className="w-4 h-4" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className={`text-sm font-medium truncate ${isSelected ? 'text-primary-900' : 'text-slate-900'}`}>
+                            <div className={`text-sm font-medium truncate ${isSelected ? 'text-stone-900' : 'text-stone-800'}`}>
                               {action.description}
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-slate-500">
+                            <div className="flex items-center gap-2 text-xs text-stone-500">
                               <span>{action.personName}</span>
                               {action.tags && action.tags.length > 0 && (
                                 <div className="flex gap-1">
@@ -233,21 +233,21 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                 )}
               </div>
             ) : (
-              <div className="p-8 text-center text-slate-500">
+              <div className="p-8 text-center text-stone-500">
                 {t('search.minChars')}
               </div>
             )}
           </div>
-          <div className="px-4 py-2 border-t border-slate-200 bg-slate-50">
-            <div className="flex items-center gap-4 text-xs text-slate-500">
+          <div className="px-4 py-2 border-t border-stone-100 bg-stone-50">
+            <div className="flex items-center gap-4 text-xs text-stone-500">
               <span>
-                <kbd className="px-1.5 py-0.5 bg-slate-200 rounded">↑↓</kbd> {t('search.navigate')}
+                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded text-stone-600">↑↓</kbd> {t('search.navigate')}
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 bg-slate-200 rounded">Enter</kbd> {t('search.select')}
+                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded text-stone-600">Enter</kbd> {t('search.select')}
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 bg-slate-200 rounded">Esc</kbd> {t('search.close')}
+                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded text-stone-600">Esc</kbd> {t('search.close')}
               </span>
             </div>
           </div>

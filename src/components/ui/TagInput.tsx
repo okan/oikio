@@ -95,7 +95,7 @@ export function TagInput({
             <div
                 className={cn(
                     'input flex flex-wrap items-center gap-1.5 min-h-[42px] py-1.5 px-2 cursor-text',
-                    'focus-within:ring-2 focus-within:ring-primary-500/20 focus-within:border-primary-400'
+                    'focus-within:ring-2 focus-within:ring-stone-500/20 focus-within:border-stone-400'
                 )}
                 onClick={() => inputRef.current?.focus()}
             >
@@ -114,20 +114,20 @@ export function TagInput({
                     onFocus={() => setShowSuggestions(true)}
                     onKeyDown={handleKeyDown}
                     placeholder={value.length === 0 ? (placeholder || t('tags.placeholder')) : ''}
-                    className="flex-1 min-w-[100px] bg-transparent border-none outline-none text-sm placeholder:text-slate-400"
+                    className="flex-1 min-w-[100px] bg-transparent border-none outline-none text-sm placeholder:text-stone-400"
                 />
             </div>
 
             {showSuggestions && filteredSuggestions.length > 0 && (
-                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto">
+                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-stone-200 max-h-48 overflow-y-auto">
                     {filteredSuggestions.map((suggestion, index) => (
                         <button
                             key={suggestion}
                             type="button"
                             onClick={() => addTag(suggestion)}
                             className={cn(
-                                'w-full text-left px-3 py-2 text-sm hover:bg-slate-50 transition-colors',
-                                index === selectedIndex && 'bg-slate-100'
+                                'w-full text-left px-3 py-2 text-sm hover:bg-stone-50 transition-colors',
+                                index === selectedIndex && 'bg-stone-100'
                             )}
                         >
                             <Tag name={suggestion} />

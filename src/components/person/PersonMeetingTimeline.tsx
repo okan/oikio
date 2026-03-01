@@ -62,19 +62,19 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
       animate={{ opacity: 1, y: 0 }}
       className="card overflow-hidden"
     >
-      <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+      <div className="p-4 border-b border-stone-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-slate-600" />
-          <h3 className="font-semibold text-slate-900">
+          <Calendar className="w-5 h-5 text-stone-500" />
+          <h3 className="font-semibold text-stone-900">
             {t('personDetail.meetingHistory', { count: meetings.length })}
           </h3>
         </div>
       </div>
-      <div className="divide-y divide-slate-100">
+      <div className="divide-y divide-stone-100">
         {Object.entries(groupedMeetings).map(([monthKey, monthMeetings]) => (
           <div key={monthKey}>
-            <div className="px-4 py-2 bg-slate-50 sticky top-0">
-              <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+            <div className="px-4 py-2 bg-stone-50 sticky top-0">
+              <span className="text-xs font-medium text-stone-500 uppercase tracking-wide">
                 {formatMonthYear(monthKey)}
               </span>
             </div>
@@ -91,35 +91,35 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.03 }}
                   onClick={() => navigate(`/meetings/${meeting.id}`)}
-                  className="w-full flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors text-left"
+                  className="w-full flex items-center gap-4 p-4 hover:bg-stone-50 transition-colors text-left"
                 >
                   <div className="w-12 text-center">
-                    <div className="text-lg font-bold text-slate-900">{formatDay(meeting.date)}</div>
-                    <div className="text-xs text-slate-500">{formatDayName(meeting.date)}</div>
+                    <div className="text-lg font-bold text-stone-900">{formatDay(meeting.date)}</div>
+                    <div className="text-xs text-stone-400">{formatDayName(meeting.date)}</div>
                   </div>
                   <div className="relative flex flex-col items-center">
                     <div
-                      className={`w-3 h-3 rounded-full ${hasAllActionsCompleted ? 'bg-green-500' : 'bg-primary-500'
+                      className={`w-3 h-3 rounded-full ${hasAllActionsCompleted ? 'bg-green-500' : 'bg-stone-500'
                         }`}
                     />
                     {index < monthMeetings.length - 1 && (
-                      <div className="absolute top-3 w-0.5 h-8 bg-slate-200" />
+                      <div className="absolute top-3 w-0.5 h-8 bg-stone-200" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-slate-900 truncate">
+                    <p className="font-medium text-stone-900 truncate">
                       {formatMeetingTitle(meeting.title, meeting.date, i18n.language)}
                     </p>
                     {template && (
-                      <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                      <p className="text-xs text-stone-400 mt-0.5 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-stone-300" />
                         {template.name}
                       </p>
                     )}
                   </div>
                   {meeting.actionStats && meeting.actionStats.total > 0 && (
                     <div
-                      className={`flex items-center gap-1 text-xs ${hasAllActionsCompleted ? 'text-green-600' : 'text-slate-500'
+                      className={`flex items-center gap-1 text-xs ${hasAllActionsCompleted ? 'text-green-600' : 'text-stone-500'
                         }`}
                     >
                       {hasAllActionsCompleted ? (
@@ -130,7 +130,7 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
                       {meeting.actionStats.completed}/{meeting.actionStats.total}
                     </div>
                   )}
-                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                  <ChevronRight className="w-4 h-4 text-stone-300" />
                 </motion.button>
               )
             })}

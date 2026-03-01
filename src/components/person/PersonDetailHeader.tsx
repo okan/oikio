@@ -47,81 +47,88 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
   }
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="card p-6"
+      className="card p-5 sticky top-6"
     >
-      <div className="flex items-start gap-6">
-        <div className="relative">
-          <Avatar name={person.name} size="lg" className="w-20 h-20 text-2xl" />
+      <div className="flex flex-col items-center text-center mb-4">
+        <div className="relative mb-3">
+          <Avatar name={person.name} size="lg" className="w-16 h-16 text-xl" />
           <div
             className={cn(
-              'absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-3 border-white',
+              'absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-white',
               getHealthColor(health.status)
             )}
           />
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-2xl font-bold text-slate-900 truncate">{person.name}</h1>
-            <Badge variant={person.role === 'manager' ? 'primary' : 'default'} size="lg">
-              {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
-            </Badge>
-          </div>
-          <div className="mb-3">
-            <div className="flex items-center justify-between mb-1">
-              <span className={cn('text-sm font-medium', getHealthTextColor(health.status))}>
-                {futureMeeting ? (
-                  <span className="text-primary-600 flex items-center gap-1">
-                    <CalendarCheck className="w-4 h-4" />
-                    {t('relationship.scheduled')}
-                  </span>
-                ) : (
-                  getLastMeetingText()
-                )}
+        <h1 className="text-lg font-semibold text-stone-900 truncate">{person.name}</h1>
+        <Badge variant={person.role === 'manager' ? 'primary' : 'default'} size="sm" className="mt-1">
+          {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
+        </Badge>
+      </div>
+
+      <div className="space-y-3 mb-4">
+        <div className="flex items-center justify-between py-2 px-3 bg-stone-50 rounded-lg">
+          <span className="text-xs text-stone-500">{t('personDetail.status')}</span>
+          <span className={cn('text-xs font-medium', getHealthTextColor(health.status))}>
+            {futureMeeting ? (
+              <span className="text-blue-600 flex items-center gap-1">
+                <CalendarCheck className="w-3 h-3" />
+                {t('relationship.scheduled')}
               </span>
+            ) : (
+              getLastMeetingText()
+            )}
+          </span>
+        </div>
+
+        {person.meetingFrequencyGoal && person.lastMeetingDate && (
+          <div className="px-3">
+            <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${health.score}%` }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className={cn('h-full rounded-full', getHealthColor(health.status))}
+              />
             </div>
-            {person.meetingFrequencyGoal && person.lastMeetingDate && (
-              <div>
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${health.score}%` }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className={cn('h-full rounded-full', getHealthColor(health.status))}
-                  />
-                </div>
-                <div className="flex justify-between mt-1 text-xs text-slate-400">
-                  <span>{t('personDetail.lastMet')}</span>
-                  <span>{t('personDetail.nextDue')}</span>
-                </div>
-              </div>
-            )}
+            <div className="flex justify-between mt-1 text-[11px] text-stone-400">
+              <span>{t('personDetail.lastMet')}</span>
+              <span>{t('personDetail.nextDue')}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-4 text-sm text-slate-500">
-            {getFrequencyText() && (
-              <span className="flex items-center gap-1">
-                <Target className="w-4 h-4" />
-                {getFrequencyText()}
-              </span>
-            )}
-            {getNextMeetingText() && (
-              <span className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
-                {getNextMeetingText()}
-              </span>
-            )}
+        )}
+
+        {getFrequencyText() && (
+          <div className="flex items-center justify-between py-2 px-3 bg-stone-50 rounded-lg">
+            <span className="text-xs text-stone-500 flex items-center gap-1">
+              <Target className="w-3 h-3" />
+              {t('personDetail.frequency')}
+            </span>
+            <span className="text-xs font-medium text-stone-700">{getFrequencyText()}</span>
           </div>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="secondary" size="sm" onClick={onEdit}>
-            <Edit2 className="w-4 h-4" />
-          </Button>
-          <Button onClick={onNewMeeting}>
-            <CalendarPlus className="w-4 h-4 mr-2" />
-            {t('meetings.newMeeting')}
-          </Button>
-        </div>
+        )}
+
+        {getNextMeetingText() && (
+          <div className="flex items-center justify-between py-2 px-3 bg-stone-50 rounded-lg">
+            <span className="text-xs text-stone-500 flex items-center gap-1">
+              <Calendar className="w-3 h-3" />
+              {t('personDetail.nextMeeting')}
+            </span>
+            <span className="text-xs font-medium text-stone-700">{getNextMeetingText()}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="flex gap-2">
+        <Button variant="secondary" size="sm" onClick={onEdit} className="flex-1">
+          <Edit2 className="w-3.5 h-3.5 mr-1.5" />
+          {t('common.edit')}
+        </Button>
+        <Button size="sm" onClick={onNewMeeting} className="flex-1">
+          <CalendarPlus className="w-3.5 h-3.5 mr-1.5" />
+          {t('meetings.newMeeting')}
+        </Button>
       </div>
     </motion.div>
   )

@@ -11,18 +11,18 @@ export function Avatar({ name, size = 'md', className }: AvatarProps) {
     lg: 'w-12 h-12 text-base',
   }
   const colors = [
-    'bg-primary-500',
-    'bg-emerald-500',
-    'bg-violet-500',
-    'bg-amber-500',
-    'bg-rose-500',
-    'bg-cyan-500',
+    'bg-stone-600',
+    'bg-stone-500',
+    'bg-stone-700',
+    'bg-stone-800',
+    'bg-zinc-600',
+    'bg-neutral-600',
   ]
   const colorIndex = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length
   return (
     <div
       className={cn(
-        'rounded-full flex items-center justify-center font-medium text-white',
+        'rounded-xl flex items-center justify-center font-medium text-white shadow-sm',
         sizes[size],
         colors[colorIndex],
         className

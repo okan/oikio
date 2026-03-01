@@ -53,7 +53,7 @@ export function ActionForm({ onSubmit }: ActionFormProps) {
     return (
       <button
         onClick={() => setIsExpanded(true)}
-        className="w-full p-4 border-2 border-dashed border-slate-200 rounded-lg text-slate-500 hover:border-slate-300 hover:text-slate-600 transition-colors flex items-center justify-center gap-2"
+        className="w-full p-4 border-2 border-dashed border-stone-200 rounded-lg text-stone-500 hover:border-stone-300 hover:text-stone-600 transition-colors flex items-center justify-center gap-2"
       >
         <Plus className="w-4 h-4" />
         {t('actions.addAction')}
@@ -70,7 +70,7 @@ export function ActionForm({ onSubmit }: ActionFormProps) {
         autoFocus
       />
       <div className="flex flex-col gap-2">
-        <label className="text-xs font-medium text-slate-500 px-1">
+        <label className="text-xs font-medium text-stone-500 px-1">
           {t('actions.assignedTo')}
         </label>
         <div className="flex gap-2">
@@ -80,8 +80,8 @@ export function ActionForm({ onSubmit }: ActionFormProps) {
             className={cn(
               'flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition-colors',
               assignedTo === 'me'
-                ? 'bg-primary-600 border-primary-600 text-white'
-                : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-stone-800 border-stone-800 text-white'
+                : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
             )}
           >
             {t('actions.me')}
@@ -93,7 +93,7 @@ export function ActionForm({ onSubmit }: ActionFormProps) {
               'flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition-colors',
               assignedTo === 'other'
                 ? 'bg-amber-600 border-amber-600 text-white'
-                : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
             )}
           >
             {t('actions.other')}

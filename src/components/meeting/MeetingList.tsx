@@ -21,7 +21,7 @@ export function MeetingList({ meetings, onAddClick, showPerson = true }: Meeting
     )
   }
   return (
-    <div className="space-y-3">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
       {meetings.map((meeting, index) => (
         <MeetingCard
           key={meeting.id}

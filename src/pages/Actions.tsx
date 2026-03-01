@@ -5,7 +5,7 @@ import { Header } from '@/components/layout'
 import { ActionList } from '@/components/action'
 import { cn, isOverdue } from '@/lib/utils'
 import { Search, Layers, AlertCircle, Hourglass, User, ExternalLink } from 'lucide-react'
-import { Input } from '@/components/ui'
+import { Input, PageTransition } from '@/components/ui'
 export function Actions() {
   const { t } = useTranslation()
   const {
@@ -52,22 +52,22 @@ export function Actions() {
   const myActions = filteredActions.filter(a => a.assignedTo !== 'other')
   const otherActions = filteredActions.filter(a => a.assignedTo === 'other')
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       <Header title={t('actions.title')} description={t('actions.description')} />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="card p-4 flex items-center justify-between">
           <div>
-            <p className="text-xs font-medium text-slate-500">{t('actions.active')}</p>
-            <p className="mt-1 text-2xl font-bold text-slate-900">{stats.total}</p>
+            <p className="text-xs font-medium text-stone-500">{t('actions.active')}</p>
+            <p className="mt-1 text-2xl font-bold text-stone-900">{stats.total}</p>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
-            <Layers className="w-5 h-5 text-primary-600" />
+          <div className="w-10 h-10 rounded-lg bg-stone-50 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-stone-600" />
           </div>
         </div>
 
         <div className="card p-4 flex items-center justify-between">
           <div>
-            <p className="text-xs font-medium text-slate-500">{t('dashboard.overdue')}</p>
+            <p className="text-xs font-medium text-stone-500">{t('dashboard.overdue')}</p>
             <p className="mt-1 text-2xl font-bold text-red-600">{stats.overdue}</p>
           </div>
           <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
@@ -77,7 +77,7 @@ export function Actions() {
 
         <div className="card p-4 flex items-center justify-between">
           <div>
-            <p className="text-xs font-medium text-slate-500">{t('actions.other')}</p>
+            <p className="text-xs font-medium text-stone-500">{t('actions.other')}</p>
             <p className="mt-1 text-2xl font-bold text-amber-600">{stats.waiting}</p>
           </div>
           <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
@@ -95,16 +95,16 @@ export function Actions() {
             leftIcon={<Search className="w-4 h-4" />}
             className="flex-1"
           />
-          <div className="flex bg-slate-100 p-1 rounded-xl">
+          <div className="flex gap-1">
             {(['pending', 'completed', 'all'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  'px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
+                  'px-3 py-1.5 text-sm font-medium rounded-lg border transition-all flex items-center gap-2',
                   activeTab === tab
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700'
+                    ? 'bg-stone-800 text-white border-stone-800'
+                    : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50'
                 )}
               >
                 {t(`actions.${tab}`)}
@@ -112,10 +112,8 @@ export function Actions() {
                   className={cn(
                     'text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center',
                     activeTab === tab
-                      ? tab === 'pending' && tabCounts[tab] > 0
-                        ? 'bg-primary-100 text-primary-700'
-                        : 'bg-slate-100 text-slate-600'
-                      : 'bg-slate-200 text-slate-500'
+                      ? 'bg-white/20 text-white'
+                      : 'bg-stone-100 text-stone-500'
                   )}
                 >
                   {tabCounts[tab]}
@@ -131,8 +129,8 @@ export function Actions() {
               className={cn(
                 'px-3 py-1 text-xs font-medium rounded-full border transition-colors',
                 !selectedTag
-                  ? 'bg-slate-800 text-white border-slate-800'
-                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                  ? 'bg-stone-800 text-white border-stone-800'
+                  : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50'
               )}
             >
               {t('tags.all')}
@@ -144,8 +142,8 @@ export function Actions() {
                 className={cn(
                   'px-3 py-1 text-xs font-medium rounded-full border transition-colors',
                   selectedTag === tag
-                    ? 'bg-primary-600 text-white border-primary-600'
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    ? 'bg-stone-800 text-white border-stone-800'
+                    : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50'
                 )}
               >
                 #{tag}
@@ -158,9 +156,9 @@ export function Actions() {
           {myActions.length > 0 && (
             <div className="space-y-3">
               <div className="flex items-center gap-2 px-1">
-                <User className="w-4 h-4 text-slate-400" />
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">{t('actions.me')}</h3>
-                <span className="text-xs text-slate-400">({myActions.length})</span>
+                <User className="w-4 h-4 text-stone-400" />
+                <h3 className="text-sm font-semibold text-stone-900 uppercase tracking-wider">{t('actions.me')}</h3>
+                <span className="text-xs text-stone-400">({myActions.length})</span>
               </div>
               <ActionList
                 actions={myActions}
@@ -176,9 +174,9 @@ export function Actions() {
           {otherActions.length > 0 && (
             <div className="space-y-3">
               <div className="flex items-center gap-2 px-1">
-                <ExternalLink className="w-4 h-4 text-slate-400" />
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">{t('actions.other')}</h3>
-                <span className="text-xs text-slate-400">({otherActions.length})</span>
+                <ExternalLink className="w-4 h-4 text-stone-400" />
+                <h3 className="text-sm font-semibold text-stone-900 uppercase tracking-wider">{t('actions.other')}</h3>
+                <span className="text-xs text-stone-400">({otherActions.length})</span>
               </div>
               <ActionList
                 actions={otherActions}
@@ -202,7 +200,7 @@ export function Actions() {
           )}
         </div>
       </div>
-    </div>
+    </PageTransition>
   )
 }
 export default Actions

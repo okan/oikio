@@ -14,10 +14,10 @@ interface HeaderProps {
 }
 export function Header({ title, description, action, secondaryAction }: HeaderProps) {
   return (
-    <header className="flex items-center justify-between pb-6 border-b border-slate-200">
+    <header className="flex items-center justify-between pb-5 mb-1">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">{title}</h1>
-        {description && <p className="text-sm text-slate-500 mt-1">{description}</p>}
+        <h1 className="text-xl font-semibold text-stone-900">{title}</h1>
+        {description && <p className="text-[13px] text-stone-500 mt-0.5">{description}</p>}
       </div>
       <div className="flex items-center gap-2">
         {secondaryAction && (

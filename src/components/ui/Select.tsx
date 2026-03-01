@@ -32,25 +32,25 @@ export function Select({
           className={cn(
             'input flex items-center justify-between gap-2',
             error && 'input-error',
-            !value && 'text-slate-400',
+            !value && 'text-stone-400',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
           <SelectPrimitive.Value placeholder={placeholder} />
           <SelectPrimitive.Icon>
-            <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0" />
+            <ChevronDown className="w-4 h-4 text-stone-400 flex-shrink-0" />
           </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
-            className="bg-white rounded-lg border border-slate-200 shadow-xl overflow-hidden z-[100] min-w-[var(--radix-select-trigger-width)]"
+            className="bg-white rounded-lg border border-stone-200 shadow-xl overflow-hidden z-[100] min-w-[var(--radix-select-trigger-width)]"
             position="popper"
             sideOffset={4}
             align="start"
           >
             <SelectPrimitive.Viewport className="p-1">
               {validOptions.length === 0 ? (
-                <div className="px-3 py-2 text-sm text-slate-500">Seçenek yok</div>
+                <div className="px-3 py-2 text-sm text-stone-500">Seçenek yok</div>
               ) : (
                 validOptions.map((option) => (
                   <SelectPrimitive.Item
@@ -58,14 +58,14 @@ export function Select({
                     value={option.value}
                     className={cn(
                       'flex items-center gap-2 px-3 py-2.5 rounded-md text-sm cursor-pointer outline-none transition-colors',
-                      'text-slate-700',
-                      'data-[highlighted]:bg-slate-100',
-                      'data-[state=checked]:text-primary-600 data-[state=checked]:font-medium'
+                      'text-stone-700',
+                      'data-[highlighted]:bg-stone-100',
+                      'data-[state=checked]:text-stone-900 data-[state=checked]:font-medium'
                     )}
                   >
                     <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
                     <SelectPrimitive.ItemIndicator className="ml-auto">
-                      <Check className="w-4 h-4 text-primary-500" />
+                      <Check className="w-4 h-4 text-stone-600" />
                     </SelectPrimitive.ItemIndicator>
                   </SelectPrimitive.Item>
                 ))

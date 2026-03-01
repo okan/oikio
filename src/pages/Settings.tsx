@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Download, Upload, Database, Info, Globe, Bell, AlertTriangle } from 'lucide-react'
 import { Header } from '@/components/layout'
-import { Button, Modal, Select, Checkbox } from '@/components/ui'
+import { Button, Modal, Select, Checkbox, PageTransition } from '@/components/ui'
 import type { NotificationSettings } from '@/types'
 export function Settings() {
   const { t, i18n } = useTranslation()
@@ -117,17 +117,17 @@ export function Settings() {
     }
   }
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       <Header title={t('settings.title')} description={t('settings.description')} />
       { }
       <div className="card p-6">
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-primary-100 rounded-xl text-primary-600">
+          <div className="p-3 bg-stone-100 rounded-xl text-stone-600">
             <Globe className="w-5 h-5" />
           </div>
           <div className="flex-1">
-            <h2 className="font-semibold text-slate-900">{t('settings.language')}</h2>
-            <p className="text-sm text-slate-500 mb-4">{t('settings.languageDesc')}</p>
+            <h2 className="font-semibold text-stone-900">{t('settings.language')}</h2>
+            <p className="text-sm text-stone-500 mb-4">{t('settings.languageDesc')}</p>
             <div className="max-w-xs">
               <Select
                 value={i18n.language}
@@ -142,12 +142,12 @@ export function Settings() {
       {notificationSettings && (
         <div className="card p-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-primary-100 rounded-xl text-primary-600">
+            <div className="p-3 bg-stone-100 rounded-xl text-stone-600">
               <Bell className="w-5 h-5" />
             </div>
             <div className="flex-1">
-              <h2 className="font-semibold text-slate-900">{t('settings.notifications')}</h2>
-              <p className="text-sm text-slate-500 mb-4">{t('settings.notificationsDesc')}</p>
+              <h2 className="font-semibold text-stone-900">{t('settings.notifications')}</h2>
+              <p className="text-sm text-stone-500 mb-4">{t('settings.notificationsDesc')}</p>
               <div className="space-y-4">
                 <Checkbox
                   id="notificationsEnabled"
@@ -184,21 +184,21 @@ export function Settings() {
       { }
       <div className="card p-6 space-y-6">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-primary-100 rounded-xl text-primary-600">
+          <div className="p-3 bg-stone-100 rounded-xl text-stone-600">
             <Database className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-semibold text-slate-900">{t('settings.dataManagement')}</h2>
-            <p className="text-sm text-slate-500">{t('settings.dataDesc')}</p>
+            <h2 className="font-semibold text-stone-900">{t('settings.dataManagement')}</h2>
+            <p className="text-sm text-stone-500">{t('settings.dataDesc')}</p>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-4 border border-slate-200 rounded-xl">
+          <div className="p-4 border border-stone-200 rounded-xl">
             <div className="flex items-center gap-3 mb-3">
-              <Download className="w-5 h-5 text-primary-600" />
-              <h3 className="font-medium text-slate-900">{t('settings.export')}</h3>
+              <Download className="w-5 h-5 text-stone-600" />
+              <h3 className="font-medium text-stone-900">{t('settings.export')}</h3>
             </div>
-            <p className="text-sm text-slate-500 mb-4">{t('settings.exportDesc')}</p>
+            <p className="text-sm text-stone-500 mb-4">{t('settings.exportDesc')}</p>
             <Button
               onClick={handleExport}
               isLoading={isExporting}
@@ -208,12 +208,12 @@ export function Settings() {
               {t('settings.exportButton')}
             </Button>
           </div>
-          <div className="p-4 border border-slate-200 rounded-xl">
+          <div className="p-4 border border-stone-200 rounded-xl">
             <div className="flex items-center gap-3 mb-3">
-              <Upload className="w-5 h-5 text-primary-600" />
-              <h3 className="font-medium text-slate-900">{t('settings.import')}</h3>
+              <Upload className="w-5 h-5 text-stone-600" />
+              <h3 className="font-medium text-stone-900">{t('settings.import')}</h3>
             </div>
-            <p className="text-sm text-slate-500 mb-4">{t('settings.importDesc')}</p>
+            <p className="text-sm text-stone-500 mb-4">{t('settings.importDesc')}</p>
             <Button
               onClick={handleImportClick}
               isLoading={isImporting}
@@ -245,8 +245,8 @@ export function Settings() {
         </div>
         <div className="flex items-center justify-between p-4 bg-white border border-red-100 rounded-xl">
           <div>
-            <h3 className="font-medium text-slate-900">{t('settings.resetData')}</h3>
-            <p className="text-sm text-slate-500">{t('settings.resetDataDesc')}</p>
+            <h3 className="font-medium text-stone-900">{t('settings.resetData')}</h3>
+            <p className="text-sm text-stone-500">{t('settings.resetDataDesc')}</p>
           </div>
           <Button
             variant="danger"
@@ -259,22 +259,22 @@ export function Settings() {
       { }
       <div className="card p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-3 bg-primary-100 rounded-xl text-primary-600">
+          <div className="p-3 bg-stone-100 rounded-xl text-stone-600">
             <Info className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-semibold text-slate-900">{t('settings.about')}</h2>
-            <p className="text-sm text-slate-500">oikio</p>
+            <h2 className="font-semibold text-stone-900">{t('settings.about')}</h2>
+            <p className="text-sm text-stone-500">oikio</p>
           </div>
         </div>
-        <div className="space-y-2 text-sm text-slate-600">
+        <div className="space-y-2 text-sm text-stone-600">
           <p>
             <span className="font-medium">{t('settings.version')}:</span> {__APP_VERSION__}
           </p>
           <p>
             <span className="font-medium">{t('settings.dataLocation')}:</span> ~/Library/Application Support/oikio/
           </p>
-          <p className="text-slate-500 mt-4">{t('settings.privacyNote')}</p>
+          <p className="text-stone-500 mt-4">{t('settings.privacyNote')}</p>
         </div>
       </div>
       { }
@@ -312,7 +312,7 @@ export function Settings() {
           </Button>
         </div>
       </Modal>
-    </div>
+    </PageTransition>
   )
 }
 export default Settings

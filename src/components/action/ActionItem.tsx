@@ -35,7 +35,7 @@ export const ActionItem = memo(function ActionItem({
       exit={{ opacity: 0, x: -10 }}
       transition={{ delay: index * 0.05 }}
       className={cn(
-        "card p-4 flex items-start gap-3 group transition-colors hover:bg-slate-50",
+        "card p-4 flex items-start gap-3 group transition-colors hover:bg-stone-50",
         isActionOverdue && !action.completed && "border-red-200 bg-red-50/10"
       )}
     >
@@ -46,14 +46,14 @@ export const ActionItem = memo(function ActionItem({
       />
       <div className="flex-1 min-w-0">
         <p
-          className={`text-sm ${action.completed ? 'line-through text-slate-400' : 'text-slate-900'}`}
+          className={`text-sm ${action.completed ? 'line-through text-stone-400' : 'text-stone-900'}`}
         >
           {action.description}
         </p>
         <div className="flex items-center gap-2 mt-1 flex-wrap">
           <div className={cn(
             "flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider",
-            action.assignedTo === 'other' ? "text-amber-600" : "text-primary-600"
+            action.assignedTo === 'other' ? "text-amber-600" : "text-blue-600"
           )}>
             {action.assignedTo === 'other' ? (
               <>
@@ -68,15 +68,15 @@ export const ActionItem = memo(function ActionItem({
             )}
           </div>
           {showMeeting && action.personName && (
-            <span className="text-xs text-slate-500 font-medium">{action.personName}</span>
+            <span className="text-xs text-stone-500 font-medium">{action.personName}</span>
           )}
           {relativeTime && (
             <>
-              <span className="text-slate-300">•</span>
+              <span className="text-stone-300">•</span>
               <span
                 className={cn(
                   "text-xs flex items-center gap-1",
-                  isActionOverdue ? 'text-red-500 font-semibold' : 'text-slate-500'
+                  isActionOverdue ? 'text-red-500 font-semibold' : 'text-stone-500'
                 )}
               >
                 <Clock className="w-3 h-3" />
@@ -101,7 +101,7 @@ export const ActionItem = memo(function ActionItem({
           e.stopPropagation()
           onDelete()
         }}
-        className="p-1 rounded text-slate-400 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="p-1 rounded text-stone-400 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
       >
         <Trash2 className="w-4 h-4" />
       </button>

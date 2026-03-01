@@ -151,7 +151,7 @@ export function MeetingForm({
           {hasPreselectedPerson ? (
             <div className="space-y-1.5">
               <label className="label">{t('meetings.person')}</label>
-              <div className="input bg-slate-50 text-slate-700">
+              <div className="input bg-stone-50 text-stone-700">
                 {persons.find(p => p.id === defaultPersonId)?.name}
               </div>
             </div>

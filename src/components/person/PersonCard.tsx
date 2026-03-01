@@ -30,45 +30,44 @@ export const PersonCard = memo(function PersonCard({ person, index = 0, futureMe
   }
   return (
     <motion.button
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
+      transition={{ delay: index * 0.04 }}
       onClick={() => navigate(`/persons/${person.id}`)}
-      className="card-hover w-full p-4 flex items-center gap-4 text-left"
+      className="card-hover w-full p-4 text-left group"
     >
-      { }
-      <div className="relative">
-        <Avatar name={person.name} size="lg" />
-        <span
-          className={cn(
-            'absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-white',
-            getHealthColor(health.status)
-          )}
-        />
-      </div>
-      { }
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <h3 className="font-semibold text-slate-900 truncate">{person.name}</h3>
-          <Badge variant={person.role === 'manager' ? 'primary' : 'default'}>
-            {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
-          </Badge>
+      <div className="flex items-center gap-3">
+        <div className="relative">
+          <Avatar name={person.name} size="md" />
+          <span
+            className={cn(
+              'absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white',
+              getHealthColor(health.status)
+            )}
+          />
         </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h3 className="font-medium text-stone-900 truncate text-sm">{person.name}</h3>
+            <Badge variant={person.role === 'manager' ? 'primary' : 'default'}>
+              {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
+            </Badge>
+          </div>
+          <div className="mt-0.5">
+            {futureMeeting ? (
+              <span className="text-xs text-blue-600 flex items-center gap-1">
+                <CalendarCheck className="w-3 h-3" />
+                {t('relationship.scheduled')}
+              </span>
+            ) : (
+              <span className={cn('text-xs', getHealthTextColor(health.status))}>
+                {getLastMeetingText()}
+              </span>
+            )}
+          </div>
+        </div>
+        <ChevronRight className="w-4 h-4 text-stone-300 group-hover:text-stone-500 transition-colors" />
       </div>
-      { }
-      <div className="text-right">
-        {futureMeeting ? (
-          <span className="text-sm font-medium text-primary-600 flex items-center gap-1">
-            <CalendarCheck className="w-4 h-4" />
-            {t('relationship.scheduled')}
-          </span>
-        ) : (
-          <span className={cn('text-sm font-medium', getHealthTextColor(health.status))}>
-            {getLastMeetingText()}
-          </span>
-        )}
-      </div>
-      <ChevronRight className="w-5 h-5 text-slate-400" />
     </motion.button>
   )
 })

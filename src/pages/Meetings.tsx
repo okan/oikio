@@ -6,7 +6,7 @@ import { useMeetingStore, usePersonStore, useTemplateStore } from '@/store'
 import { Header } from '@/components/layout'
 import { MeetingList, MeetingForm } from '@/components/meeting'
 import { TemplateList, TemplateForm } from '@/components/template'
-import { Modal } from '@/components/ui'
+import { Modal, PageTransition } from '@/components/ui'
 import type { Meeting, Template } from '@/types'
 export function Meetings() {
   const { t } = useTranslation()
@@ -63,7 +63,7 @@ export function Meetings() {
     await deleteTemplate(id)
   }
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       <Header
         title={t('meetings.title')}
         description={t('meetings.description')}
@@ -94,7 +94,7 @@ export function Meetings() {
           <div className="flex justify-end">
             <button
               onClick={handleAddTemplate}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-stone-800 rounded-lg hover:bg-stone-900 transition-colors"
             >
               {t('templates.newTemplate')}
             </button>
@@ -113,7 +113,7 @@ export function Meetings() {
         template={editingTemplate}
         onSubmit={handleTemplateSubmit}
       />
-    </div>
+    </PageTransition>
   )
 }
 export default Meetings

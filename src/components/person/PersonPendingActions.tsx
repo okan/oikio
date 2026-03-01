@@ -26,7 +26,7 @@ export function PersonPendingActions({ actions, onActionToggle }: PersonPendingA
       animate={{ opacity: 1, y: 0 }}
       className="card overflow-hidden"
     >
-      <div className="p-4 border-b border-slate-100 bg-amber-50">
+      <div className="p-4 border-b border-stone-100 bg-amber-50">
         <div className="flex items-center gap-2">
           <Zap className="w-4 h-4 text-amber-600" />
           <h3 className="font-medium text-amber-900">
@@ -34,22 +34,22 @@ export function PersonPendingActions({ actions, onActionToggle }: PersonPendingA
           </h3>
         </div>
       </div>
-      <div className="divide-y divide-slate-100">
+      <div className="divide-y divide-stone-100">
         {pendingActions.map((action, index) => (
           <motion.div
             key={action.id}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="flex items-center gap-3 p-3 hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-3 p-3 hover:bg-stone-50 transition-colors"
           >
             <Checkbox checked={false} onCheckedChange={() => handleToggle(action.id)} />
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-slate-900">{action.description}</p>
+              <p className="text-sm text-stone-900">{action.description}</p>
               <div
                 className={cn(
                   'flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider mt-0.5',
-                  action.assignedTo === 'other' ? 'text-amber-600' : 'text-primary-600'
+                  action.assignedTo === 'other' ? 'text-amber-600' : 'text-blue-600'
                 )}
               >
                 {action.assignedTo === 'other' ? (
@@ -67,7 +67,7 @@ export function PersonPendingActions({ actions, onActionToggle }: PersonPendingA
             </div>
             {action.dueDate && (
               <span
-                className={`text-xs flex items-center gap-1 ${isOverdue(action.dueDate) ? 'text-red-600' : 'text-slate-500'
+                className={`text-xs flex items-center gap-1 ${isOverdue(action.dueDate) ? 'text-red-600' : 'text-stone-500'
                   }`}
               >
                 <Clock className="w-3 h-3" />

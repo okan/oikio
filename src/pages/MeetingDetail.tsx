@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import { ArrowLeft, Edit2, Trash2, Calendar, User, ListTodo, Plus, Maximize2 } from 'lucide-react'
 import { useMeetingStore, usePersonStore, useTemplateStore, useActionStore } from '@/store'
 import type { Meeting, ActionItem } from '@/types'
-import { Button, Avatar, Modal, Textarea } from '@/components/ui'
+import { Button, Avatar, Modal, Textarea, PageTransition } from '@/components/ui'
 import { MeetingForm, FocusMode } from '@/components/meeting'
 import { ActionList, ActionForm } from '@/components/action'
 import { formatDate, formatMeetingTitle } from '@/lib/utils'
@@ -58,7 +58,7 @@ export function MeetingDetail() {
   if (!meeting) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-slate-500">{t('common.noResults')}</p>
+        <p className="text-stone-500">{t('common.noResults')}</p>
       </div>
     )
   }
@@ -119,132 +119,141 @@ export function MeetingDetail() {
     await refreshActions()
   }
   return (
-    <div className="space-y-6">
-      { }
+    <PageTransition className="space-y-5">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+        className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-700 transition-colors"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="w-3.5 h-3.5" />
         <span>{t('common.back')}</span>
       </button>
-      { }
-      <div className="card p-6">
-        <div className="flex items-start justify-between">
-          <div className="flex items-start gap-4">
-            <Avatar name={meeting.personName || ''} size="lg" />
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">
-                {formatMeetingTitle(meeting.title, meeting.date)}
-              </h1>
-              <div className="flex items-center gap-4 mt-2 text-slate-500">
-                <span className="flex items-center gap-1">
-                  <User className="w-4 h-4" />
-                  {meeting.personName}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
-                  {formatDate(meeting.date)}
-                </span>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="col-span-2 space-y-4">
+          {meeting.notes && (
+            <div className="card overflow-hidden">
+              <div className="flex items-center gap-2 px-5 py-3 border-b border-stone-100">
+                <Edit2 className="w-3.5 h-3.5 text-stone-400" />
+                <h2 className="text-xs font-medium text-stone-500 uppercase tracking-wide">{t('meetings.notes')}</h2>
+              </div>
+              <div className="p-5 prose prose-stone prose-sm max-w-none prose-headings:text-stone-800 prose-headings:font-semibold prose-headings:mt-3 prose-headings:mb-1.5 prose-p:text-stone-600 prose-p:leading-relaxed prose-li:text-stone-600 prose-li:my-0.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-strong:text-stone-700 prose-a:text-blue-600">
+                <ReactMarkdown>{meeting.notes}</ReactMarkdown>
+              </div>
+            </div>
+          )}
+
+          <div className="card overflow-hidden">
+            <div className="flex items-center gap-2 px-5 py-3 border-b border-stone-100">
+              <ListTodo className="w-3.5 h-3.5 text-stone-400" />
+              <h2 className="text-xs font-medium text-stone-500 uppercase tracking-wide">{t('nav.actions')}</h2>
+            </div>
+            <div className="p-4">
+              <ActionList
+                actions={actions}
+                onToggle={handleToggle}
+                onDelete={handleDeleteAction}
+                emptyTitle={t('actions.noActions')}
+                emptyDescription={t('actions.noActionsDesc')}
+              />
+              <div className="mt-3">
+                <ActionForm onSubmit={handleActionCreate} />
               </div>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant="primary"
-              onClick={() => setFocusModeOpen(true)}
-              leftIcon={<Maximize2 className="w-4 h-4" />}
-            >
-              {t('focusMode.title')}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => setEditFormOpen(true)}
-              leftIcon={<Edit2 className="w-4 h-4" />}
-            >
-              {t('common.edit')}
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => setDeleteModalOpen(true)}
-              leftIcon={<Trash2 className="w-4 h-4" />}
-            >
-              {t('common.delete')}
-            </Button>
+
+          <div className="card p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <ListTodo className="w-3.5 h-3.5 text-stone-400" />
+                <h2 className="text-xs font-medium text-stone-500 uppercase tracking-wide">{t('meetings.nextTopics')}</h2>
+              </div>
+              {!isEditingNextTopics && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsEditingNextTopics(true)}
+                  leftIcon={meeting?.nextTopics ? <Edit2 className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                >
+                  {meeting?.nextTopics ? t('common.edit') : t('common.add')}
+                </Button>
+              )}
+            </div>
+            {isEditingNextTopics ? (
+              <div className="space-y-3">
+                <Textarea
+                  value={nextTopics}
+                  onChange={(e) => setNextTopics(e.target.value)}
+                  placeholder={t('meetings.nextTopicsPlaceholder')}
+                  rows={4}
+                  autoFocus
+                />
+                <div className="flex justify-end gap-2">
+                  <Button variant="secondary" size="sm" onClick={handleCancelNextTopics}>
+                    {t('common.cancel')}
+                  </Button>
+                  <Button size="sm" onClick={handleSaveNextTopics} isLoading={isSavingNextTopics}>
+                    {t('common.save')}
+                  </Button>
+                </div>
+              </div>
+            ) : meeting?.nextTopics ? (
+              <div className="prose prose-stone prose-sm max-w-none">
+                <ReactMarkdown>{meeting.nextTopics}</ReactMarkdown>
+              </div>
+            ) : (
+              <p className="text-xs text-stone-400 italic">{t('meetings.noNextTopics')}</p>
+            )}
           </div>
         </div>
-      </div>
-      {meeting.notes && (
-        <div className="card overflow-hidden">
-          <div className="flex items-center gap-2 px-6 py-3 bg-slate-50 border-b border-slate-100">
-            <Edit2 className="w-4 h-4 text-slate-400" />
-            <h2 className="text-sm font-medium text-slate-600 uppercase tracking-wide">{t('meetings.notes')}</h2>
-          </div>
-          <div className="p-6 prose prose-slate max-w-none prose-headings:text-slate-800 prose-headings:font-semibold prose-headings:mt-4 prose-headings:mb-2 prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-li:my-1 prose-ul:my-2 prose-ol:my-2 prose-strong:text-slate-700 prose-a:text-primary-600">
-            <ReactMarkdown>{meeting.notes}</ReactMarkdown>
-          </div>
-        </div>
-      )}
-      <div className="card overflow-hidden">
-        <div className="flex items-center gap-2 px-6 py-3 bg-slate-50 border-b border-slate-100">
-          <ListTodo className="w-4 h-4 text-slate-400" />
-          <h2 className="text-sm font-medium text-slate-600 uppercase tracking-wide">{t('nav.actions')}</h2>
-        </div>
-        <div className="p-4">
-          <ActionList
-            actions={actions}
-            onToggle={handleToggle}
-            onDelete={handleDeleteAction}
-            emptyTitle={t('actions.noActions')}
-            emptyDescription={t('actions.noActionsDesc')}
-          />
-          <div className="mt-3">
-            <ActionForm onSubmit={handleActionCreate} />
-          </div>
-        </div>
-      </div>
-      <div className="card p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <ListTodo className="w-5 h-5 text-primary-600" />
-            <h2 className="text-lg font-semibold text-slate-900">{t('meetings.nextTopics')}</h2>
-          </div>
-          {!isEditingNextTopics && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEditingNextTopics(true)}
-              leftIcon={meeting?.nextTopics ? <Edit2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-            >
-              {meeting?.nextTopics ? t('common.edit') : t('common.add')}
-            </Button>
-          )}
-        </div>
-        {isEditingNextTopics ? (
-          <div className="space-y-3">
-            <Textarea
-              value={nextTopics}
-              onChange={(e) => setNextTopics(e.target.value)}
-              placeholder={t('meetings.nextTopicsPlaceholder')}
-              rows={4}
-              autoFocus
-            />
-            <div className="flex justify-end gap-2">
-              <Button variant="secondary" size="sm" onClick={handleCancelNextTopics}>
-                {t('common.cancel')}
+
+        <div className="col-span-1 space-y-4">
+          <div className="card p-5 sticky top-6">
+            <div className="flex flex-col items-center text-center mb-4">
+              <Avatar name={meeting.personName || ''} size="lg" className="w-14 h-14 text-lg mb-3" />
+              <h1 className="text-base font-semibold text-stone-900">
+                {formatMeetingTitle(meeting.title, meeting.date)}
+              </h1>
+            </div>
+
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center justify-between py-2 px-3 bg-stone-50 rounded-lg">
+                <span className="text-xs text-stone-500 flex items-center gap-1">
+                  <User className="w-3 h-3" />
+                  {t('meetings.person')}
+                </span>
+                <span className="text-xs font-medium text-stone-700">{meeting.personName}</span>
+              </div>
+              <div className="flex items-center justify-between py-2 px-3 bg-stone-50 rounded-lg">
+                <span className="text-xs text-stone-500 flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  {t('meetings.date')}
+                </span>
+                <span className="text-xs font-medium text-stone-700">{formatDate(meeting.date)}</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Button size="sm" onClick={() => setFocusModeOpen(true)} className="w-full">
+                <Maximize2 className="w-3.5 h-3.5 mr-1.5" />
+                {t('focusMode.title')}
               </Button>
-              <Button size="sm" onClick={handleSaveNextTopics} isLoading={isSavingNextTopics}>
-                {t('common.save')}
+              <Button variant="secondary" size="sm" onClick={() => setEditFormOpen(true)} className="w-full">
+                <Edit2 className="w-3.5 h-3.5 mr-1.5" />
+                {t('common.edit')}
               </Button>
             </div>
+
+            <div className="mt-4 flex justify-center">
+              <button
+                onClick={() => setDeleteModalOpen(true)}
+                className="text-xs text-red-400 hover:text-red-600 transition-colors flex items-center gap-1"
+              >
+                <Trash2 className="w-3 h-3" />
+                {t('common.delete')}
+              </button>
+            </div>
           </div>
-        ) : meeting?.nextTopics ? (
-          <div className="prose prose-slate prose-sm max-w-none">
-            <ReactMarkdown>{meeting.nextTopics}</ReactMarkdown>
-          </div>
-        ) : (
-          <p className="text-sm text-slate-500 italic">{t('meetings.noNextTopics')}</p>
-        )}
+        </div>
       </div>
       { }
       <MeetingForm
@@ -284,7 +293,7 @@ export function MeetingDetail() {
           onToggleAction={handleFocusModeToggle}
         />
       )}
-    </div>
+    </PageTransition>
   )
 }
 export default MeetingDetail

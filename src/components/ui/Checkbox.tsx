@@ -28,9 +28,9 @@ export function Checkbox({
         checked={checked}
         onCheckedChange={(checked) => onCheckedChange?.(checked === true)}
         className={cn(
-          'w-5 h-5 rounded border-2 border-slate-300 transition-colors duration-150',
-          'hover:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20',
-          'data-[state=checked]:bg-primary-500 data-[state=checked]:border-primary-500',
+          'w-5 h-5 rounded border-2 border-stone-300 transition-colors duration-150',
+          'hover:border-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-500/20',
+          'data-[state=checked]:bg-stone-800 data-[state=checked]:border-stone-800',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
@@ -49,8 +49,8 @@ export function Checkbox({
         <label
           htmlFor={id}
           className={cn(
-            'text-sm text-slate-700 cursor-pointer select-none',
-            checked && lineThrough && 'line-through text-slate-400',
+            'text-sm text-stone-700 cursor-pointer select-none',
+            checked && lineThrough && 'line-through text-stone-400',
             disabled && 'cursor-not-allowed opacity-50'
           )}
         >

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { usePersonStore } from '@/store'
 import { Header } from '@/components/layout'
 import { PersonList, PersonForm } from '@/components/person'
+import { PageTransition } from '@/components/ui'
 import type { Person, Meeting } from '@/types'
 export function Persons() {
   const { t } = useTranslation()
@@ -34,7 +35,7 @@ export function Persons() {
     }
   }
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       <Header
         title={t('persons.title')}
         description={t('persons.description')}
@@ -47,7 +48,7 @@ export function Persons() {
         person={editingPerson}
         onSubmit={handleSubmit}
       />
-    </div>
+    </PageTransition>
   )
 }
 export default Persons

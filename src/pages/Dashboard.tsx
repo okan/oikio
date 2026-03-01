@@ -2,21 +2,21 @@ import {
   WelcomeHero,
   TodayFocus,
   RelationshipGrid,
-  MiniAnalytics,
 } from '@/components/dashboard'
+import { PageTransition } from '@/components/ui'
 export function Dashboard() {
   return (
-    <div className="space-y-6">
-      { }
-      <WelcomeHero />
-      { }
-      <MiniAnalytics />
-      { }
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <PageTransition className="grid grid-cols-3 gap-4 auto-rows-min">
+      <div className="col-span-3">
+        <WelcomeHero />
+      </div>
+      <div className="col-span-2">
         <TodayFocus />
+      </div>
+      <div className="col-span-1">
         <RelationshipGrid />
       </div>
-    </div>
+    </PageTransition>
   )
 }
 export default Dashboard

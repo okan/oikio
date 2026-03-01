@@ -268,29 +268,6 @@
     "closeModal": "Pencereyi Kapat",
     "tip": "Kısayollar her sayfada aktiftir"
   },
-  "streak": {
-    "title": "Aktivite",
-    "currentStreak": "Güncel Seri",
-    "longestStreak": "En Uzun Seri",
-    "weeklyGoal": "Haftalık Hedef",
-    "weeklyProgress": "Haftalık İlerleme",
-    "badges": "Rozetler",
-    "viewAll": "Tüm Rozetler",
-    "earned": "Kazanıldı",
-    "locked": "Kilitli",
-    "badgesTitle": "Başarıların",
-    "badgesDesc": "İlerlemeni ve tutarlılığını takip et",
-    "firstMeeting_name": "İlk Adım",
-    "firstMeeting_desc": "İlk toplantını tamamla",
-    "weekStreak_name": "Haftalık Seri",
-    "weekStreak_desc": "7 gün boyunca serini koru",
-    "tenMeetings_name": "10 Toplantı",
-    "tenMeetings_desc": "Toplam 10 toplantı gerçekleştir",
-    "actionHero_name": "Aksiyon Kahramanı",
-    "actionHero_desc": "25 aksiyon maddesini tamamla",
-    "consistent_name": "Tutarlılık",
-    "consistent_desc": "30 gün boyunca serini koru"
-  },
   "focusMode": {
     "title": "Odak Modu",
     "notes": "Notlar",
@@ -340,6 +317,9 @@
     "week": "hafta"
   },
   "personDetail": {
+    "status": "Durum",
+    "frequency": "Sıklık",
+    "nextMeeting": "Sonraki Toplantı",
     "meetingSoon": "Görüşme zamanı geldi",
     "nextTomorrow": "Sonraki: Yarın",
     "nextInDays": "Sonraki: {{days}} gün içinde",

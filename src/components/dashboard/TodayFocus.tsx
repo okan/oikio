@@ -137,12 +137,12 @@ export function TodayFocus() {
   }
   if (isLoading) {
     return (
-      <div className="card p-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-slate-200 rounded w-1/3" />
-          <div className="space-y-3">
+      <div className="card p-5">
+        <div className="animate-pulse space-y-3">
+          <div className="h-5 bg-stone-100 rounded w-1/3" />
+          <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-slate-100 rounded-lg" />
+              <div key={i} className="h-14 bg-stone-50 rounded-lg" />
             ))}
           </div>
         </div>
@@ -154,25 +154,25 @@ export function TodayFocus() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="card p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-green-100 hover:border-green-200 transition-all"
+        className="card p-4 border-emerald-100 hover:border-emerald-200 transition-all"
       >
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-5 h-5 text-green-600" />
+          <div className="w-9 h-9 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-5 h-5 text-emerald-600" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="font-medium text-green-800">{t('focus.allClear')}</span>
+            <span className="font-medium text-emerald-800">{t('focus.allClear')}</span>
             <div className="flex items-center gap-3 mt-1.5 flex-wrap">
-              <span className="text-xs text-slate-500 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-green-500" />
+              <span className="text-xs text-stone-500 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                 {t('focus.noOverduePersons')}
               </span>
-              <span className="text-xs text-slate-500 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-green-500" />
+              <span className="text-xs text-stone-500 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                 {t('focus.noOverdueActions')}
               </span>
-              <span className="text-xs text-slate-500 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-green-500" />
+              <span className="text-xs text-stone-500 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                 {t('focus.noTodayMeetings')}
               </span>
             </div>
@@ -188,7 +188,7 @@ export function TodayFocus() {
       case 'urgent_action':
         return <Clock className="w-4 h-4 text-red-500" />
       case 'upcoming_meeting':
-        return <Calendar className="w-4 h-4 text-primary-500" />
+        return <Calendar className="w-4 h-4 text-blue-500" />
       case 'due_action':
         return <CheckCircle2 className="w-4 h-4 text-amber-500" />
     }
@@ -199,7 +199,7 @@ export function TodayFocus() {
       case 'urgent_action':
         return 'bg-red-50 hover:bg-red-100 border-red-100'
       case 'upcoming_meeting':
-        return 'bg-primary-50 hover:bg-primary-100 border-primary-100'
+        return 'bg-blue-50 hover:bg-blue-100 border-blue-100'
       case 'due_action':
         return 'bg-amber-50 hover:bg-amber-100 border-amber-100'
     }
@@ -210,18 +210,13 @@ export function TodayFocus() {
       animate={{ opacity: 1, y: 0 }}
       className="card overflow-hidden"
     >
-      <div className="p-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+      <div className="px-5 pt-5 pb-3">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
-            <Zap className="w-4 h-4 text-primary-600" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-slate-900">{t('focus.title')}</h2>
-            <p className="text-xs text-slate-500">{t('focus.subtitle')}</p>
-          </div>
+          <Zap className="w-4 h-4 text-stone-400" />
+          <h2 className="text-sm font-medium text-stone-500">{t('focus.title')}</h2>
         </div>
       </div>
-      <div className="p-3 space-y-2">
+      <div className="px-5 pb-5 space-y-2">
         <AnimatePresence mode="popLayout">
           {items.map((item, index) => (
             <motion.div
@@ -239,7 +234,7 @@ export function TodayFocus() {
                 >
                   <Avatar name={item.data.person.name} size="sm" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-slate-900 text-sm truncate">
+                    <p className="font-medium text-stone-900 text-sm truncate">
                       {item.data.person.name}
                     </p>
                     <p className="text-xs text-red-600">
@@ -268,16 +263,16 @@ export function TodayFocus() {
                       onCheckedChange={() => handleToggleAction(item.data.action!.id)}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-900 truncate">
+                      <p className="text-sm text-stone-900 truncate">
                         {item.data.action.description}
                       </p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-xs text-slate-500">
+                        <span className="text-xs text-stone-500">
                           {item.data.action.personName}
                         </span>
                         {item.data.action.dueDate && (
                           <>
-                            <span className="text-slate-300">•</span>
+                            <span className="text-stone-300">•</span>
                             <span
                               className={`text-xs flex items-center gap-1 ${isOverdue(item.data.action.dueDate)
                                 ? 'text-red-600'
@@ -305,16 +300,16 @@ export function TodayFocus() {
                 >
                   <Avatar name={item.data.meeting.personName || ''} size="sm" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-slate-900 text-sm truncate">
+                    <p className="font-medium text-stone-900 text-sm truncate">
                       {formatMeetingTitle(item.data.meeting.title, item.data.meeting.date)}
                     </p>
-                    <p className="text-xs text-slate-500">{item.data.meeting.personName}</p>
+                    <p className="text-xs text-stone-500">{item.data.meeting.personName}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="primary" size="sm">
                       {t('focus.today')}
                     </Badge>
-                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                    <ChevronRight className="w-4 h-4 text-stone-400" />
                   </div>
                 </div>
               )}
