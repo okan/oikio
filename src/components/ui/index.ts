@@ -1,4 +1,5 @@
 export { Modal } from './Modal'
+export { ConfirmModal } from './ConfirmModal'
 export { Input } from './Input'
 export { Textarea } from './Textarea'
 export { Select } from './Select'

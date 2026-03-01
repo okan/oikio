@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { usePersonStore, useMeetingStore, useTemplateStore } from '@/store'
 import type { Person, Meeting, ActionItem, MeetingSkip } from '@/types'
-import { Button, Modal, PageTransition } from '@/components/ui'
+import { Button, ConfirmModal, PageTransition } from '@/components/ui'
 import { MeetingForm } from '@/components/meeting'
 import {
   PersonForm,
@@ -175,21 +175,13 @@ export function PersonDetail() {
         defaultPersonId={person.id}
         onSubmit={handleMeetingSubmit}
       />
-      <Modal
+      <ConfirmModal
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}
         title={t('persons.deletePerson')}
         description={t('persons.deleteConfirm')}
-      >
-        <div className="flex justify-end gap-3">
-          <Button variant="secondary" onClick={() => setDeleteModalOpen(false)}>
-            {t('common.cancel')}
-          </Button>
-          <Button variant="danger" onClick={handleDelete}>
-            {t('common.delete')}
-          </Button>
-        </div>
-      </Modal>
+        onConfirm={handleDelete}
+      />
     </PageTransition>
   )
 }

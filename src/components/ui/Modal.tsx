@@ -25,7 +25,7 @@ export function Modal({ open, onOpenChange, title, description, children, classN
             className
           )}
         >
-          <div className="flex items-center justify-between p-5 border-b border-stone-100">
+          <div className="flex items-start justify-between p-5 border-b border-stone-100">
             <div>
               <Dialog.Title className="text-base font-semibold text-stone-900">
                 {title}

@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import { ArrowLeft, Edit2, Trash2, Calendar, User, ListTodo, Plus, Maximize2 } from 'lucide-react'
 import { useMeetingStore, usePersonStore, useTemplateStore, useActionStore } from '@/store'
 import type { Meeting, ActionItem } from '@/types'
-import { Button, Avatar, Modal, Textarea, PageTransition } from '@/components/ui'
+import { Button, Avatar, ConfirmModal, Textarea, PageTransition } from '@/components/ui'
 import { MeetingForm, FocusMode } from '@/components/meeting'
 import { ActionList, ActionForm } from '@/components/action'
 import { formatDate, formatMeetingTitle } from '@/lib/utils'
@@ -281,21 +281,13 @@ export function MeetingDetail() {
           await updateMeeting(meeting.id, data)
         }}
       />
-      <Modal
+      <ConfirmModal
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}
         title={t('meetings.deleteMeeting')}
         description={t('meetings.deleteConfirm')}
-      >
-        <div className="flex justify-end gap-3">
-          <Button variant="secondary" onClick={() => setDeleteModalOpen(false)}>
-            {t('common.cancel')}
-          </Button>
-          <Button variant="danger" onClick={handleDelete}>
-            {t('common.delete')}
-          </Button>
-        </div>
-      </Modal>
+        onConfirm={handleDelete}
+      />
       {focusModeOpen && (
         <FocusMode
           meeting={meeting}
