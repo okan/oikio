@@ -63,6 +63,11 @@ export interface Template {
   category: TemplateCategory
   isDefault: boolean
 }
+export interface DashboardStats {
+  totalPersons: number
+  meetingsThisMonth: number
+  pendingActions: number
+}
 export interface ElectronAPI {
   persons: {
     getAll: () => Promise<Person[]>
