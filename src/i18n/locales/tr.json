@@ -25,9 +25,6 @@
     "templates": "Şablonlar",
     "settings": "Ayarlar"
   },
-  "sidebar": {
-    "tagline": "1-1 toplantı arkadaşınız"
-  },
   "dashboard": {
     "welcome": "Hoş Geldiniz!",
     "summary": "1-1 toplantılarınızın özeti",

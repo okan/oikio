@@ -25,9 +25,6 @@
     "templates": "Templates",
     "settings": "Settings"
   },
-  "sidebar": {
-    "tagline": "1-1 meeting companion"
-  },
   "dashboard": {
     "welcome": "Welcome!",
     "summary": "Your 1-1 meetings summary",
