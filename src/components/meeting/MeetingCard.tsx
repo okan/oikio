@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Calendar, ChevronRight, CheckCircle2 } from 'lucide-react'
 import type { Meeting } from '@/types'
@@ -10,7 +11,8 @@ interface MeetingCardProps {
 }
 export function MeetingCard({ meeting, index = 0, showPerson = true }: MeetingCardProps) {
   const navigate = useNavigate()
-  const displayTitle = meeting.title || formatDate(meeting.date)
+  const { i18n } = useTranslation()
+  const displayTitle = meeting.title || formatDate(meeting.date, i18n.language)
   const hasActions = meeting.actionStats && meeting.actionStats.total > 0
   return (
     <motion.button
@@ -25,7 +27,7 @@ export function MeetingCard({ meeting, index = 0, showPerson = true }: MeetingCa
           <h3 className="font-medium text-stone-900 truncate text-sm">{displayTitle}</h3>
           <div className="flex items-center gap-1.5 mt-0.5 text-xs text-stone-500">
             <Calendar className="w-3 h-3 text-stone-400" />
-            <span>{formatDate(meeting.date)}</span>
+            <span>{formatDate(meeting.date, i18n.language)}</span>
             {showPerson && meeting.personName && (
               <>
                 <span className="text-stone-300">·</span>

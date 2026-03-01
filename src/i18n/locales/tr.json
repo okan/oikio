@@ -15,7 +15,8 @@
     "no": "Hayır",
     "dismiss": "Kapat",
     "more": "daha",
-    "error": "Bir hata oluştu"
+    "error": "Bir hata oluştu",
+    "required": "{{field}} zorunludur"
   },
   "nav": {
     "home": "Ana Sayfa",
@@ -87,7 +88,10 @@
     "neverMet": "Henüz görüşülmedi",
     "daysAgo": "{{days}} gün önce",
     "overdue": "Gecikmiş",
-    "daysOverdue": "{{days}} gün gecikmiş"
+    "daysOverdue": "{{days}} gün gecikmiş",
+    "created": "Kişi eklendi",
+    "updated": "Kişi güncellendi",
+    "deleted": "Kişi silindi"
   },
   "meetings": {
     "title": "Toplantılar",
@@ -116,7 +120,9 @@
     "fromLastMeeting": "Geçen Toplantıdan",
     "nextTopics": "Sonraki Toplantı İçin",
     "nextTopicsPlaceholder": "Sonraki toplantıda konuşulacak konular...",
-    "noNextTopics": "Henüz sonraki toplantı için konu eklenmemiş."
+    "noNextTopics": "Henüz sonraki toplantı için konu eklenmemiş.",
+    "updated": "Toplantı güncellendi",
+    "deleted": "Toplantı silindi"
   },
   "actions": {
     "title": "Aksiyonlar",
@@ -137,7 +143,8 @@
     "dueDate": "Son Tarih",
     "assignedTo": "Sorumlu Kim?",
     "me": "Ben yapacağım",
-    "other": "Karşı Tarafta"
+    "other": "Karşı Tarafta",
+    "deleteConfirm": "Bu aksiyonu silmek istediğinize emin misiniz?"
   },
   "tags": {
     "label": "Etiketler",
@@ -278,7 +285,10 @@
     "saveShortcut": "kaydet",
     "unsavedChanges": "Kaydedilmemiş değişiklikler",
     "autoSaved": "Otomatik kaydedildi",
-    "new": "yeni"
+    "new": "yeni",
+    "exitConfirmTitle": "Kaydedilmemiş değişiklikler var",
+    "exitConfirmDesc": "Kaydetmeden çıkmak istediğinize emin misiniz?",
+    "discardAndExit": "Kaydetmeden çık"
   },
   "focus": {
     "title": "Bugün Senden Beklenenler",

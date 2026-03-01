@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import {
   WelcomeHero,
   TodayFocus,
@@ -5,8 +6,9 @@ import {
 } from '@/components/dashboard'
 import { PageTransition } from '@/components/ui'
 export function Dashboard() {
+  const location = useLocation()
   return (
-    <PageTransition className="grid grid-cols-3 gap-4 auto-rows-min">
+    <PageTransition key={location.key} className="grid grid-cols-3 gap-4 auto-rows-min">
       <div className="col-span-3">
         <WelcomeHero />
       </div>

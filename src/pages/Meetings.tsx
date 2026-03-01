@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { FileText } from 'lucide-react'
 import { useMeetingStore, usePersonStore, useTemplateStore } from '@/store'
 import { Header } from '@/components/layout'
@@ -38,6 +39,7 @@ export function Meetings() {
   const handleMeetingSubmit = async (data: Omit<Meeting, 'id' | 'createdAt'>) => {
     if (editingMeeting) {
       await updateMeeting(editingMeeting.id, data)
+      toast.success(t('meetings.updated'))
     } else {
       const newMeeting = await createMeeting(data)
       navigate(`/meetings/${newMeeting.id}?focus=true`)
@@ -83,7 +85,6 @@ export function Meetings() {
         templates={templates}
         onSubmit={handleMeetingSubmit}
       />
-      { }
       <Modal
         open={templateManagerOpen}
         onOpenChange={setTemplateManagerOpen}

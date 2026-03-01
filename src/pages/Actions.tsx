@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { useActionStore } from '@/store'
 import { Header } from '@/components/layout'
 import { ActionList } from '@/components/action'
@@ -37,6 +38,19 @@ export function Actions() {
     pending: actions.filter(a => !a.completed).length,
     completed: actions.filter(a => a.completed).length,
     all: actions.length,
+  }
+
+  const handleDelete = (id: number) => {
+    toast(t('actions.deleteConfirm'), {
+      action: {
+        label: t('common.delete'),
+        onClick: () => deleteAction(id),
+      },
+      cancel: {
+        label: t('common.cancel'),
+        onClick: () => {},
+      },
+    })
   }
 
   const filteredActions = actions.filter((a) => {
@@ -163,7 +177,7 @@ export function Actions() {
               <ActionList
                 actions={myActions}
                 onToggle={(id) => toggleComplete(id)}
-                onDelete={(id) => deleteAction(id)}
+                onDelete={(id) => handleDelete(id)}
                 showMeeting
                 emptyTitle={t('actions.noPending')}
                 emptyDescription={t('actions.noPendingDesc')}
@@ -181,7 +195,7 @@ export function Actions() {
               <ActionList
                 actions={otherActions}
                 onToggle={(id) => toggleComplete(id)}
-                onDelete={(id) => deleteAction(id)}
+                onDelete={(id) => handleDelete(id)}
                 showMeeting
                 emptyTitle={t('actions.noPending')}
                 emptyDescription={t('actions.noPendingDesc')}

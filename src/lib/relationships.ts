@@ -84,11 +84,3 @@ export function getHealthTextColor(status: 'good' | 'warning' | 'critical'): str
   }
   return colors[status]
 }
-export function getHealthBgColor(status: 'good' | 'warning' | 'critical'): string {
-  const colors = {
-    good: 'bg-green-100',
-    warning: 'bg-amber-100',
-    critical: 'bg-red-100',
-  }
-  return colors[status]
-}

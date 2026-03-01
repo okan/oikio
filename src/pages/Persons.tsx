@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { usePersonStore } from '@/store'
 import { Header } from '@/components/layout'
 import { PersonList, PersonForm } from '@/components/person'
@@ -30,8 +31,10 @@ export function Persons() {
   const handleSubmit = async (data: Omit<Person, 'id' | 'createdAt'>) => {
     if (editingPerson) {
       await updatePerson(editingPerson.id, data)
+      toast.success(t('persons.updated'))
     } else {
       await createPerson(data)
+      toast.success(t('persons.created'))
     }
   }
   return (

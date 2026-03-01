@@ -19,14 +19,14 @@ export const ActionItem = memo(function ActionItem({
   showMeeting = false,
   index = 0,
 }: ActionItemProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const isActionOverdue = useMemo(
     () => action.dueDate && isOverdue(action.dueDate) && !action.completed,
     [action.dueDate, action.completed]
   )
   const relativeTime = useMemo(
-    () => action.dueDate ? getRelativeTime(action.dueDate) : null,
-    [action.dueDate]
+    () => action.dueDate ? getRelativeTime(action.dueDate, i18n.language) : null,
+    [action.dueDate, i18n.language]
   )
   return (
     <motion.div

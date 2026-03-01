@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { usePersonStore, useMeetingStore, useTemplateStore } from '@/store'
 import type { Person, Meeting, ActionItem } from '@/types'
@@ -75,6 +76,7 @@ export function PersonDetail() {
   }
   const handleDelete = async () => {
     await deletePerson(person.id)
+    toast.success(t('persons.deleted'))
     navigate('/persons')
   }
   const handleMeetingSubmit = async (data: Omit<Meeting, 'id' | 'createdAt'>) => {
@@ -129,7 +131,6 @@ export function PersonDetail() {
           </div>
         </div>
       </div>
-      { }
       <PersonForm
         open={editFormOpen}
         onOpenChange={setEditFormOpen}
@@ -138,7 +139,6 @@ export function PersonDetail() {
           await updatePerson(person.id, data)
         }}
       />
-      { }
       <MeetingForm
         open={meetingFormOpen}
         onOpenChange={setMeetingFormOpen}
@@ -148,7 +148,6 @@ export function PersonDetail() {
         defaultPersonId={person.id}
         onSubmit={handleMeetingSubmit}
       />
-      { }
       <Modal
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}

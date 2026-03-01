@@ -109,7 +109,7 @@ function prioritizeItems(
 }
 export function TodayFocus() {
   const navigate = useNavigate()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { toggleComplete } = useActionStore()
   const [items, setItems] = useState<FocusItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -280,7 +280,7 @@ export function TodayFocus() {
                                 }`}
                             >
                               {getItemIcon(item.type)}
-                              {getRelativeTime(item.data.action.dueDate)}
+                              {getRelativeTime(item.data.action.dueDate, i18n.language)}
                             </span>
                           </>
                         )}

@@ -10,7 +10,7 @@ interface PersonPendingActionsProps {
   onActionToggle?: () => void
 }
 export function PersonPendingActions({ actions, onActionToggle }: PersonPendingActionsProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { toggleComplete } = useActionStore()
   const pendingActions = actions.filter((a) => !a.completed)
   const handleToggle = async (actionId: number) => {
@@ -71,7 +71,7 @@ export function PersonPendingActions({ actions, onActionToggle }: PersonPendingA
                   }`}
               >
                 <Clock className="w-3 h-3" />
-                {getRelativeTime(action.dueDate)}
+                {getRelativeTime(action.dueDate, i18n.language)}
               </span>
             )}
             {action.dueDate && isOverdue(action.dueDate) && (

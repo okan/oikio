@@ -119,7 +119,6 @@ export function Settings() {
   return (
     <PageTransition className="space-y-6">
       <Header title={t('settings.title')} description={t('settings.description')} />
-      { }
       <div className="card p-6">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-stone-100 rounded-xl text-stone-600">
@@ -138,7 +137,6 @@ export function Settings() {
           </div>
         </div>
       </div>
-      { }
       {notificationSettings && (
         <div className="card p-6">
           <div className="flex items-start gap-4">
@@ -181,7 +179,6 @@ export function Settings() {
           </div>
         </div>
       )}
-      { }
       <div className="card p-6 space-y-6">
         <div className="flex items-center gap-3">
           <div className="p-3 bg-stone-100 rounded-xl text-stone-600">
@@ -232,7 +229,6 @@ export function Settings() {
           </div>
         </div>
       </div>
-      { }
       <div className="card p-6 border-red-100 bg-red-50/30">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-3 bg-red-100 rounded-xl text-red-600">
@@ -256,7 +252,6 @@ export function Settings() {
           </Button>
         </div>
       </div>
-      { }
       <div className="card p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-3 bg-stone-100 rounded-xl text-stone-600">
@@ -277,7 +272,6 @@ export function Settings() {
           <p className="text-stone-500 mt-4">{t('settings.privacyNote')}</p>
         </div>
       </div>
-      { }
       <Modal
         open={importModalOpen}
         onOpenChange={setImportModalOpen}
@@ -293,7 +287,6 @@ export function Settings() {
           </Button>
         </div>
       </Modal>
-      { }
       <Modal
         open={resetModalOpen}
         onOpenChange={setResetModalOpen}

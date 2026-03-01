@@ -15,7 +15,8 @@
     "no": "No",
     "dismiss": "Dismiss",
     "more": "more",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "required": "{{field}} is required"
   },
   "nav": {
     "home": "Home",
@@ -87,7 +88,10 @@
     "neverMet": "Never met",
     "daysAgo": "{{days}} days ago",
     "overdue": "Overdue",
-    "daysOverdue": "{{days}} days overdue"
+    "daysOverdue": "{{days}} days overdue",
+    "created": "Person added",
+    "updated": "Person updated",
+    "deleted": "Person deleted"
   },
   "meetings": {
     "title": "Meetings",
@@ -116,7 +120,9 @@
     "fromLastMeeting": "From Last Meeting",
     "nextTopics": "For Next Meeting",
     "nextTopicsPlaceholder": "Topics to discuss in the next meeting...",
-    "noNextTopics": "No topics added for the next meeting yet."
+    "noNextTopics": "No topics added for the next meeting yet.",
+    "updated": "Meeting updated",
+    "deleted": "Meeting deleted"
   },
   "actions": {
     "title": "Actions",
@@ -137,7 +143,8 @@
     "dueDate": "Due Date",
     "assignedTo": "Who is responsible?",
     "me": "Me",
-    "other": "Them"
+    "other": "Other party",
+    "deleteConfirm": "Are you sure you want to delete this action?"
   },
   "tags": {
     "label": "Tags",
@@ -279,7 +286,10 @@
     "saveShortcut": "save",
     "unsavedChanges": "Unsaved changes",
     "autoSaved": "Auto-saved",
-    "new": "new"
+    "new": "new",
+    "exitConfirmTitle": "You have unsaved changes",
+    "exitConfirmDesc": "Are you sure you want to exit without saving?",
+    "discardAndExit": "Discard and exit"
   },
   "focus": {
     "title": "Today's Focus",

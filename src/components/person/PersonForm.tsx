@@ -41,7 +41,7 @@ export function PersonForm({ open, onOpenChange, person, onSubmit }: PersonFormP
   const validate = () => {
     const newErrors: Record<string, string> = {}
     if (!name.trim()) {
-      newErrors.name = t('persons.name') + ' required'
+      newErrors.name = t('common.required', { field: t('persons.name') })
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0

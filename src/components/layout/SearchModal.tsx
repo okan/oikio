@@ -12,7 +12,7 @@ interface SearchModalProps {
 }
 export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   const navigate = useNavigate()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }>({
     persons: [],
@@ -183,7 +183,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                               {formatMeetingTitle(meeting.title, meeting.date)}
                             </div>
                             <div className="text-xs text-stone-500">
-                              {meeting.personName} • {formatDateShort(meeting.date)}
+                              {meeting.personName} • {formatDateShort(meeting.date, i18n.language)}
                             </div>
                           </div>
                         </button>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Save, Plus, Check, Clock, User, AlertCircle, CheckCircle2 } from 'lucide-react'
 import type { Meeting, ActionItem } from '@/types'
-import { Button, Input, Avatar, RichTextEditor } from '@/components/ui'
+import { Button, Input, Avatar, RichTextEditor, Modal } from '@/components/ui'
 import { formatDate, formatMeetingTitle } from '@/lib/utils'
 interface FocusModeProps {
   meeting: Meeting
@@ -21,7 +21,7 @@ export function FocusMode({
   onAddAction,
   onToggleAction,
 }: FocusModeProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [notes, setNotes] = useState(meeting.notes || '')
   const [newAction, setNewAction] = useState('')
   const [isSaving, setIsSaving] = useState(false)
@@ -110,11 +110,19 @@ export function FocusMode({
       handleAddAction()
     }
   }
+  const [showExitConfirm, setShowExitConfirm] = useState(false)
+  const handleClose = useCallback(() => {
+    if (hasUnsavedChanges) {
+      setShowExitConfirm(true)
+    } else {
+      onClose()
+    }
+  }, [hasUnsavedChanges, onClose])
   const handleGlobalKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault()
-        onClose()
+        handleClose()
         return
       }
       if ((e.metaKey || e.ctrlKey) && e.key === 's') {
@@ -125,7 +133,7 @@ export function FocusMode({
         return
       }
     },
-    [onClose, isSaving, handleSave]
+    [handleClose, isSaving, handleSave]
   )
   useEffect(() => {
     window.addEventListener('keydown', handleGlobalKeyDown)
@@ -140,7 +148,6 @@ export function FocusMode({
       exit={{ opacity: 0 }}
       className="fixed inset-0 bg-stone-50 z-50 flex flex-col"
     >
-      { }
       <div className="flex items-center justify-between px-6 py-4 border-b border-stone-200 bg-white">
         <div className="flex items-center gap-4">
           <Avatar name={meeting.personName || ''} size="md" />
@@ -153,7 +160,7 @@ export function FocusMode({
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
-                {formatDate(meeting.date)}
+                {formatDate(meeting.date, i18n.language)}
               </span>
             </div>
           </div>
@@ -192,7 +199,7 @@ export function FocusMode({
           >
             {t('common.save')}
           </Button>
-          <Button variant="ghost" onClick={onClose}>
+          <Button variant="ghost" onClick={handleClose}>
             <X className="w-5 h-5 text-stone-500" />
           </Button>
         </div>
@@ -281,7 +288,6 @@ export function FocusMode({
           )}
         </div>
       </div>
-      { }
       <div className="px-6 py-2 border-t border-stone-200 bg-white">
         <div className="flex items-center gap-4 text-xs text-stone-500">
           <span>
@@ -298,6 +304,21 @@ export function FocusMode({
           </span>
         </div>
       </div>
+      <Modal
+        open={showExitConfirm}
+        onOpenChange={setShowExitConfirm}
+        title={t('focusMode.exitConfirmTitle')}
+        description={t('focusMode.exitConfirmDesc')}
+      >
+        <div className="flex justify-end gap-3">
+          <Button variant="secondary" onClick={() => setShowExitConfirm(false)}>
+            {t('common.cancel')}
+          </Button>
+          <Button variant="danger" onClick={onClose}>
+            {t('focusMode.discardAndExit')}
+          </Button>
+        </div>
+      </Modal>
     </motion.div>
   )
 }

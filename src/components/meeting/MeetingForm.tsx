@@ -83,7 +83,7 @@ export function MeetingForm({
   }, [meeting, open, defaultPersonId])
   const handleTemplateChange = (value: string) => {
     setTemplateId(value)
-    if (value && meeting) {
+    if (value) {
       const template = templates.find((t) => t.id.toString() === value)
       if (template) {
         setNotes(template.content)
@@ -95,10 +95,10 @@ export function MeetingForm({
   const validate = () => {
     const newErrors: Record<string, string> = {}
     if (!personId) {
-      newErrors.personId = t('meetings.person') + ' required'
+      newErrors.personId = t('common.required', { field: t('meetings.person') })
     }
     if (!date) {
-      newErrors.date = t('meetings.date') + ' required'
+      newErrors.date = t('common.required', { field: t('meetings.date') })
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import ReactMarkdown from 'react-markdown'
 import { ArrowLeft, Edit2, Trash2, Calendar, User, ListTodo, Plus, Maximize2 } from 'lucide-react'
 import { useMeetingStore, usePersonStore, useTemplateStore, useActionStore } from '@/store'
@@ -13,7 +14,7 @@ export function MeetingDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { meetings, fetchMeetings, updateMeeting, deleteMeeting } = useMeetingStore()
   const { persons, fetchPersons } = usePersonStore()
   const { templates, fetchTemplates } = useTemplateStore()
@@ -26,14 +27,17 @@ export function MeetingDetail() {
   const [isEditingNextTopics, setIsEditingNextTopics] = useState(false)
   const [isSavingNextTopics, setIsSavingNextTopics] = useState(false)
   const [focusModeOpen, setFocusModeOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
     const loadData = async () => {
       if (!id) return
+      setIsLoading(true)
       await fetchMeetings()
       await fetchPersons()
       await fetchTemplates()
       const meetingActions = await fetchActionsByMeeting(parseInt(id))
       setActions(meetingActions)
+      setIsLoading(false)
     }
     loadData()
   }, [id, fetchMeetings, fetchPersons, fetchTemplates, fetchActionsByMeeting])
@@ -55,15 +59,27 @@ export function MeetingDetail() {
     const meetingActions = await fetchActionsByMeeting(parseInt(id))
     setActions(meetingActions)
   }
-  if (!meeting) {
+  if (isLoading || !meeting) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-stone-500">{t('common.noResults')}</p>
+      <div className="max-w-5xl mx-auto px-8 py-6">
+        <div className="animate-pulse space-y-5">
+          <div className="h-4 bg-stone-100 rounded w-16" />
+          <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-2 space-y-4">
+              <div className="h-48 bg-stone-100 rounded-xl" />
+              <div className="h-32 bg-stone-100 rounded-xl" />
+            </div>
+            <div className="col-span-1">
+              <div className="h-64 bg-stone-100 rounded-xl" />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
   const handleDelete = async () => {
     await deleteMeeting(meeting.id)
+    toast.success(t('meetings.deleted'))
     navigate('/meetings')
   }
   const handleActionCreate = async (data: {
@@ -228,7 +244,7 @@ export function MeetingDetail() {
                   <Calendar className="w-3 h-3" />
                   {t('meetings.date')}
                 </span>
-                <span className="text-xs font-medium text-stone-700">{formatDate(meeting.date)}</span>
+                <span className="text-xs font-medium text-stone-700">{formatDate(meeting.date, i18n.language)}</span>
               </div>
             </div>
 
@@ -255,7 +271,6 @@ export function MeetingDetail() {
           </div>
         </div>
       </div>
-      { }
       <MeetingForm
         open={editFormOpen}
         onOpenChange={setEditFormOpen}
@@ -266,7 +281,6 @@ export function MeetingDetail() {
           await updateMeeting(meeting.id, data)
         }}
       />
-      { }
       <Modal
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}
@@ -282,7 +296,6 @@ export function MeetingDetail() {
           </Button>
         </div>
       </Modal>
-      { }
       {focusModeOpen && (
         <FocusMode
           meeting={meeting}
