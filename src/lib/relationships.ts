@@ -16,24 +16,35 @@ export function getDaysSinceLastMeeting(lastMeetingDate?: string): number | null
   lastMeeting.setHours(0, 0, 0, 0)
   return Math.floor((today.getTime() - lastMeeting.getTime()) / (1000 * 60 * 60 * 24))
 }
+function isSkipActive(skippedUntil?: string): boolean {
+  if (!skippedUntil) return false
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const until = new Date(skippedUntil)
+  until.setHours(23, 59, 59, 999)
+  return until >= today
+}
 export function calculateRelationshipHealth(person: Person): RelationshipHealth {
   const daysSince = getDaysSinceLastMeeting(person.lastMeetingDate)
   const expectedDays = getFrequencyDays(person.meetingFrequencyGoal)
+  const skipped = isSkipActive(person.skippedUntil)
   if (!person.meetingFrequencyGoal && daysSince === null) {
     return {
       score: 0,
-      status: 'warning',
+      status: skipped ? 'good' : 'warning',
       daysSinceLastMeeting: null,
       isOverdue: false,
+      isSkipped: skipped,
       daysOverdue: 0,
     }
   }
   if (daysSince === null) {
     return {
       score: 0,
-      status: 'critical',
+      status: skipped ? 'good' : 'critical',
       daysSinceLastMeeting: null,
       isOverdue: false,
+      isSkipped: skipped,
       daysOverdue: 0,
     }
   }
@@ -41,7 +52,9 @@ export function calculateRelationshipHealth(person: Person): RelationshipHealth 
   const isOverdue = daysSince > expectedDays
   const daysOverdue = Math.max(0, daysSince - expectedDays)
   let status: 'good' | 'warning' | 'critical'
-  if (daysSince <= expectedDays * 0.8) {
+  if (skipped) {
+    status = 'good'
+  } else if (daysSince <= expectedDays * 0.8) {
     status = 'good'
   } else if (daysSince <= expectedDays) {
     status = 'warning'
@@ -52,8 +65,9 @@ export function calculateRelationshipHealth(person: Person): RelationshipHealth 
     score: progress,
     status,
     daysSinceLastMeeting: daysSince,
-    isOverdue,
-    daysOverdue,
+    isOverdue: skipped ? false : isOverdue,
+    isSkipped: skipped,
+    daysOverdue: skipped ? 0 : daysOverdue,
   }
 }
 export function getHealthDescription(health: RelationshipHealth, t: (key: string, options?: Record<string, unknown>) => string): string {

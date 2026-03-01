@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Calendar, Target, Edit2, CalendarPlus, CalendarCheck } from 'lucide-react'
+import { Calendar, Target, Edit2, CalendarPlus, CalendarCheck, SkipForward } from 'lucide-react'
 import type { Person, Meeting } from '@/types'
 import { Avatar, Badge, Button } from '@/components/ui'
 import {
@@ -15,9 +15,10 @@ interface PersonDetailHeaderProps {
   person: Person
   onEdit: () => void
   onNewMeeting: () => void
+  onSkip: () => void
   futureMeeting?: Meeting
 }
-export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting }: PersonDetailHeaderProps) {
+export function PersonDetailHeader({ person, onEdit, onNewMeeting, onSkip, futureMeeting }: PersonDetailHeaderProps) {
   const { t } = useTranslation()
   const health = calculateRelationshipHealth(person)
   const daysSince = getDaysSinceLastMeeting(person.lastMeetingDate)
@@ -65,6 +66,12 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
         <Badge variant={person.role === 'manager' ? 'primary' : 'default'} size="sm" className="mt-1">
           {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
         </Badge>
+        {health.isSkipped && (
+          <Badge variant="default" size="sm" className="mt-1">
+            <SkipForward className="w-3 h-3 mr-1" />
+            {t('skip.skippedBadge')}
+          </Badge>
+        )}
       </div>
 
       <div className="space-y-3 mb-4">
@@ -130,6 +137,12 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, futureMeeting
           {t('meetings.newMeeting')}
         </Button>
       </div>
+      {!health.isSkipped && health.isOverdue && (
+        <Button variant="secondary" size="sm" onClick={onSkip} className="w-full mt-2">
+          <SkipForward className="w-3.5 h-3.5 mr-1.5" />
+          {t('skip.button')}
+        </Button>
+      )}
     </motion.div>
   )
 }

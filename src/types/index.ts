@@ -8,13 +8,22 @@ export interface Person {
   notes?: string
   meetingFrequencyGoal?: MeetingFrequency
   lastMeetingDate?: string
+  skippedUntil?: string
   createdAt: string
+}
+export interface MeetingSkip {
+  id: number
+  personId: number
+  skippedAt: string
+  skippedUntil: string
+  reason?: string
 }
 export interface RelationshipHealth {
   score: number
   status: 'good' | 'warning' | 'critical'
   daysSinceLastMeeting: number | null
   isOverdue: boolean
+  isSkipped: boolean
   daysOverdue: number
 }
 export interface Meeting {
@@ -90,6 +99,11 @@ export interface ElectronAPI {
   }
   stats: {
     getDashboard: () => Promise<{ totalPersons: number; meetingsThisMonth: number; pendingActions: number }>
+  }
+  meetingSkips: {
+    create: (personId: number, reason?: string) => Promise<MeetingSkip>
+    getByPerson: (personId: number) => Promise<MeetingSkip[]>
+    getActive: (personId: number) => Promise<MeetingSkip | null>
   }
   data: {
     export: () => Promise<string>

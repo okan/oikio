@@ -337,5 +337,13 @@
     "noMeetingsDesc": "Create your first meeting with this person",
     "lastMet": "Last met",
     "nextDue": "Next due"
+  },
+  "skip": {
+    "button": "Skip",
+    "skippedUntil": "Skipped until {{date}}",
+    "history": "Skip History",
+    "noHistory": "No skips yet",
+    "success": "Skipped this period",
+    "skippedBadge": "Skipped"
   }
 }

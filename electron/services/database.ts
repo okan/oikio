@@ -1,18 +1,20 @@
 import { app } from 'electron'
 import path from 'path'
 import fs from 'fs'
-import type { Person, Meeting, ActionItem, Template, DashboardStats } from '../../src/types'
+import type { Person, Meeting, ActionItem, Template, DashboardStats, MeetingSkip } from '../../src/types'
 interface DatabaseData {
   persons: Person[]
   meetings: Meeting[]
   actionItems: ActionItem[]
   templates: Template[]
+  meetingSkips: MeetingSkip[]
   meta: {
     lastId: {
       persons: number
       meetings: number
       actionItems: number
       templates: number
+      meetingSkips: number
     }
   }
 }
@@ -21,12 +23,14 @@ const defaultData: DatabaseData = {
   meetings: [],
   actionItems: [],
   templates: [],
+  meetingSkips: [],
   meta: {
     lastId: {
       persons: 0,
       meetings: 0,
       actionItems: 0,
       templates: 0,
+      meetingSkips: 0,
     },
   },
 }
@@ -378,6 +382,56 @@ export class DatabaseService {
   deleteTemplate(id: number): void {
     this.data.templates = this.data.templates.filter((t) => t.id !== id)
     this.save()
+  }
+  createMeetingSkip(personId: number, reason?: string): MeetingSkip {
+    const person = this.data.persons.find((p) => p.id === personId)
+    if (!person) throw new Error('Person not found')
+    const frequencyDays: Record<string, number> = {
+      weekly: 7,
+      biweekly: 14,
+      monthly: 30,
+      quarterly: 90,
+    }
+    const days = person.meetingFrequencyGoal
+      ? frequencyDays[person.meetingFrequencyGoal] || 30
+      : 30
+    const now = new Date()
+    const skippedUntil = new Date(now)
+    skippedUntil.setDate(skippedUntil.getDate() + days)
+    const skip: MeetingSkip = {
+      id: this.getNextId('meetingSkips'),
+      personId,
+      skippedAt: now.toISOString(),
+      skippedUntil: skippedUntil.toISOString().split('T')[0],
+      reason,
+    }
+    if (!this.data.meetingSkips) this.data.meetingSkips = []
+    this.data.meetingSkips.push(skip)
+    const personIndex = this.data.persons.findIndex((p) => p.id === personId)
+    if (personIndex !== -1) {
+      this.data.persons[personIndex].skippedUntil = skip.skippedUntil
+    }
+    this.save()
+    return skip
+  }
+  getMeetingSkipsByPerson(personId: number): MeetingSkip[] {
+    if (!this.data.meetingSkips) return []
+    return this.data.meetingSkips
+      .filter((s) => s.personId === personId)
+      .sort((a, b) => new Date(b.skippedAt).getTime() - new Date(a.skippedAt).getTime())
+  }
+  getActiveMeetingSkip(personId: number): MeetingSkip | null {
+    if (!this.data.meetingSkips) return null
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return (
+      this.data.meetingSkips.find((s) => {
+        if (s.personId !== personId) return false
+        const until = new Date(s.skippedUntil)
+        until.setHours(23, 59, 59, 999)
+        return until >= today
+      }) || null
+    )
   }
   getDashboardStats(): DashboardStats {
     const currentMonth = new Date().toISOString().slice(0, 7)

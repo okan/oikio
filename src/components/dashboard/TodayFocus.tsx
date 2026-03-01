@@ -11,6 +11,7 @@ import {
   ChevronRight,
   CalendarPlus,
   Sparkles,
+  SkipForward,
 } from 'lucide-react'
 import type { Person, Meeting, ActionItem } from '@/types'
 import { Avatar, Checkbox, Badge } from '@/components/ui'
@@ -135,6 +136,10 @@ export function TodayFocus() {
     await toggleComplete(actionId)
     setItems((prev) => prev.filter((item) => item.data.action?.id !== actionId))
   }
+  const handleSkipPerson = async (personId: number) => {
+    await window.api.meetingSkips.create(personId)
+    setItems((prev) => prev.filter((item) => item.data.person?.id !== personId))
+  }
   if (isLoading) {
     return (
       <div className="card p-5">
@@ -243,16 +248,28 @@ export function TodayFocus() {
                         : t('persons.neverMet')}
                     </p>
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      navigate(`/meetings?new=true&personId=${item.data.person!.id}`)
-                    }}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors shadow-sm"
-                  >
-                    <CalendarPlus className="w-3 h-3" />
-                    {t('focus.schedule')}
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleSkipPerson(item.data.person!.id)
+                      }}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
+                    >
+                      <SkipForward className="w-3 h-3" />
+                      {t('skip.button')}
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate(`/meetings?new=true&personId=${item.data.person!.id}`)
+                      }}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors shadow-sm"
+                    >
+                      <CalendarPlus className="w-3 h-3" />
+                      {t('focus.schedule')}
+                    </button>
+                  </div>
                 </div>
               )}
               {(item.type === 'urgent_action' || item.type === 'due_action') &&

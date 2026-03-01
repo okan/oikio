@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { usePersonStore, useMeetingStore, useTemplateStore } from '@/store'
-import type { Person, Meeting, ActionItem } from '@/types'
+import type { Person, Meeting, ActionItem, MeetingSkip } from '@/types'
 import { Button, Modal, PageTransition } from '@/components/ui'
 import { MeetingForm } from '@/components/meeting'
 import {
@@ -28,6 +28,7 @@ export function PersonDetail() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editingMeeting, setEditingMeeting] = useState<Meeting | null>(null)
   const [futureMeetings, setFutureMeetings] = useState<Meeting[]>([])
+  const [skipHistory, setSkipHistory] = useState<MeetingSkip[]>([])
   const loadActions = useCallback(async () => {
     if (!id) return
     const allActions = await window.api.actions.getAll()
@@ -53,6 +54,8 @@ export function PersonDetail() {
         return m.personId === parseInt(id) && meetingDate > now
       })
       setFutureMeetings(personFutureMeetings)
+      const skips = await window.api.meetingSkips.getByPerson(parseInt(id))
+      setSkipHistory(skips)
     }
     loadData()
   }, [id, fetchPersons, fetchMeetingsByPerson, fetchTemplates])
@@ -95,6 +98,12 @@ export function PersonDetail() {
     setEditingMeeting(null)
     setMeetingFormOpen(true)
   }
+  const handleSkip = async () => {
+    const skip = await window.api.meetingSkips.create(person.id)
+    toast.success(t('skip.success'))
+    setSkipHistory((prev) => [skip, ...prev])
+    await fetchPersons()
+  }
   return (
     <PageTransition className="space-y-5">
       <button
@@ -116,8 +125,26 @@ export function PersonDetail() {
             person={person}
             onEdit={() => setEditFormOpen(true)}
             onNewMeeting={handleNewMeeting}
+            onSkip={handleSkip}
             futureMeeting={futureMeetings[0]}
           />
+          {skipHistory.length > 0 && (
+            <div className="card p-4">
+              <h3 className="text-xs font-medium text-stone-500 mb-3">{t('skip.history')}</h3>
+              <div className="space-y-2">
+                {skipHistory.slice(0, 5).map((skip) => (
+                  <div key={skip.id} className="flex items-center justify-between text-xs">
+                    <span className="text-stone-600">
+                      {new Date(skip.skippedAt).toLocaleDateString()}
+                    </span>
+                    <span className="text-stone-400">
+                      → {new Date(skip.skippedUntil).toLocaleDateString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="flex justify-center">
             <Button
               variant="ghost"
