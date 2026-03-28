@@ -1,5 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import type { Person, Meeting, ActionItem, Template, DashboardStats, MeetingSkip } from '../src/types'
+import type {
+  Person,
+  Meeting,
+  ActionItem,
+  Template,
+  DashboardStats,
+  MeetingSkip,
+  PersonNote,
+} from '../src/types'
 contextBridge.exposeInMainWorld('api', {
   persons: {
     getAll: (): Promise<Person[]> => ipcRenderer.invoke('db:persons:getAll'),
@@ -60,6 +68,13 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.invoke('db:meetingSkips:getByPerson', personId),
     getActive: (personId: number): Promise<MeetingSkip | null> =>
       ipcRenderer.invoke('db:meetingSkips:getActive', personId),
+  },
+  personNotes: {
+    getByPerson: (personId: number): Promise<PersonNote[]> =>
+      ipcRenderer.invoke('db:personNotes:getByPerson', personId),
+    create: (data: { personId: number; content: string }): Promise<PersonNote> =>
+      ipcRenderer.invoke('db:personNotes:create', data),
+    delete: (id: number): Promise<void> => ipcRenderer.invoke('db:personNotes:delete', id),
   },
   data: {
     export: (): Promise<string> => ipcRenderer.invoke('db:export'),

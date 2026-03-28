@@ -96,6 +96,13 @@
     "updated": "Person updated",
     "deleted": "Person deleted"
   },
+  "personNotes": {
+    "title": "Quick notes",
+    "placeholder": "Add a note…",
+    "empty": "No notes yet. Jot down observations between meetings.",
+    "added": "Note added",
+    "deleted": "Note deleted"
+  },
   "meetings": {
     "title": "Meetings",
     "description": "All 1-1 meeting notes",

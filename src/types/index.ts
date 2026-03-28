@@ -19,6 +19,12 @@ export interface MeetingSkip {
   skippedUntil: string
   reason?: string
 }
+export interface PersonNote {
+  id: number
+  personId: number
+  content: string
+  createdAt: string
+}
 export interface RelationshipHealth {
   score: number
   status: 'good' | 'warning' | 'critical' | 'neutral'
@@ -112,6 +118,11 @@ export interface ElectronAPI {
     create: (personId: number, reason?: string) => Promise<MeetingSkip>
     getByPerson: (personId: number) => Promise<MeetingSkip[]>
     getActive: (personId: number) => Promise<MeetingSkip | null>
+  }
+  personNotes: {
+    getByPerson: (personId: number) => Promise<PersonNote[]>
+    create: (data: { personId: number; content: string }) => Promise<PersonNote>
+    delete: (id: number) => Promise<void>
   }
   data: {
     export: () => Promise<string>

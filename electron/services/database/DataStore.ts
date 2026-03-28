@@ -3,6 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import type { DatabaseData, EntityType } from './types'
 import { defaultData } from './types'
+import type { PersonNote } from '../../../src/types'
 export class DataStore {
   private data: DatabaseData
   private dbPath: string
@@ -19,12 +20,26 @@ export class DataStore {
     if (fs.existsSync(this.dbPath)) {
       try {
         const content = fs.readFileSync(this.dbPath, 'utf-8')
-        return JSON.parse(content)
+        const data = JSON.parse(content) as DatabaseData
+        if (!Array.isArray(data.personNotes)) {
+          data.personNotes = []
+        }
+        if (!data.meta?.lastId) {
+          data.meta = structuredClone(defaultData.meta)
+        } else {
+          data.meta.lastId = { ...defaultData.meta.lastId, ...data.meta.lastId }
+        }
+        if (typeof data.meta.lastId.personNotes !== 'number') {
+          data.meta.lastId.personNotes = data.personNotes.length
+            ? Math.max(0, ...data.personNotes.map((n: PersonNote) => n.id))
+            : 0
+        }
+        return data
       } catch {
-        return { ...defaultData }
+        return structuredClone(defaultData)
       }
     }
-    return { ...defaultData }
+    return structuredClone(defaultData)
   }
   save(): void {
     if (this.saveDebounceTimer) {
@@ -79,6 +94,12 @@ export class DataStore {
   set meetingSkips(value) {
     this.data.meetingSkips = value
   }
+  get personNotes() {
+    return this.data.personNotes || []
+  }
+  set personNotes(value) {
+    this.data.personNotes = value
+  }
   get meta() {
     return this.data.meta
   }
@@ -89,6 +110,7 @@ export class DataStore {
       actionItems: this.data.actionItems,
       templates: this.data.templates.filter((t) => !t.isDefault),
       meetingSkips: this.data.meetingSkips || [],
+      personNotes: this.data.personNotes || [],
       exportedAt: new Date().toISOString(),
     }
     return JSON.stringify(exportData, null, 2)
@@ -100,15 +122,17 @@ export class DataStore {
     this.data.actionItems = importedData.actionItems || []
     this.data.templates = [...defaultTemplates, ...(importedData.templates || [])]
     this.data.meetingSkips = importedData.meetingSkips || []
+    this.data.personNotes = importedData.personNotes || []
     this.data.meta.lastId.persons = Math.max(0, ...this.data.persons.map((p) => p.id))
     this.data.meta.lastId.meetings = Math.max(0, ...this.data.meetings.map((m) => m.id))
     this.data.meta.lastId.actionItems = Math.max(0, ...this.data.actionItems.map((a) => a.id))
     this.data.meta.lastId.templates = Math.max(0, ...this.data.templates.map((t) => t.id))
     this.data.meta.lastId.meetingSkips = Math.max(0, ...(this.data.meetingSkips || []).map((s) => s.id))
+    this.data.meta.lastId.personNotes = Math.max(0, ...(this.data.personNotes || []).map((n) => n.id))
     this.saveImmediate()
   }
   reset(): void {
-    this.data = { ...defaultData }
+    this.data = structuredClone(defaultData)
     this.saveImmediate()
   }
 }

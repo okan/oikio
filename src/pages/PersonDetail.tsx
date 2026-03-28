@@ -12,6 +12,7 @@ import {
   PersonForm,
   PersonDetailHeader,
   PersonPendingActions,
+  PersonNotes,
   PersonMeetingTimeline,
 } from '@/components/person'
 export function PersonDetail() {
@@ -119,6 +120,7 @@ export function PersonDetail() {
       <div className="grid grid-cols-5 gap-4">
         <div className="col-span-3 space-y-4">
           <PersonPendingActions actions={actions} onActionToggle={loadActions} />
+          <PersonNotes personId={person.id} />
           <PersonMeetingTimeline meetings={meetings} onAddClick={handleNewMeeting} />
         </div>
 

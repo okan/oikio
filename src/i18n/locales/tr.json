@@ -96,6 +96,13 @@
     "updated": "Kişi güncellendi",
     "deleted": "Kişi silindi"
   },
+  "personNotes": {
+    "title": "Hızlı notlar",
+    "placeholder": "Not ekle…",
+    "empty": "Henüz not yok. Toplantılar arasında gözlemlerinizi buraya yazın.",
+    "added": "Not eklendi",
+    "deleted": "Not silindi"
+  },
   "meetings": {
     "title": "Toplantılar",
     "description": "Tüm 1-1 toplantı notları",

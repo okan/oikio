@@ -13,6 +13,7 @@ oikio is a **local-first** Electron desktop application for managing 1-1 meeting
 | **ActionItem** | A task linked to a Meeting, with tags, due date, and ownership (`me` \| `other`) |
 | **Template** | Reusable meeting note templates with categories (`manager` \| `teammate` \| `general`). Default templates are seeded per locale |
 | **MeetingSkip** | Records when a user intentionally skips a meeting cycle for a person |
+| **PersonNote** | Timestamped short observations linked to a person (between meetings) |
 
 ---
 
@@ -92,6 +93,7 @@ oikio/
 │   │   ├── actionHandlers.ts
 │   │   ├── templateHandlers.ts
 │   │   ├── meetingSkipHandlers.ts
+│   │   ├── personNoteHandlers.ts
 │   │   ├── dataHandlers.ts          # Export/import/reset
 │   │   └── notificationHandlers.ts
 │   └── services/
@@ -103,7 +105,9 @@ oikio/
 │       │   ├── PersonRepository.ts
 │       │   ├── MeetingRepository.ts
 │       │   ├── ActionRepository.ts
-│       │   └── TemplateRepository.ts
+│       │   ├── TemplateRepository.ts
+│       │   ├── MeetingSkipRepository.ts
+│       │   └── PersonNoteRepository.ts
 │       └── notifications.ts         # Native notification service
 ├── src/                             # React renderer
 │   ├── main.tsx                     # App bootstrap (StrictMode, HashRouter)
@@ -129,7 +133,7 @@ oikio/
 │   ├── components/
 │   │   ├── ui/                      # Reusable primitives (Button, Modal, Input, RichTextEditor, etc.)
 │   │   ├── layout/                  # Layout, Navbar, SearchModal, QuickActionModal, KeyboardShortcutsHelp
-│   │   ├── person/                  # PersonCard, PersonForm, PersonDetailHeader, PersonMeetingTimeline, etc.
+│   │   ├── person/                  # PersonCard, PersonForm, PersonDetailHeader, PersonNotes, PersonMeetingTimeline, etc.
 │   │   ├── meeting/                 # MeetingCard, MeetingForm, MeetingList, FocusMode
 │   │   ├── action/                  # ActionForm, ActionItem, ActionList
 │   │   ├── dashboard/               # WelcomeHero, TodayFocus, RelationshipGrid
@@ -194,7 +198,8 @@ Person (1) ──→ (N) Meeting (1) ──→ (N) ActionItem
   │                   │
   │                   └── templateId? ──→ Template
   │
-  └── (N) MeetingSkip
+  ├── (N) MeetingSkip
+  └── (N) PersonNote
 ```
 
 ### Key Fields
@@ -210,7 +215,7 @@ Person (1) ──→ (N) Meeting (1) ──→ (N) ActionItem
 - **Template.isDefault** — system-seeded templates (locale-aware, cannot be exported)
 
 ### Persistence
-All data is stored in `oikio-data.json` at Electron's `userData` path. The file includes a `meta.lastId` map for auto-incrementing IDs per entity.
+All data is stored in `oikio-data.json` at Electron's `userData` path. The file includes a `meta.lastId` map for auto-incrementing IDs per entity. Export/import includes `personNotes`; deleting a person removes their person notes via `PersonNoteRepository.deleteByPersonId`.
 
 ---
 
@@ -288,7 +293,7 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 ### Data Export/Import
 - Export serializes all data except default templates, including `meetingSkips`
 - Import preserves default templates, restores `meetingSkips`, and recalculates `meta.lastId` counters
-- Deleting a person removes their `meetingSkips` via `MeetingSkipRepository.deleteByPersonId`
+- Deleting a person removes their `meetingSkips` and `personNotes` via repository cascade
 - Reset restores to `defaultData` and re-seeds templates
 
 ### Analytics (`src/lib/analytics.ts`)

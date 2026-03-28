@@ -6,6 +6,7 @@ import { registerActionHandlers } from './actionHandlers'
 import { registerTemplateHandlers } from './templateHandlers'
 import { registerDataHandlers } from './dataHandlers'
 import { registerMeetingSkipHandlers } from './meetingSkipHandlers'
+import { registerPersonNoteHandlers } from './personNoteHandlers'
 import { registerNotificationHandlers } from './notificationHandlers'
 export function registerAllHandlers(
   db: DatabaseService,
@@ -16,6 +17,7 @@ export function registerAllHandlers(
   registerActionHandlers(db)
   registerTemplateHandlers(db)
   registerMeetingSkipHandlers(db)
+  registerPersonNoteHandlers(db)
   registerDataHandlers(db)
   registerNotificationHandlers(notificationService)
 }
@@ -25,6 +27,7 @@ export {
   registerActionHandlers,
   registerTemplateHandlers,
   registerMeetingSkipHandlers,
+  registerPersonNoteHandlers,
   registerDataHandlers,
   registerNotificationHandlers,
 }
