@@ -89,6 +89,11 @@ export function MeetingForm({
     if (value) {
       const template = templates.find((t) => t.id.toString() === value)
       if (template) {
+        if (notes.trim() && notes.trim() !== template.content.trim()) {
+          if (!window.confirm(t('meetings.templateOverwriteConfirm'))) {
+            return
+          }
+        }
         setNotes(template.content)
       }
     }

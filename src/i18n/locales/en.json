@@ -125,7 +125,8 @@
     "deleted": "Meeting deleted",
     "searchPlaceholder": "Search meetings...",
     "allPersons": "All people",
-    "noResults": "No meetings match your search"
+    "noResults": "No meetings match your search",
+    "templateOverwriteConfirm": "You have existing notes. Selecting this template will replace them. Continue?"
   },
   "actions": {
     "title": "Actions",

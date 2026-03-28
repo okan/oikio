@@ -125,7 +125,8 @@
     "deleted": "Toplantı silindi",
     "searchPlaceholder": "Toplantı ara...",
     "allPersons": "Tüm kişiler",
-    "noResults": "Aramanızla eşleşen toplantı yok"
+    "noResults": "Aramanızla eşleşen toplantı yok",
+    "templateOverwriteConfirm": "Mevcut notlarınız var. Şablon seçimi bunların üzerine yazacak. Devam etmek istiyor musunuz?"
   },
   "actions": {
     "title": "Aksiyonlar",
