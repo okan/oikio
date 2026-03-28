@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AlertCircle, CheckSquare, ListTodo } from 'lucide-react'
 import type { Meeting, Person, Template, ActionItem } from '@/types'
+import { meetingService, actionService } from '@/services'
 import { Button, Input, Select, Modal, RichTextEditor } from '@/components/ui'
 import { toInputDate } from '@/lib/utils'
 interface MeetingFormProps {
@@ -44,7 +45,7 @@ export function MeetingForm({
         return
       }
       try {
-        const allMeetings = await window.api.meetings.getByPerson(parseInt(personId))
+        const allMeetings = await meetingService.getByPerson(parseInt(personId))
         const now = new Date()
         const pastMeetings = allMeetings.filter((m) => new Date(m.date) <= now)
         if (pastMeetings.length === 0) {
@@ -52,7 +53,7 @@ export function MeetingForm({
           return
         }
         const lastMeeting = pastMeetings[0]
-        const actions = await window.api.actions.getByMeeting(lastMeeting.id)
+        const actions = await actionService.getByMeeting(lastMeeting.id)
         const pendingActions = actions.filter((a) => !a.completed)
         setLastMeetingContext({
           meeting: lastMeeting,

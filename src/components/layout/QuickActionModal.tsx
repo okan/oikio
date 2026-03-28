@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Zap, X, Calendar } from 'lucide-react'
 import type { Person, Meeting } from '@/types'
+import { personService, meetingService, actionService } from '@/services'
 import { Button, Input, Select, Textarea } from '@/components/ui'
 import { cn } from '@/lib/utils'
 interface QuickActionModalProps {
@@ -22,7 +23,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
   useEffect(() => {
     if (open) {
       const loadData = async () => {
-        const allPersons = await window.api.persons.getAll()
+        const allPersons = await personService.getAll()
         setPersons(allPersons)
       }
       loadData()
@@ -31,7 +32,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
   useEffect(() => {
     if (personId) {
       const loadMeetings = async () => {
-        const personMeetings = await window.api.meetings.getByPerson(parseInt(personId))
+        const personMeetings = await meetingService.getByPerson(parseInt(personId))
         setMeetings(personMeetings.slice(0, 5))
       }
       loadMeetings()
@@ -59,7 +60,7 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
     if (!description.trim() || !meetingId) return
     setIsSubmitting(true)
     try {
-      await window.api.actions.create({
+      await actionService.create({
         meetingId: parseInt(meetingId),
         description: description.trim(),
         dueDate: dueDate || undefined,
