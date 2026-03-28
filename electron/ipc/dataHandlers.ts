@@ -1,5 +1,5 @@
 import { ipcMain, app } from 'electron'
-import type { DatabaseService } from '../services/database'
+import type { DatabaseService } from '../services/database/index'
 export function registerDataHandlers(db: DatabaseService): void {
   ipcMain.handle('db:getPath', () => {
     return app.getPath('userData')

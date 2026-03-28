@@ -1,5 +1,5 @@
 import { Notification, app } from 'electron'
-import { DatabaseService } from './database'
+import { DatabaseService } from './database/index'
 export interface NotificationSettings {
   enabled: boolean
   meetingReminders: boolean

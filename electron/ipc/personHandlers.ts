@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron'
-import type { DatabaseService } from '../services/database'
+import type { DatabaseService } from '../services/database/index'
 export function registerPersonHandlers(db: DatabaseService): void {
   ipcMain.handle('db:persons:getAll', () => {
     return db.getAllPersons()

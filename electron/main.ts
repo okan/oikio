@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
-import { DatabaseService } from './services/database'
+import { DatabaseService } from './services/database/index'
 import { NotificationService } from './services/notifications'
 import { registerAllHandlers } from './ipc'
 app.disableHardwareAcceleration()

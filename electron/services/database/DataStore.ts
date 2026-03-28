@@ -73,6 +73,12 @@ export class DataStore {
   set templates(value) {
     this.data.templates = value
   }
+  get meetingSkips() {
+    return this.data.meetingSkips || []
+  }
+  set meetingSkips(value) {
+    this.data.meetingSkips = value
+  }
   get meta() {
     return this.data.meta
   }
@@ -82,6 +88,7 @@ export class DataStore {
       meetings: this.data.meetings,
       actionItems: this.data.actionItems,
       templates: this.data.templates.filter((t) => !t.isDefault),
+      meetingSkips: this.data.meetingSkips || [],
       exportedAt: new Date().toISOString(),
     }
     return JSON.stringify(exportData, null, 2)
@@ -92,10 +99,12 @@ export class DataStore {
     this.data.meetings = importedData.meetings || []
     this.data.actionItems = importedData.actionItems || []
     this.data.templates = [...defaultTemplates, ...(importedData.templates || [])]
+    this.data.meetingSkips = importedData.meetingSkips || []
     this.data.meta.lastId.persons = Math.max(0, ...this.data.persons.map((p) => p.id))
     this.data.meta.lastId.meetings = Math.max(0, ...this.data.meetings.map((m) => m.id))
     this.data.meta.lastId.actionItems = Math.max(0, ...this.data.actionItems.map((a) => a.id))
     this.data.meta.lastId.templates = Math.max(0, ...this.data.templates.map((t) => t.id))
+    this.data.meta.lastId.meetingSkips = Math.max(0, ...(this.data.meetingSkips || []).map((s) => s.id))
     this.saveImmediate()
   }
   reset(): void {

@@ -1,21 +1,24 @@
-import type { Person, Meeting, ActionItem, Template, DashboardStats } from '../../../src/types'
+import type { Person, Meeting, ActionItem, Template, DashboardStats, MeetingSkip } from '../../../src/types'
 import { DataStore } from './DataStore'
 import { PersonRepository } from './PersonRepository'
 import { MeetingRepository } from './MeetingRepository'
 import { ActionRepository } from './ActionRepository'
 import { TemplateRepository } from './TemplateRepository'
+import { MeetingSkipRepository } from './MeetingSkipRepository'
 export class DatabaseService {
   private store: DataStore
   private personRepo: PersonRepository
   private meetingRepo: MeetingRepository
   private actionRepo: ActionRepository
   private templateRepo: TemplateRepository
+  private meetingSkipRepo: MeetingSkipRepository
   constructor() {
     this.store = new DataStore()
     this.personRepo = new PersonRepository(this.store)
     this.meetingRepo = new MeetingRepository(this.store)
     this.actionRepo = new ActionRepository(this.store)
     this.templateRepo = new TemplateRepository(this.store)
+    this.meetingSkipRepo = new MeetingSkipRepository(this.store)
     this.templateRepo.seedDefaults()
     this.meetingRepo.migrateLastMeetingDates(this.personRepo)
     this.store.save()
@@ -101,6 +104,15 @@ export class DatabaseService {
   deleteTemplate(id: number): void {
     return this.templateRepo.delete(id)
   }
+  createMeetingSkip(personId: number, reason?: string): MeetingSkip {
+    return this.meetingSkipRepo.create(personId, reason)
+  }
+  getMeetingSkipsByPerson(personId: number): MeetingSkip[] {
+    return this.meetingSkipRepo.getByPerson(personId)
+  }
+  getActiveMeetingSkip(personId: number): MeetingSkip | null {
+    return this.meetingSkipRepo.getActive(personId)
+  }
   getDashboardStats(): DashboardStats {
     const currentMonth = new Date().toISOString().slice(0, 7)
     return {
@@ -112,7 +124,10 @@ export class DatabaseService {
   search(query: string): { persons: Person[]; meetings: Meeting[]; actions: ActionItem[] } {
     const lowerQuery = query.toLowerCase()
     const persons = this.store.persons.filter(
-      (p) => p.name.toLowerCase().includes(lowerQuery)
+      (p) =>
+        (p.name || '').toLowerCase().includes(lowerQuery) ||
+        p.email?.toLowerCase().includes(lowerQuery) ||
+        p.notes?.toLowerCase().includes(lowerQuery)
     )
     const meetings = this.store.meetings
       .filter(
@@ -162,4 +177,5 @@ export { PersonRepository } from './PersonRepository'
 export { MeetingRepository } from './MeetingRepository'
 export { ActionRepository } from './ActionRepository'
 export { TemplateRepository } from './TemplateRepository'
+export { MeetingSkipRepository } from './MeetingSkipRepository'
 export * from './types'

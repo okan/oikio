@@ -1,4 +1,4 @@
-import type { DatabaseService } from '../services/database'
+import type { DatabaseService } from '../services/database/index'
 import type { NotificationService } from '../services/notifications'
 import { registerPersonHandlers } from './personHandlers'
 import { registerMeetingHandlers } from './meetingHandlers'

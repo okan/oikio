@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron'
-import type { DatabaseService } from '../services/database'
+import type { DatabaseService } from '../services/database/index'
 export function registerTemplateHandlers(db: DatabaseService): void {
   ipcMain.handle('db:templates:getAll', () => {
     return db.getAllTemplates()

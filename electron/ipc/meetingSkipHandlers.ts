@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron'
-import type { DatabaseService } from '../services/database'
+import type { DatabaseService } from '../services/database/index'
 export function registerMeetingSkipHandlers(db: DatabaseService): void {
   ipcMain.handle('db:meetingSkips:create', (_, personId: number, reason?: string) => {
     return db.createMeetingSkip(personId, reason)
