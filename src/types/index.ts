@@ -20,7 +20,7 @@ export interface MeetingSkip {
 }
 export interface RelationshipHealth {
   score: number
-  status: 'good' | 'warning' | 'critical'
+  status: 'good' | 'warning' | 'critical' | 'neutral'
   daysSinceLastMeeting: number | null
   isOverdue: boolean
   isSkipped: boolean

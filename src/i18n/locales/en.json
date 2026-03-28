@@ -234,6 +234,7 @@
   "relationships": {
     "health": "Sync Status",
     "onTrack": "On track",
+    "neutral": "No cadence goal",
     "good": "Good",
     "warning": "Warning",
     "critical": "Critical"

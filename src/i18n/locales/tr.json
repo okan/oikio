@@ -233,6 +233,7 @@
   "relationships": {
     "health": "Görüşme Durumu",
     "onTrack": "Yolunda",
+    "neutral": "Sıklık hedefi yok",
     "good": "İyi",
     "warning": "Dikkat",
     "critical": "Kritik"

@@ -97,7 +97,9 @@ export function RelationshipGrid({ persons: rawPersons, futureMeetings }: Relati
                     ? 'bg-red-500'
                     : health.status === 'warning'
                       ? 'bg-amber-500'
-                      : 'bg-emerald-500'
+                      : health.status === 'neutral'
+                        ? 'bg-stone-400'
+                        : 'bg-emerald-500'
                     }`}
                 />
               </div>
