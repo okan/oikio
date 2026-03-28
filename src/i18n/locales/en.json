@@ -171,7 +171,12 @@
     "assignedTo": "Who is responsible?",
     "me": "Me",
     "other": "Other party",
-    "deleteConfirm": "Are you sure you want to delete this action?"
+    "deleteConfirm": "Are you sure you want to delete this action?",
+    "progressUpdates": "Progress updates",
+    "addProgressPlaceholder": "Add an update…",
+    "addProgress": "Add update",
+    "progressExpand": "Show progress updates",
+    "progressCollapse": "Hide progress updates"
   },
   "tags": {
     "label": "Tags",

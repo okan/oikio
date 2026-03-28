@@ -171,7 +171,12 @@
     "assignedTo": "Sorumlu Kim?",
     "me": "Ben yapacağım",
     "other": "Karşı Tarafta",
-    "deleteConfirm": "Bu aksiyonu silmek istediğinize emin misiniz?"
+    "deleteConfirm": "Bu aksiyonu silmek istediğinize emin misiniz?",
+    "progressUpdates": "İlerleme notları",
+    "addProgressPlaceholder": "Güncelleme ekle…",
+    "addProgress": "Güncelleme ekle",
+    "progressExpand": "İlerleme notlarını göster",
+    "progressCollapse": "İlerleme notlarını gizle"
   },
   "tags": {
     "label": "Etiketler",

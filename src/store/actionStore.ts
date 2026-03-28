@@ -15,6 +15,7 @@ interface ActionState {
   updateAction: (id: number, data: Partial<ActionItem>) => Promise<ActionItem>
   deleteAction: (id: number) => Promise<void>
   toggleComplete: (id: number) => Promise<void>
+  addProgressNote: (id: number, text: string) => Promise<ActionItem>
   clearError: () => void
 }
 export const useActionStore = create<ActionState>((set, get) => ({
@@ -139,6 +140,14 @@ export const useActionStore = create<ActionState>((set, get) => ({
       const message = error instanceof Error ? error.message : 'Failed to toggle action'
       set({ error: message })
     }
+  },
+  addProgressNote: async (id, text) => {
+    const action = await actionService.addProgressNote(id, text)
+    set((state) => ({
+      actions: state.actions.map((a) => (a.id === id ? action : a)),
+      pendingActions: state.pendingActions.map((a) => (a.id === id ? action : a)),
+    }))
+    return action
   },
   clearError: () => {
     set({ error: null })

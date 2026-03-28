@@ -10,6 +10,7 @@ interface ActionListProps {
   showMeeting?: boolean
   emptyTitle?: string
   emptyDescription?: string
+  onAddProgressNote?: (actionId: number, text: string) => Promise<void>
 }
 export function ActionList({
   actions,
@@ -18,6 +19,7 @@ export function ActionList({
   showMeeting = false,
   emptyTitle = 'No actions',
   emptyDescription = 'No action items added yet.',
+  onAddProgressNote,
 }: ActionListProps) {
   if (actions.length === 0) {
     return (
@@ -39,6 +41,7 @@ export function ActionList({
             onDelete={() => onDelete(action.id)}
             showMeeting={showMeeting}
             index={index}
+            onAddProgressNote={onAddProgressNote}
           />
         ))}
       </AnimatePresence>

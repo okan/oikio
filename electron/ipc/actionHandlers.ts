@@ -22,6 +22,9 @@ export function registerActionHandlers(db: DatabaseService): void {
   ipcMain.handle('db:actions:toggleComplete', (_, id: number) => {
     return db.toggleActionItemComplete(id)
   })
+  ipcMain.handle('db:actions:addProgressNote', (_, id: number, text: string) => {
+    return db.addActionProgressNote(id, text)
+  })
   ipcMain.handle('db:actions:getAllTags', () => {
     return db.getAllActionTags()
   })

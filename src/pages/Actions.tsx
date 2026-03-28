@@ -17,6 +17,7 @@ export function Actions() {
     fetchAllTags,
     toggleComplete,
     deleteAction,
+    addProgressNote,
   } = useActionStore()
   const [activeTab, setActiveTab] = useState('pending')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
@@ -178,6 +179,9 @@ export function Actions() {
                 actions={myActions}
                 onToggle={(id) => toggleComplete(id)}
                 onDelete={(id) => handleDelete(id)}
+                onAddProgressNote={async (id, text) => {
+                  await addProgressNote(id, text)
+                }}
                 showMeeting
                 emptyTitle={t('actions.noPending')}
                 emptyDescription={t('actions.noPendingDesc')}
@@ -196,6 +200,9 @@ export function Actions() {
                 actions={otherActions}
                 onToggle={(id) => toggleComplete(id)}
                 onDelete={(id) => handleDelete(id)}
+                onAddProgressNote={async (id, text) => {
+                  await addProgressNote(id, text)
+                }}
                 showMeeting
                 emptyTitle={t('actions.noPending')}
                 emptyDescription={t('actions.noPendingDesc')}

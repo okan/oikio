@@ -34,6 +34,8 @@ export const actionService = {
   update: (id: number, data: Partial<ActionItem>): Promise<ActionItem> => window.api.actions.update(id, data),
   delete: (id: number): Promise<void> => window.api.actions.delete(id),
   toggleComplete: (id: number): Promise<ActionItem> => window.api.actions.toggleComplete(id),
+  addProgressNote: (id: number, text: string): Promise<ActionItem> =>
+    window.api.actions.addProgressNote(id, text),
 }
 export const templateService = {
   getAll: (): Promise<Template[]> => window.api.templates.getAll(),

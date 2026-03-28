@@ -58,6 +58,11 @@ export interface Meeting {
     completed: number
   }
 }
+export interface ActionProgressNote {
+  id: number
+  text: string
+  createdAt: string
+}
 export interface ActionItem {
   id: number
   meetingId: number
@@ -69,6 +74,7 @@ export interface ActionItem {
   assignedTo?: 'me' | 'other'
   completed: boolean
   createdAt: string
+  progressNotes?: ActionProgressNote[]
 }
 export type TemplateCategory = 'manager' | 'teammate' | 'general'
 export interface Template {
@@ -112,6 +118,7 @@ export interface ElectronAPI {
     update: (id: number, data: Partial<ActionItem>) => Promise<ActionItem>
     delete: (id: number) => Promise<void>
     toggleComplete: (id: number) => Promise<ActionItem>
+    addProgressNote: (id: number, text: string) => Promise<ActionItem>
   }
   templates: {
     getAll: () => Promise<Template[]>

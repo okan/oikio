@@ -17,6 +17,7 @@ import {
 import type { Meeting, ActionItem, PersonNote, TalkingPoint, MeetingMood } from '@/types'
 import { Button, Input, Avatar, RichTextEditor, Modal, Checkbox } from '@/components/ui'
 import { MoodSelector } from './MoodSelector'
+import { ActionProgressSection } from '@/components/action'
 import { formatDate, formatMeetingTitle, getRelativeTime, cn } from '@/lib/utils'
 
 type SidebarTab = 'actions' | 'prep'
@@ -33,6 +34,7 @@ interface FocusModeProps {
   prepOtherMeetingActions?: ActionItem[]
   onTogglePrepTalkingPoint?: (id: number) => Promise<void>
   onMoodChange?: (mood: MeetingMood | undefined) => Promise<void>
+  onAddProgressNote?: (actionId: number, text: string) => Promise<ActionItem>
 }
 export function FocusMode({
   meeting,
@@ -46,6 +48,7 @@ export function FocusMode({
   prepOtherMeetingActions = [],
   onTogglePrepTalkingPoint,
   onMoodChange,
+  onAddProgressNote,
 }: FocusModeProps) {
   const { t, i18n } = useTranslation()
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>('actions')
@@ -322,10 +325,28 @@ export function FocusMode({
                         >
                           {action.completed && <Check className="w-3 h-3 text-stone-700" />}
                         </button>
-                        <span className="text-sm text-stone-700">{action.description}</span>
-                        {action.id < 0 && (
-                          <span className="ml-auto text-xs text-amber-600">{t('focusMode.new')}</span>
-                        )}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start gap-2">
+                            <span className="text-sm text-stone-700 flex-1">{action.description}</span>
+                            {action.id < 0 && (
+                              <span className="text-xs text-amber-600 shrink-0">{t('focusMode.new')}</span>
+                            )}
+                          </div>
+                          <ActionProgressSection
+                            plain
+                            progressNotes={action.progressNotes}
+                            onAddProgressNote={
+                              action.id > 0 && onAddProgressNote
+                                ? async (text) => {
+                                    const updated = await onAddProgressNote(action.id, text)
+                                    setLocalActions((prev) =>
+                                      prev.map((a) => (a.id === updated.id ? updated : a))
+                                    )
+                                  }
+                                : undefined
+                            }
+                          />
+                        </div>
                       </motion.div>
                     ))}
                   </div>
@@ -349,9 +370,25 @@ export function FocusMode({
                           >
                             <Check className="w-3 h-3 text-white" />
                           </button>
-                          <span className="text-sm text-stone-500 line-through">
-                            {action.description}
-                          </span>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-sm text-stone-500 line-through block">
+                              {action.description}
+                            </span>
+                            <ActionProgressSection
+                              plain
+                              progressNotes={action.progressNotes}
+                              onAddProgressNote={
+                                action.id > 0 && onAddProgressNote
+                                  ? async (text) => {
+                                      const updated = await onAddProgressNote(action.id, text)
+                                      setLocalActions((prev) =>
+                                        prev.map((a) => (a.id === updated.id ? updated : a))
+                                      )
+                                    }
+                                  : undefined
+                              }
+                            />
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -433,6 +470,7 @@ export function FocusMode({
                                   {[action.meetingTitle, action.personName].filter(Boolean).join(' · ')}
                                 </p>
                               )}
+                              <ActionProgressSection plain progressNotes={action.progressNotes} />
                             </li>
                           ))}
                         </ul>

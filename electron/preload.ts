@@ -48,6 +48,8 @@ contextBridge.exposeInMainWorld('api', {
     delete: (id: number): Promise<void> => ipcRenderer.invoke('db:actions:delete', id),
     toggleComplete: (id: number): Promise<ActionItem> =>
       ipcRenderer.invoke('db:actions:toggleComplete', id),
+    addProgressNote: (id: number, text: string): Promise<ActionItem> =>
+      ipcRenderer.invoke('db:actions:addProgressNote', id, text),
   },
   templates: {
     getAll: (): Promise<Template[]> => ipcRenderer.invoke('db:templates:getAll'),

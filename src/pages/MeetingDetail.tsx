@@ -192,6 +192,15 @@ export function MeetingDetail() {
     await updateMeeting(meeting.id, { mood })
     await refreshMeeting()
   }
+  const handleAddProgressNote = async (actionId: number, text: string) => {
+    await actionService.addProgressNote(actionId, text)
+    await refreshActions()
+  }
+  const handleFocusAddProgress = async (actionId: number, text: string) => {
+    const updated = await actionService.addProgressNote(actionId, text)
+    await refreshActions()
+    return updated
+  }
   return (
     <PageTransition className="space-y-5">
       <button
@@ -226,6 +235,7 @@ export function MeetingDetail() {
                 actions={actions}
                 onToggle={handleToggle}
                 onDelete={handleDeleteAction}
+                onAddProgressNote={handleAddProgressNote}
                 emptyTitle={t('actions.noActions')}
                 emptyDescription={t('actions.noActionsDesc')}
               />
@@ -365,6 +375,7 @@ export function MeetingDetail() {
           prepOtherMeetingActions={focusPrep.otherActions}
           onTogglePrepTalkingPoint={handleTogglePrepTalkingPoint}
           onMoodChange={handleMoodChange}
+          onAddProgressNote={handleFocusAddProgress}
         />
       )}
     </PageTransition>

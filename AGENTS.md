@@ -138,7 +138,7 @@ oikio/
 │   │   ├── layout/                  # Layout, Navbar, SearchModal, QuickActionModal, KeyboardShortcutsHelp
 │   │   ├── person/                  # PersonCard, PersonForm, PersonDetailHeader, PersonNotes, PersonTalkingPoints, PersonMeetingTimeline, etc.
 │   │   ├── meeting/                 # MeetingCard, MeetingForm, MeetingList, FocusMode
-│   │   ├── action/                  # ActionForm, ActionItem, ActionList
+│   │   ├── action/                  # ActionForm, ActionItem, ActionList, ActionProgressSection
 │   │   ├── dashboard/               # WelcomeHero, TodayFocus, RelationshipGrid
 │   │   └── template/                # TemplateCard, TemplateForm, TemplateList
 │   ├── lib/                         # Pure utility functions
@@ -216,6 +216,7 @@ Person (1) ──→ (N) Meeting (1) ──→ (N) ActionItem
 - **Person.skippedUntil** — set when a MeetingSkip is created
 - **ActionItem.assignedTo** — `me | other`
 - **ActionItem.tags** — freeform string array with deterministic color mapping
+- **ActionItem.progressNotes** — optional chronological `{ id, text, createdAt }[]`; appended via `ActionRepository.addProgressNote` / IPC `db:actions:addProgressNote`
 - **Template.isDefault** — system-seeded templates (locale-aware, cannot be exported)
 - **Meeting.mood** — optional `1 | 2 | 3 | 4 | 5` (1 hardest, 5 best); set from Focus Mode header, meeting sidebar, or cleared via `MoodSelector`
 

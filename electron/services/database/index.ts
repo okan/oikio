@@ -107,6 +107,9 @@ export class DatabaseService {
   toggleActionItemComplete(id: number): ActionItem {
     return this.actionRepo.toggleComplete(id)
   }
+  addActionProgressNote(id: number, text: string): ActionItem {
+    return this.actionRepo.addProgressNote(id, text)
+  }
   getAllActionTags(): string[] {
     return this.actionRepo.getAllTags()
   }

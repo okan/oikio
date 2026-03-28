@@ -61,6 +61,19 @@ export class ActionRepository {
     this.store.save()
     return this.store.actionItems[index]
   }
+  addProgressNote(id: number, text: string): ActionItem {
+    const index = this.store.actionItems.findIndex((a) => a.id === id)
+    if (index === -1) throw new Error('Action item not found')
+    const trimmed = text.trim()
+    if (!trimmed) throw new Error('Progress note cannot be empty')
+    const action = this.store.actionItems[index]
+    const prev = action.progressNotes ?? []
+    const nextId = prev.length === 0 ? 1 : Math.max(...prev.map((n) => n.id)) + 1
+    const progressNotes = [...prev, { id: nextId, text: trimmed, createdAt: this.store.getCurrentTimestamp() }]
+    this.store.actionItems[index] = { ...action, progressNotes }
+    this.store.save()
+    return this.enrichAction(this.store.actionItems[index])
+  }
   getAllTags(): string[] {
     const allTags = this.store.actionItems
       .flatMap((a) => a.tags || [])

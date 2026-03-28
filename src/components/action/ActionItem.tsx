@@ -5,12 +5,14 @@ import { Clock, Trash2, User, ExternalLink } from 'lucide-react'
 import { ActionItem as ActionItemType } from '@/types'
 import { Checkbox, Badge, Tag } from '@/components/ui'
 import { getRelativeTime, isOverdue, cn } from '@/lib/utils'
+import { ActionProgressSection } from './ActionProgressSection'
 interface ActionItemProps {
   action: ActionItemType
   onToggle: () => void
   onDelete: () => void
   showMeeting?: boolean
   index?: number
+  onAddProgressNote?: (actionId: number, text: string) => Promise<void>
 }
 export const ActionItem = memo(function ActionItem({
   action,
@@ -18,6 +20,7 @@ export const ActionItem = memo(function ActionItem({
   onDelete,
   showMeeting = false,
   index = 0,
+  onAddProgressNote,
 }: ActionItemProps) {
   const { t, i18n } = useTranslation()
   const isActionOverdue = useMemo(
@@ -92,6 +95,14 @@ export const ActionItem = memo(function ActionItem({
             ))}
           </div>
         )}
+        <ActionProgressSection
+          progressNotes={action.progressNotes}
+          onAddProgressNote={
+            onAddProgressNote && action.id > 0
+              ? (text) => onAddProgressNote(action.id, text)
+              : undefined
+          }
+        />
       </div>
       {isActionOverdue && (
         <Badge variant="error">{t('dashboard.overdue')}</Badge>
