@@ -18,7 +18,7 @@ export function Dashboard() {
     fetchActions()
     fetchPendingActions()
     fetchUpcomingMeetings(365)
-  }, [fetchPersons, fetchMeetings, fetchActions, fetchPendingActions, fetchUpcomingMeetings])
+  }, [location.key, fetchPersons, fetchMeetings, fetchActions, fetchPendingActions, fetchUpcomingMeetings])
   return (
     <PageTransition key={location.key} className="grid grid-cols-3 gap-4 auto-rows-min">
       <div className="col-span-3">

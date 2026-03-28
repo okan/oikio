@@ -122,7 +122,10 @@
     "nextTopicsPlaceholder": "Sonraki toplantıda konuşulacak konular...",
     "noNextTopics": "Henüz sonraki toplantı için konu eklenmemiş.",
     "updated": "Toplantı güncellendi",
-    "deleted": "Toplantı silindi"
+    "deleted": "Toplantı silindi",
+    "searchPlaceholder": "Toplantı ara...",
+    "allPersons": "Tüm kişiler",
+    "noResults": "Aramanızla eşleşen toplantı yok"
   },
   "actions": {
     "title": "Aksiyonlar",

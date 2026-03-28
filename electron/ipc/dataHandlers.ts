@@ -1,6 +1,9 @@
-import { ipcMain } from 'electron'
+import { ipcMain, app } from 'electron'
 import type { DatabaseService } from '../services/database'
 export function registerDataHandlers(db: DatabaseService): void {
+  ipcMain.handle('db:getPath', () => {
+    return app.getPath('userData')
+  })
   ipcMain.handle('db:stats:getDashboard', () => {
     return db.getDashboardStats()
   })

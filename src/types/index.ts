@@ -116,6 +116,7 @@ export interface ElectronAPI {
     export: () => Promise<string>
     import: (data: string) => Promise<void>
     reset: () => Promise<void>
+    getPath: () => Promise<string>
   }
   search: (query: string) => Promise<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }>
   notifications: {

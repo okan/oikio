@@ -122,7 +122,10 @@
     "nextTopicsPlaceholder": "Topics to discuss in the next meeting...",
     "noNextTopics": "No topics added for the next meeting yet.",
     "updated": "Meeting updated",
-    "deleted": "Meeting deleted"
+    "deleted": "Meeting deleted",
+    "searchPlaceholder": "Search meetings...",
+    "allPersons": "All people",
+    "noResults": "No meetings match your search"
   },
   "actions": {
     "title": "Actions",

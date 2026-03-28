@@ -65,6 +65,7 @@ contextBridge.exposeInMainWorld('api', {
     export: (): Promise<string> => ipcRenderer.invoke('db:export'),
     import: (data: string): Promise<void> => ipcRenderer.invoke('db:import', data),
     reset: (): Promise<void> => ipcRenderer.invoke('db:reset'),
+    getPath: (): Promise<string> => ipcRenderer.invoke('db:getPath'),
   },
   search: (query: string): Promise<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }> =>
     ipcRenderer.invoke('db:search', query),

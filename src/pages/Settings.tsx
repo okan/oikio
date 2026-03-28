@@ -13,16 +13,21 @@ export function Settings() {
   const [resetModalOpen, setResetModalOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings | null>(null)
+  const [dataPath, setDataPath] = useState('')
   useEffect(() => {
-    const loadNotificationSettings = async () => {
+    const loadSettings = async () => {
       try {
-        const settings = await window.api.notifications.getSettings()
+        const [settings, path] = await Promise.all([
+          window.api.notifications.getSettings(),
+          window.api.data.getPath(),
+        ])
         setNotificationSettings(settings)
+        setDataPath(path)
       } catch (error) {
-        console.error('Error loading notification settings:', error)
+        console.error('Error loading settings:', error)
       }
     }
-    loadNotificationSettings()
+    loadSettings()
   }, [])
   const handleLanguageChange = (lang: string) => {
     i18n.changeLanguage(lang)
@@ -267,7 +272,7 @@ export function Settings() {
             <span className="font-medium">{t('settings.version')}:</span> {__APP_VERSION__}
           </p>
           <p>
-            <span className="font-medium">{t('settings.dataLocation')}:</span> ~/Library/Application Support/oikio/
+            <span className="font-medium">{t('settings.dataLocation')}:</span> {dataPath}
           </p>
           <p className="text-stone-500 mt-4">{t('settings.privacyNote')}</p>
         </div>

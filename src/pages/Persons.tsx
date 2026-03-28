@@ -2,22 +2,22 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { usePersonStore } from '@/store'
+import { usePersonStore, useMeetingStore } from '@/store'
 import { Header } from '@/components/layout'
 import { PersonList, PersonForm } from '@/components/person'
 import { PageTransition } from '@/components/ui'
-import type { Person, Meeting } from '@/types'
+import type { Person } from '@/types'
 export function Persons() {
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const { persons, fetchPersons, createPerson, updatePerson } = usePersonStore()
+  const { upcomingMeetings, fetchUpcomingMeetings } = useMeetingStore()
   const [formOpen, setFormOpen] = useState(false)
   const [editingPerson, setEditingPerson] = useState<Person | null>(null)
-  const [futureMeetings, setFutureMeetings] = useState<Meeting[]>([])
   useEffect(() => {
     fetchPersons()
-    window.api.meetings.getUpcoming(365).then(setFutureMeetings)
-  }, [fetchPersons])
+    fetchUpcomingMeetings(365)
+  }, [fetchPersons, fetchUpcomingMeetings])
   useEffect(() => {
     if (searchParams.get('new') === 'true') {
       setFormOpen(true)
@@ -44,7 +44,7 @@ export function Persons() {
         description={t('persons.description')}
         action={{ label: t('persons.newPerson'), onClick: handleAdd }}
       />
-      <PersonList persons={persons} onAddClick={handleAdd} futureMeetings={futureMeetings} />
+      <PersonList persons={persons} onAddClick={handleAdd} futureMeetings={upcomingMeetings} />
       <PersonForm
         open={formOpen}
         onOpenChange={setFormOpen}

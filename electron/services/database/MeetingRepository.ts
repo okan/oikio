@@ -118,7 +118,7 @@ export class MeetingRepository {
   getRecent(limit: number): Meeting[] {
     return [...this.store.meetings]
       .map((m) => this.enrichMeeting(m))
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       .slice(0, limit)
   }
   migrateLastMeetingDates(personRepository: PersonRepository): void {
