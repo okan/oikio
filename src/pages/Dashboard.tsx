@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
   WelcomeHero,
+  WeeklySchedule,
   TodayFocus,
   RelationshipGrid,
 } from '@/components/dashboard'
@@ -24,6 +25,9 @@ export function Dashboard() {
     <PageTransition key={location.key} className="grid grid-cols-3 gap-4 auto-rows-min">
       <div className="col-span-3">
         <WelcomeHero meetings={meetings} actions={actions} isLoading={isLoading} />
+      </div>
+      <div className="col-span-3">
+        <WeeklySchedule meetings={meetings} isLoading={isLoading} />
       </div>
       <div className="col-span-2">
         <TodayFocus

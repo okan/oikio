@@ -55,7 +55,9 @@
     "needAttentionDesc": "Toplantı zamanı gelen kişiler",
     "allCaughtUp": "Her şey yolunda!",
     "noAttentionNeeded": "Görüşme zamanı gelen kişi yok.",
-    "people": "kişi"
+    "people": "kişi",
+    "weekSchedule": "Bu hafta",
+    "weekScheduleEmpty": "Bu hafta planlanmış toplantı yok."
   },
   "persons": {
     "title": "Kişiler",

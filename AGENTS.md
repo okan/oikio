@@ -139,7 +139,7 @@ oikio/
 │   │   ├── person/                  # PersonCard, PersonForm, PersonDetailHeader, PersonNotes, PersonTalkingPoints, PersonMeetingTimeline, etc.
 │   │   ├── meeting/                 # MeetingCard, MeetingForm, MeetingList, FocusMode
 │   │   ├── action/                  # ActionForm, ActionItem, ActionList, ActionProgressSection
-│   │   ├── dashboard/               # WelcomeHero, TodayFocus, RelationshipGrid
+│   │   ├── dashboard/               # WelcomeHero, WeeklySchedule, TodayFocus, RelationshipGrid
 │   │   └── template/                # TemplateCard, TemplateForm, TemplateList
 │   ├── lib/                         # Pure utility functions
 │   │   ├── utils.ts                 # cn(), formatDate, getRelativeTime, getInitials, etc.
@@ -310,6 +310,10 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 ### Analytics (`src/lib/analytics.ts`)
 - Computes 6-month rolling monthly stats (meetings count, actions created/completed)
 - Calculates meeting trend (month-over-month %), average meetings per week, action completion rate
+
+### Weekly schedule (`src/lib/weeklySchedule.ts`, `WeeklySchedule.tsx`)
+- Dashboard card groups meetings by local calendar day for the ISO-style week (Monday–Sunday) containing “today”
+- `parseMeetingLocalDate` parses `YYYY-MM-DD` as local midnight to avoid UTC day shifts
 
 ### Tag Colors (`src/lib/tagColors.ts`)
 - Deterministic color assignment: hash-based mapping from tag name to a palette of 16 TailwindCSS color sets

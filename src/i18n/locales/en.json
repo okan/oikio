@@ -55,7 +55,9 @@
     "needAttentionDesc": "People you should catch up with",
     "allCaughtUp": "All caught up!",
     "noAttentionNeeded": "No one needs attention right now.",
-    "people": "people"
+    "people": "people",
+    "weekSchedule": "This week",
+    "weekScheduleEmpty": "No meetings scheduled this week."
   },
   "persons": {
     "title": "People",
