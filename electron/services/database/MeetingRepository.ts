@@ -122,14 +122,16 @@ export class MeetingRepository {
       .slice(0, limit)
   }
   migrateLastMeetingDates(personRepository: PersonRepository): void {
+    const now = new Date()
     for (const person of this.store.persons) {
       const personMeetings = this.store.meetings
         .filter((m) => m.personId === person.id)
-        .filter((m) => new Date(m.date) <= new Date())
+        .filter((m) => new Date(m.date) <= now)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       const latestMeeting = personMeetings[0]
-      if (latestMeeting) {
-        personRepository.updateLastMeetingDate(person.id, latestMeeting.date)
+      const correctDate = latestMeeting?.date || undefined
+      if (person.lastMeetingDate !== correctDate) {
+        personRepository.updateLastMeetingDate(person.id, correctDate)
       }
     }
   }
