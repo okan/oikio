@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -16,6 +16,7 @@ import {
 import type { Person, Meeting, ActionItem } from '@/types'
 import { Avatar, Checkbox, Badge } from '@/components/ui'
 import { useActionStore } from '@/store'
+import { meetingSkipService } from '@/services'
 import { calculateRelationshipHealth } from '@/lib/relationships'
 import { isOverdue, getRelativeTime, formatMeetingTitle } from '@/lib/utils'
 type FocusItemType = 'overdue_person' | 'urgent_action' | 'upcoming_meeting' | 'due_action'
@@ -108,38 +109,39 @@ function prioritizeItems(
     })
   return items.sort((a, b) => b.priority - a.priority).slice(0, 5)
 }
-export function TodayFocus() {
+interface TodayFocusProps {
+  persons: Person[]
+  pendingActions: ActionItem[]
+  upcomingMeetings: Meeting[]
+}
+export function TodayFocus({ persons, pendingActions, upcomingMeetings }: TodayFocusProps) {
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const { toggleComplete } = useActionStore()
-  const [items, setItems] = useState<FocusItem[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [persons, actions, meetings] = await Promise.all([
-          window.api.persons.getAll(),
-          window.api.actions.getPending(),
-          window.api.meetings.getUpcoming(365),
-        ])
-        const prioritized = prioritizeItems(persons, actions, meetings)
-        setItems(prioritized)
-      } catch (error) {
-        console.error('Error loading focus items:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    loadData()
-  }, [])
+  const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set())
+  const items = useMemo(
+    () => prioritizeItems(persons, pendingActions, upcomingMeetings),
+    [persons, pendingActions, upcomingMeetings]
+  )
+  const visibleItems = items.filter((item) => !dismissedIds.has(item.id))
   const handleToggleAction = async (actionId: number) => {
     await toggleComplete(actionId)
-    setItems((prev) => prev.filter((item) => item.data.action?.id !== actionId))
+    setDismissedIds((prev) => {
+      const next = new Set(prev)
+      next.add(`action-overdue-${actionId}`)
+      next.add(`action-soon-${actionId}`)
+      return next
+    })
   }
   const handleSkipPerson = async (personId: number) => {
-    await window.api.meetingSkips.create(personId)
-    setItems((prev) => prev.filter((item) => item.data.person?.id !== personId))
+    await meetingSkipService.create(personId)
+    setDismissedIds((prev) => {
+      const next = new Set(prev)
+      next.add(`person-${personId}`)
+      return next
+    })
   }
+  const isLoading = persons.length === 0 && pendingActions.length === 0 && upcomingMeetings.length === 0
   if (isLoading) {
     return (
       <div className="card p-5">
@@ -154,7 +156,7 @@ export function TodayFocus() {
       </div>
     )
   }
-  if (items.length === 0) {
+  if (visibleItems.length === 0) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -223,7 +225,7 @@ export function TodayFocus() {
       </div>
       <div className="px-5 pb-5 space-y-2">
         <AnimatePresence mode="popLayout">
-          {items.map((item, index) => (
+          {visibleItems.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, x: -20 }}

@@ -3,6 +3,7 @@ import type {
   Meeting,
   ActionItem,
   Template,
+  MeetingSkip,
 } from '@/types'
 export const personService = {
   getAll: (): Promise<Person[]> => window.api.persons.getAll(),
@@ -38,4 +39,12 @@ export const templateService = {
   create: (data: Omit<Template, 'id'>): Promise<Template> => window.api.templates.create(data),
   update: (id: number, data: Partial<Template>): Promise<Template> => window.api.templates.update(id, data),
   delete: (id: number): Promise<void> => window.api.templates.delete(id),
+}
+export const meetingSkipService = {
+  create: (personId: number, reason?: string): Promise<MeetingSkip> =>
+    window.api.meetingSkips.create(personId, reason),
+  getByPerson: (personId: number): Promise<MeetingSkip[]> =>
+    window.api.meetingSkips.getByPerson(personId),
+  getActive: (personId: number): Promise<MeetingSkip | null> =>
+    window.api.meetingSkips.getActive(personId),
 }

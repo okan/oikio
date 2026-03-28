@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { usePersonStore, useMeetingStore, useTemplateStore } from '@/store'
+import { actionService, meetingService, meetingSkipService } from '@/services'
 import type { Person, Meeting, ActionItem, MeetingSkip } from '@/types'
 import { Button, ConfirmModal, PageTransition } from '@/components/ui'
 import { MeetingForm } from '@/components/meeting'
@@ -30,8 +31,11 @@ export function PersonDetail() {
   const [futureMeetings, setFutureMeetings] = useState<Meeting[]>([])
   const [skipHistory, setSkipHistory] = useState<MeetingSkip[]>([])
   const loadActions = useCallback(async () => {
-    if (!id) return
-    const allActions = await window.api.actions.getAll()
+    if (!id || meetings.length === 0) {
+      setActions([])
+      return
+    }
+    const allActions = await actionService.getAll()
     const meetingIds = meetings.map((m) => m.id)
     const personActions = allActions.filter((a) => meetingIds.includes(a.meetingId))
     setActions(personActions)
@@ -43,7 +47,7 @@ export function PersonDetail() {
       await fetchTemplates()
       const [personMeetings, futureMeetingsData] = await Promise.all([
         fetchMeetingsByPerson(parseInt(id)),
-        window.api.meetings.getUpcoming(365),
+        meetingService.getUpcoming(365),
       ])
       setMeetings(personMeetings)
       const now = new Date()
@@ -54,7 +58,7 @@ export function PersonDetail() {
         return m.personId === parseInt(id) && meetingDate > now
       })
       setFutureMeetings(personFutureMeetings)
-      const skips = await window.api.meetingSkips.getByPerson(parseInt(id))
+      const skips = await meetingSkipService.getByPerson(parseInt(id))
       setSkipHistory(skips)
     }
     loadData()
@@ -99,7 +103,7 @@ export function PersonDetail() {
     setMeetingFormOpen(true)
   }
   const handleSkip = async () => {
-    const skip = await window.api.meetingSkips.create(person.id)
+    const skip = await meetingSkipService.create(person.id)
     toast.success(t('skip.success'))
     setSkipHistory((prev) => [skip, ...prev])
     await fetchPersons()

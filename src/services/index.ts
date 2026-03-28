@@ -3,4 +3,5 @@ export {
   meetingService,
   actionService,
   templateService,
+  meetingSkipService,
 } from './api'

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
@@ -9,48 +9,21 @@ import {
   calculateRelationshipHealth,
   getHealthTextColor,
 } from '@/lib/relationships'
-export function RelationshipGrid() {
+interface RelationshipGridProps {
+  persons: Person[]
+  futureMeetings: Meeting[]
+}
+export function RelationshipGrid({ persons: rawPersons, futureMeetings }: RelationshipGridProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const [persons, setPersons] = useState<Person[]>([])
-  const [futureMeetings, setFutureMeetings] = useState<Meeting[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  useEffect(() => {
-    const loadPersons = async () => {
-      try {
-        const [personsData, meetingsData] = await Promise.all([
-          window.api.persons.getAll(),
-          window.api.meetings.getUpcoming(365),
-        ])
-        const sorted = personsData.sort((a, b) => {
-          const healthA = calculateRelationshipHealth(a)
-          const healthB = calculateRelationshipHealth(b)
-          return healthA.score - healthB.score
-        })
-        setPersons(sorted)
-        setFutureMeetings(meetingsData)
-      } catch (error) {
-        console.error('Error loading persons:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    loadPersons()
-  }, [])
-  if (isLoading) {
-    return (
-      <div className="card p-5 h-full">
-        <div className="animate-pulse space-y-3">
-          <div className="h-5 bg-stone-100 rounded w-2/3" />
-          <div className="space-y-2">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-12 bg-stone-50 rounded-lg" />
-            ))}
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const persons = useMemo(
+    () => [...rawPersons].sort((a, b) => {
+      const healthA = calculateRelationshipHealth(a)
+      const healthB = calculateRelationshipHealth(b)
+      return healthA.score - healthB.score
+    }),
+    [rawPersons]
+  )
   if (persons.length === 0) {
     return (
       <motion.div

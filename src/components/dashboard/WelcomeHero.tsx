@@ -1,31 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { UserPlus, CalendarPlus, Calendar, CheckCircle, Target, TrendingUp, TrendingDown, Minus } from 'lucide-react'
-import { calculateOverallAnalytics, type OverallAnalytics } from '@/lib/analytics'
-export function WelcomeHero() {
+import type { Meeting, ActionItem } from '@/types'
+import { calculateOverallAnalytics } from '@/lib/analytics'
+interface WelcomeHeroProps {
+  meetings: Meeting[]
+  actions: ActionItem[]
+}
+export function WelcomeHero({ meetings, actions }: WelcomeHeroProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const [analytics, setAnalytics] = useState<OverallAnalytics | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  useEffect(() => {
-    const loadAnalytics = async () => {
-      try {
-        const [meetings, actions] = await Promise.all([
-          window.api.meetings.getAll(),
-          window.api.actions.getAll(),
-        ])
-        const stats = calculateOverallAnalytics(meetings, actions)
-        setAnalytics(stats)
-      } catch (error) {
-        console.error('Error loading analytics:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    loadAnalytics()
-  }, [])
+  const analytics = useMemo(
+    () => (meetings.length > 0 || actions.length > 0)
+      ? calculateOverallAnalytics(meetings, actions)
+      : null,
+    [meetings, actions]
+  )
+  const isLoading = meetings.length === 0 && actions.length === 0 && !analytics
   const TrendIcon = analytics
     ? analytics.meetingsTrend > 0
       ? TrendingUp

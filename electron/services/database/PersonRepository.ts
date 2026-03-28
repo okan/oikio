@@ -48,6 +48,7 @@ export class PersonRepository {
     return this.store.persons
       .filter((person) => {
         if (!person.meetingFrequencyGoal) return false
+        if (person.skippedUntil && new Date(person.skippedUntil) > today) return false
         const lastMeeting = person.lastMeetingDate ? new Date(person.lastMeetingDate) : null
         if (!lastMeeting) return true  
         const daysSinceLastMeeting = Math.floor(

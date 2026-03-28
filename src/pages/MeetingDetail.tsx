@@ -15,7 +15,7 @@ export function MeetingDetail() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { t, i18n } = useTranslation()
-  const { meetings, fetchMeetings, updateMeeting, deleteMeeting } = useMeetingStore()
+  const { fetchMeetingById, updateMeeting, deleteMeeting } = useMeetingStore()
   const { persons, fetchPersons } = usePersonStore()
   const { templates, fetchTemplates } = useTemplateStore()
   const { fetchActionsByMeeting, createAction, toggleComplete, deleteAction } = useActionStore()
@@ -32,19 +32,14 @@ export function MeetingDetail() {
     const loadData = async () => {
       if (!id) return
       setIsLoading(true)
-      await fetchMeetings()
+      const [foundMeeting, meetingActions] = await Promise.all([
+        fetchMeetingById(parseInt(id)),
+        fetchActionsByMeeting(parseInt(id)),
+      ])
       await fetchPersons()
       await fetchTemplates()
-      const meetingActions = await fetchActionsByMeeting(parseInt(id))
+      setMeeting(foundMeeting)
       setActions(meetingActions)
-      setIsLoading(false)
-    }
-    loadData()
-  }, [id, fetchMeetings, fetchPersons, fetchTemplates, fetchActionsByMeeting])
-  useEffect(() => {
-    if (id && meetings.length > 0) {
-      const foundMeeting = meetings.find((m) => m.id === parseInt(id))
-      setMeeting(foundMeeting || null)
       if (foundMeeting) {
         setNextTopics(foundMeeting.nextTopics || '')
         if (searchParams.get('focus') === 'true') {
@@ -52,8 +47,10 @@ export function MeetingDetail() {
           setSearchParams({})
         }
       }
+      setIsLoading(false)
     }
-  }, [id, meetings, searchParams, setSearchParams])
+    loadData()
+  }, [id, fetchMeetingById, fetchPersons, fetchTemplates, fetchActionsByMeeting, searchParams, setSearchParams])
   const refreshActions = async () => {
     if (!id) return
     const meetingActions = await fetchActionsByMeeting(parseInt(id))
@@ -102,11 +99,20 @@ export function MeetingDetail() {
     await deleteAction(actionId)
     await refreshActions()
   }
+  const refreshMeeting = async () => {
+    if (!id) return
+    const updated = await fetchMeetingById(parseInt(id))
+    if (updated) {
+      setMeeting(updated)
+      setNextTopics(updated.nextTopics || '')
+    }
+  }
   const handleSaveNextTopics = async () => {
     if (!meeting) return
     setIsSavingNextTopics(true)
     try {
       await updateMeeting(meeting.id, { nextTopics: nextTopics.trim() || undefined })
+      await refreshMeeting()
       setIsEditingNextTopics(false)
     } catch (error) {
       console.error('Error saving next topics:', error)
@@ -129,6 +135,7 @@ export function MeetingDetail() {
   const handleFocusModeSaveNotes = async (notes: string) => {
     if (!meeting) return
     await updateMeeting(meeting.id, { notes })
+    await refreshMeeting()
   }
   const handleFocusModeToggle = async (actionId: number) => {
     await toggleComplete(actionId)
