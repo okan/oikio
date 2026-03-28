@@ -36,7 +36,7 @@ export class DatabaseService {
     return this.personRepo.update(id, data)
   }
   deletePerson(id: number): void {
-    return this.personRepo.delete(id, this.meetingRepo)
+    return this.personRepo.delete(id, this.meetingRepo, this.meetingSkipRepo)
   }
   getPersonsNeedingAttention(): Person[] {
     return this.personRepo.getNeedingAttention()

@@ -25,7 +25,12 @@ export class PersonRepository {
     this.store.save()
     return this.store.persons[index]
   }
-  delete(id: number, meetingRepository: { deleteByPersonId: (personId: number) => void }): void {
+  delete(
+    id: number,
+    meetingRepository: { deleteByPersonId: (personId: number) => void },
+    meetingSkipRepository: { deleteByPersonId: (personId: number) => void }
+  ): void {
+    meetingSkipRepository.deleteByPersonId(id)
     meetingRepository.deleteByPersonId(id)
     this.store.persons = this.store.persons.filter((p) => p.id !== id)
     this.store.save()
