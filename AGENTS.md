@@ -217,6 +217,7 @@ Person (1) ──→ (N) Meeting (1) ──→ (N) ActionItem
 - **ActionItem.assignedTo** — `me | other`
 - **ActionItem.tags** — freeform string array with deterministic color mapping
 - **Template.isDefault** — system-seeded templates (locale-aware, cannot be exported)
+- **Meeting.mood** — optional `1 | 2 | 3 | 4 | 5` (1 hardest, 5 best); set from Focus Mode header, meeting sidebar, or cleared via `MoodSelector`
 
 ### Persistence
 All data is stored in `oikio-data.json` at Electron's `userData` path. The file includes a `meta.lastId` map for auto-incrementing IDs per entity. Export/import includes `personNotes` and `talkingPoints`; deleting a person cascades notes and talking points via repositories.
@@ -289,6 +290,7 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 ### Focus Mode (`src/components/meeting/FocusMode.tsx`)
 - Full-screen notes + sidebar with **Actions** and **Prep** tabs
 - Prep tab: open talking points (toggle complete), read-only quick notes (`PersonNote`), pending actions from other meetings for the same person
+- Header **How did it go?** (`MoodSelector`): five-step mood saved immediately via `updateMeeting`
 
 ### Keyboard Shortcuts (handled in `src/components/layout/Layout.tsx`)
 - `Cmd/Ctrl + K` — Open search

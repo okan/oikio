@@ -146,7 +146,10 @@
     "searchPlaceholder": "Search meetings...",
     "allPersons": "All people",
     "noResults": "No meetings match your search",
-    "templateOverwriteConfirm": "You have existing notes. Selecting this template will replace them. Continue?"
+    "templateOverwriteConfirm": "You have existing notes. Selecting this template will replace them. Continue?",
+    "moodLabel": "How did it go?",
+    "moodClear": "Clear rating",
+    "moodAria": "Mood level {{level}} of 5; 1 is most difficult, 5 is best"
   },
   "actions": {
     "title": "Actions",

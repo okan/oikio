@@ -32,6 +32,7 @@ export interface TalkingPoint {
   completed: boolean
   createdAt: string
 }
+export type MeetingMood = 1 | 2 | 3 | 4 | 5
 export interface RelationshipHealth {
   score: number
   status: 'good' | 'warning' | 'critical' | 'neutral'
@@ -50,6 +51,7 @@ export interface Meeting {
   notes?: string
   talkingPoints?: string
   nextTopics?: string
+  mood?: MeetingMood
   createdAt: string
   actionStats?: {
     total: number

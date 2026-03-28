@@ -11,9 +11,9 @@ import {
   personNoteService,
   talkingPointService,
 } from '@/services'
-import type { Meeting, ActionItem, PersonNote, TalkingPoint } from '@/types'
+import type { Meeting, ActionItem, PersonNote, TalkingPoint, MeetingMood } from '@/types'
 import { Button, Avatar, ConfirmModal, Textarea, PageTransition } from '@/components/ui'
-import { MeetingForm, FocusMode } from '@/components/meeting'
+import { MeetingForm, FocusMode, MoodSelector } from '@/components/meeting'
 import { ActionList, ActionForm } from '@/components/action'
 import { formatDate, formatMeetingTitle } from '@/lib/utils'
 export function MeetingDetail() {
@@ -188,6 +188,10 @@ export function MeetingDetail() {
     await talkingPointService.toggleComplete(talkingPointId)
     await loadFocusPrep()
   }
+  const handleMoodChange = async (mood: MeetingMood | undefined) => {
+    await updateMeeting(meeting.id, { mood })
+    await refreshMeeting()
+  }
   return (
     <PageTransition className="space-y-5">
       <button
@@ -302,6 +306,8 @@ export function MeetingDetail() {
               </div>
             </div>
 
+            <MoodSelector value={meeting.mood} onChange={handleMoodChange} className="mb-4" />
+
             <div className="space-y-2">
               <Button size="sm" onClick={() => setFocusModeOpen(true)} className="w-full">
                 <Maximize2 className="w-3.5 h-3.5 mr-1.5" />
@@ -358,6 +364,7 @@ export function MeetingDetail() {
           prepTalkingPoints={focusPrep.talkingPoints}
           prepOtherMeetingActions={focusPrep.otherActions}
           onTogglePrepTalkingPoint={handleTogglePrepTalkingPoint}
+          onMoodChange={handleMoodChange}
         />
       )}
     </PageTransition>

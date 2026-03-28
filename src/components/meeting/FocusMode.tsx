@@ -14,8 +14,9 @@ import {
   StickyNote,
   CheckSquare,
 } from 'lucide-react'
-import type { Meeting, ActionItem, PersonNote, TalkingPoint } from '@/types'
+import type { Meeting, ActionItem, PersonNote, TalkingPoint, MeetingMood } from '@/types'
 import { Button, Input, Avatar, RichTextEditor, Modal, Checkbox } from '@/components/ui'
+import { MoodSelector } from './MoodSelector'
 import { formatDate, formatMeetingTitle, getRelativeTime, cn } from '@/lib/utils'
 
 type SidebarTab = 'actions' | 'prep'
@@ -31,6 +32,7 @@ interface FocusModeProps {
   prepTalkingPoints?: TalkingPoint[]
   prepOtherMeetingActions?: ActionItem[]
   onTogglePrepTalkingPoint?: (id: number) => Promise<void>
+  onMoodChange?: (mood: MeetingMood | undefined) => Promise<void>
 }
 export function FocusMode({
   meeting,
@@ -43,6 +45,7 @@ export function FocusMode({
   prepTalkingPoints = [],
   prepOtherMeetingActions = [],
   onTogglePrepTalkingPoint,
+  onMoodChange,
 }: FocusModeProps) {
   const { t, i18n } = useTranslation()
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>('actions')
@@ -198,6 +201,13 @@ export function FocusMode({
                 {formatDate(meeting.date, i18n.language)}
               </span>
             </div>
+            {onMoodChange && (
+              <MoodSelector
+                value={meeting.mood}
+                onChange={onMoodChange}
+                className="mt-3 pt-3 border-t border-stone-100 max-w-xs"
+              />
+            )}
           </div>
         </div>
         <div className="flex items-center gap-3">

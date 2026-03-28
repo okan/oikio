@@ -5,6 +5,7 @@ import { Calendar, ChevronRight, CheckCircle, Circle } from 'lucide-react'
 import type { Meeting } from '@/types'
 import { EmptyState, Button } from '@/components/ui'
 import { formatMeetingTitle } from '@/lib/utils'
+import { getMeetingMoodEmoji } from '@/lib/meetingMood'
 import { useTemplateStore } from '@/store'
 interface PersonMeetingTimelineProps {
   meetings: Meeting[]
@@ -84,6 +85,7 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
                 meeting.actionStats.total > 0 &&
                 meeting.actionStats.completed === meeting.actionStats.total
               const template = templates.find((t) => t.id === meeting.templateId)
+              const moodEmoji = getMeetingMoodEmoji(meeting.mood)
               return (
                 <motion.button
                   key={meeting.id}
@@ -107,8 +109,15 @@ export function PersonMeetingTimeline({ meetings, onAddClick }: PersonMeetingTim
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-stone-900 truncate">
-                      {formatMeetingTitle(meeting.title, meeting.date, i18n.language)}
+                    <p className="font-medium text-stone-900 truncate flex items-center gap-2">
+                      {moodEmoji && (
+                        <span className="shrink-0 text-lg leading-none" title={t('meetings.moodLabel')}>
+                          {moodEmoji}
+                        </span>
+                      )}
+                      <span className="truncate">
+                        {formatMeetingTitle(meeting.title, meeting.date, i18n.language)}
+                      </span>
                     </p>
                     {template && (
                       <p className="text-xs text-stone-400 mt-0.5 flex items-center gap-1">
