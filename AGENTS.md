@@ -14,6 +14,7 @@ oikio is a **local-first** Electron desktop application for managing 1-1 meeting
 | **Template** | Reusable meeting note templates with categories (`manager` \| `teammate` \| `general`). Default templates are seeded per locale |
 | **MeetingSkip** | Records when a user intentionally skips a meeting cycle for a person |
 | **PersonNote** | Timestamped short observations linked to a person (between meetings) |
+| **TalkingPoint** | Per-person checklist of topics for the next meeting (`completed` when discussed) |
 
 ---
 
@@ -94,6 +95,7 @@ oikio/
 │   │   ├── templateHandlers.ts
 │   │   ├── meetingSkipHandlers.ts
 │   │   ├── personNoteHandlers.ts
+│   │   ├── talkingPointHandlers.ts
 │   │   ├── dataHandlers.ts          # Export/import/reset
 │   │   └── notificationHandlers.ts
 │   └── services/
@@ -107,7 +109,8 @@ oikio/
 │       │   ├── ActionRepository.ts
 │       │   ├── TemplateRepository.ts
 │       │   ├── MeetingSkipRepository.ts
-│       │   └── PersonNoteRepository.ts
+│       │   ├── PersonNoteRepository.ts
+│       │   └── TalkingPointRepository.ts
 │       └── notifications.ts         # Native notification service
 ├── src/                             # React renderer
 │   ├── main.tsx                     # App bootstrap (StrictMode, HashRouter)
@@ -133,7 +136,7 @@ oikio/
 │   ├── components/
 │   │   ├── ui/                      # Reusable primitives (Button, Modal, Input, RichTextEditor, etc.)
 │   │   ├── layout/                  # Layout, Navbar, SearchModal, QuickActionModal, KeyboardShortcutsHelp
-│   │   ├── person/                  # PersonCard, PersonForm, PersonDetailHeader, PersonNotes, PersonMeetingTimeline, etc.
+│   │   ├── person/                  # PersonCard, PersonForm, PersonDetailHeader, PersonNotes, PersonTalkingPoints, PersonMeetingTimeline, etc.
 │   │   ├── meeting/                 # MeetingCard, MeetingForm, MeetingList, FocusMode
 │   │   ├── action/                  # ActionForm, ActionItem, ActionList
 │   │   ├── dashboard/               # WelcomeHero, TodayFocus, RelationshipGrid
@@ -172,7 +175,7 @@ Every store follows the same shape:
 - Error handling: catch → set error message → re-throw for callers
 
 ### Service Layer
-`src/services/api.ts` contains thin wrappers (`personService`, `meetingService`, `actionService`, `templateService`) that call `window.api.*`. Stores never call `window.api` directly.
+`src/services/api.ts` contains thin wrappers (`personService`, `meetingService`, `actionService`, `templateService`, `meetingSkipService`, `personNoteService`, `talkingPointService`) that call `window.api.*`. Stores never call `window.api` directly.
 
 ### Repository Pattern (Electron)
 `electron/services/database/` uses a clean separation:
@@ -199,7 +202,8 @@ Person (1) ──→ (N) Meeting (1) ──→ (N) ActionItem
   │                   └── templateId? ──→ Template
   │
   ├── (N) MeetingSkip
-  └── (N) PersonNote
+  ├── (N) PersonNote
+  └── (N) TalkingPoint
 ```
 
 ### Key Fields
@@ -215,7 +219,7 @@ Person (1) ──→ (N) Meeting (1) ──→ (N) ActionItem
 - **Template.isDefault** — system-seeded templates (locale-aware, cannot be exported)
 
 ### Persistence
-All data is stored in `oikio-data.json` at Electron's `userData` path. The file includes a `meta.lastId` map for auto-incrementing IDs per entity. Export/import includes `personNotes`; deleting a person removes their person notes via `PersonNoteRepository.deleteByPersonId`.
+All data is stored in `oikio-data.json` at Electron's `userData` path. The file includes a `meta.lastId` map for auto-incrementing IDs per entity. Export/import includes `personNotes` and `talkingPoints`; deleting a person cascades notes and talking points via repositories.
 
 ---
 
@@ -291,9 +295,9 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 - Shortcuts are suppressed when focus is in input/textarea/contenteditable elements
 
 ### Data Export/Import
-- Export serializes all data except default templates, including `meetingSkips`
-- Import preserves default templates, restores `meetingSkips`, and recalculates `meta.lastId` counters
-- Deleting a person removes their `meetingSkips` and `personNotes` via repository cascade
+- Export serializes all data except default templates, including `meetingSkips`, `personNotes`, and `talkingPoints`
+- Import preserves default templates, restores `meetingSkips`, `personNotes`, and `talkingPoints`, and recalculates `meta.lastId` counters
+- Deleting a person removes their `meetingSkips`, `personNotes`, and `talkingPoints` via repository cascade
 - Reset restores to `defaultData` and re-seeds templates
 
 ### Analytics (`src/lib/analytics.ts`)

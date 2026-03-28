@@ -103,6 +103,15 @@
     "added": "Not eklendi",
     "deleted": "Not silindi"
   },
+  "talkingPoints": {
+    "title": "Konuşma konuları",
+    "placeholder": "Konu ekle…",
+    "empty": "Henüz konu yok. Bir sonraki toplantıda konuşmak istediğiniz şeyleri ekleyin.",
+    "added": "Konu eklendi",
+    "completed": "Tamamlandı",
+    "openCount": "{{count}} açık",
+    "deleted": "Konu silindi"
+  },
   "meetings": {
     "title": "Toplantılar",
     "description": "Tüm 1-1 toplantı notları",
@@ -126,6 +135,7 @@
     "prepSection": "Geçen Toplantıdan",
     "pendingFromLast": "{{count}} bekleyen aksiyon",
     "topicsFromLast": "Konuşulacak konular:",
+    "prepTalkingPoints": "Açık konuşma konuları",
     "carryOver": "Notlara Ekle",
     "fromLastMeeting": "Geçen Toplantıdan",
     "nextTopics": "Sonraki Toplantı İçin",

@@ -6,6 +6,7 @@ import type {
   DashboardStats,
   MeetingSkip,
   PersonNote,
+  TalkingPoint,
 } from '../../../src/types'
 import { DataStore } from './DataStore'
 import { PersonRepository } from './PersonRepository'
@@ -14,6 +15,7 @@ import { ActionRepository } from './ActionRepository'
 import { TemplateRepository } from './TemplateRepository'
 import { MeetingSkipRepository } from './MeetingSkipRepository'
 import { PersonNoteRepository } from './PersonNoteRepository'
+import { TalkingPointRepository } from './TalkingPointRepository'
 export class DatabaseService {
   private store: DataStore
   private personRepo: PersonRepository
@@ -22,6 +24,7 @@ export class DatabaseService {
   private templateRepo: TemplateRepository
   private meetingSkipRepo: MeetingSkipRepository
   private personNoteRepo: PersonNoteRepository
+  private talkingPointRepo: TalkingPointRepository
   constructor() {
     this.store = new DataStore()
     this.personRepo = new PersonRepository(this.store)
@@ -30,6 +33,7 @@ export class DatabaseService {
     this.templateRepo = new TemplateRepository(this.store)
     this.meetingSkipRepo = new MeetingSkipRepository(this.store)
     this.personNoteRepo = new PersonNoteRepository(this.store)
+    this.talkingPointRepo = new TalkingPointRepository(this.store)
     this.templateRepo.seedDefaults()
     this.meetingRepo.migrateLastMeetingDates(this.personRepo)
     this.store.save()
@@ -47,7 +51,13 @@ export class DatabaseService {
     return this.personRepo.update(id, data)
   }
   deletePerson(id: number): void {
-    return this.personRepo.delete(id, this.meetingRepo, this.meetingSkipRepo, this.personNoteRepo)
+    return this.personRepo.delete(
+      id,
+      this.meetingRepo,
+      this.meetingSkipRepo,
+      this.personNoteRepo,
+      this.talkingPointRepo
+    )
   }
   getPersonsNeedingAttention(): Person[] {
     return this.personRepo.getNeedingAttention()
@@ -133,6 +143,18 @@ export class DatabaseService {
   deletePersonNote(id: number): void {
     this.personNoteRepo.delete(id)
   }
+  getTalkingPointsByPerson(personId: number): TalkingPoint[] {
+    return this.talkingPointRepo.getByPerson(personId)
+  }
+  createTalkingPoint(data: { personId: number; content: string }): TalkingPoint {
+    return this.talkingPointRepo.create(data)
+  }
+  toggleTalkingPointComplete(id: number): TalkingPoint {
+    return this.talkingPointRepo.toggleComplete(id)
+  }
+  deleteTalkingPoint(id: number): void {
+    this.talkingPointRepo.delete(id)
+  }
   getDashboardStats(): DashboardStats {
     const currentMonth = new Date().toISOString().slice(0, 7)
     return {
@@ -200,4 +222,5 @@ export { ActionRepository } from './ActionRepository'
 export { TemplateRepository } from './TemplateRepository'
 export { MeetingSkipRepository } from './MeetingSkipRepository'
 export { PersonNoteRepository } from './PersonNoteRepository'
+export { TalkingPointRepository } from './TalkingPointRepository'
 export * from './types'

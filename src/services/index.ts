@@ -5,4 +5,5 @@ export {
   templateService,
   meetingSkipService,
   personNoteService,
+  talkingPointService,
 } from './api'

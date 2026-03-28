@@ -25,6 +25,13 @@ export interface PersonNote {
   content: string
   createdAt: string
 }
+export interface TalkingPoint {
+  id: number
+  personId: number
+  content: string
+  completed: boolean
+  createdAt: string
+}
 export interface RelationshipHealth {
   score: number
   status: 'good' | 'warning' | 'critical' | 'neutral'
@@ -122,6 +129,12 @@ export interface ElectronAPI {
   personNotes: {
     getByPerson: (personId: number) => Promise<PersonNote[]>
     create: (data: { personId: number; content: string }) => Promise<PersonNote>
+    delete: (id: number) => Promise<void>
+  }
+  talkingPoints: {
+    getByPerson: (personId: number) => Promise<TalkingPoint[]>
+    create: (data: { personId: number; content: string }) => Promise<TalkingPoint>
+    toggleComplete: (id: number) => Promise<TalkingPoint>
     delete: (id: number) => Promise<void>
   }
   data: {

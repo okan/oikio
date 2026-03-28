@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import type { DatabaseData, EntityType } from './types'
 import { defaultData } from './types'
-import type { PersonNote } from '../../../src/types'
+import type { PersonNote, TalkingPoint } from '../../../src/types'
 export class DataStore {
   private data: DatabaseData
   private dbPath: string
@@ -32,6 +32,14 @@ export class DataStore {
         if (typeof data.meta.lastId.personNotes !== 'number') {
           data.meta.lastId.personNotes = data.personNotes.length
             ? Math.max(0, ...data.personNotes.map((n: PersonNote) => n.id))
+            : 0
+        }
+        if (!Array.isArray(data.talkingPoints)) {
+          data.talkingPoints = []
+        }
+        if (typeof data.meta.lastId.talkingPoints !== 'number') {
+          data.meta.lastId.talkingPoints = data.talkingPoints.length
+            ? Math.max(0, ...data.talkingPoints.map((tp: TalkingPoint) => tp.id))
             : 0
         }
         return data
@@ -100,6 +108,12 @@ export class DataStore {
   set personNotes(value) {
     this.data.personNotes = value
   }
+  get talkingPoints() {
+    return this.data.talkingPoints || []
+  }
+  set talkingPoints(value) {
+    this.data.talkingPoints = value
+  }
   get meta() {
     return this.data.meta
   }
@@ -111,6 +125,7 @@ export class DataStore {
       templates: this.data.templates.filter((t) => !t.isDefault),
       meetingSkips: this.data.meetingSkips || [],
       personNotes: this.data.personNotes || [],
+      talkingPoints: this.data.talkingPoints || [],
       exportedAt: new Date().toISOString(),
     }
     return JSON.stringify(exportData, null, 2)
@@ -123,12 +138,14 @@ export class DataStore {
     this.data.templates = [...defaultTemplates, ...(importedData.templates || [])]
     this.data.meetingSkips = importedData.meetingSkips || []
     this.data.personNotes = importedData.personNotes || []
+    this.data.talkingPoints = importedData.talkingPoints || []
     this.data.meta.lastId.persons = Math.max(0, ...this.data.persons.map((p) => p.id))
     this.data.meta.lastId.meetings = Math.max(0, ...this.data.meetings.map((m) => m.id))
     this.data.meta.lastId.actionItems = Math.max(0, ...this.data.actionItems.map((a) => a.id))
     this.data.meta.lastId.templates = Math.max(0, ...this.data.templates.map((t) => t.id))
     this.data.meta.lastId.meetingSkips = Math.max(0, ...(this.data.meetingSkips || []).map((s) => s.id))
     this.data.meta.lastId.personNotes = Math.max(0, ...(this.data.personNotes || []).map((n) => n.id))
+    this.data.meta.lastId.talkingPoints = Math.max(0, ...(this.data.talkingPoints || []).map((tp) => tp.id))
     this.saveImmediate()
   }
   reset(): void {

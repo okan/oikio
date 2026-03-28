@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AlertCircle, CheckSquare, ListTodo } from 'lucide-react'
-import type { Meeting, Person, Template, ActionItem } from '@/types'
-import { meetingService, actionService } from '@/services'
+import { AlertCircle, CheckSquare, ListTodo, MessageSquare } from 'lucide-react'
+import type { Meeting, Person, Template, ActionItem, TalkingPoint } from '@/types'
+import { meetingService, actionService, talkingPointService } from '@/services'
 import { Button, Input, Select, Modal, RichTextEditor } from '@/components/ui'
 import { toInputDate } from '@/lib/utils'
 interface MeetingFormProps {
@@ -37,6 +37,7 @@ export function MeetingForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [lastMeetingContext, setLastMeetingContext] = useState<LastMeetingContext | null>(null)
+  const [prepTalkingPoints, setPrepTalkingPoints] = useState<TalkingPoint[]>([])
   const [showPrepSection, setShowPrepSection] = useState(true)
   useEffect(() => {
     const fetchLastMeetingContext = async () => {
@@ -66,6 +67,22 @@ export function MeetingForm({
       }
     }
     fetchLastMeetingContext()
+  }, [personId, meeting])
+  useEffect(() => {
+    const loadTalkingPoints = async () => {
+      if (!personId || meeting) {
+        setPrepTalkingPoints([])
+        return
+      }
+      try {
+        const all = await talkingPointService.getByPerson(parseInt(personId))
+        setPrepTalkingPoints(all.filter((tp) => !tp.completed))
+      } catch (error) {
+        console.error('Error fetching talking points:', error)
+        setPrepTalkingPoints([])
+      }
+    }
+    loadTalkingPoints()
   }, [personId, meeting])
   useEffect(() => {
     if (meeting) {
@@ -153,8 +170,11 @@ export function MeetingForm({
       label: isRecommended ? `★ ${tpl.name}` : tpl.name,
     }
   })
-  const hasContext = lastMeetingContext &&
-    (lastMeetingContext.pendingActions.length > 0 || lastMeetingContext.nextTopics)
+  const hasLastMeetingPrep =
+    lastMeetingContext &&
+    (lastMeetingContext.pendingActions.length > 0 || Boolean(lastMeetingContext.nextTopics))
+  const showPrepPanel =
+    isCreating && (hasLastMeetingPrep || prepTalkingPoints.length > 0) && showPrepSection
   return (
     <Modal
       open={open}
@@ -189,7 +209,7 @@ export function MeetingForm({
             error={errors.date}
           />
         </div>
-        {isCreating && hasContext && showPrepSection && (
+        {showPrepPanel && (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-amber-800">
@@ -204,7 +224,7 @@ export function MeetingForm({
                 {t('common.dismiss')}
               </button>
             </div>
-            {lastMeetingContext.pendingActions.length > 0 && (
+            {lastMeetingContext && lastMeetingContext.pendingActions.length > 0 && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-amber-700">
                   <CheckSquare className="w-4 h-4" />
@@ -224,7 +244,7 @@ export function MeetingForm({
                 </ul>
               </div>
             )}
-            {lastMeetingContext.nextTopics && (
+            {lastMeetingContext?.nextTopics && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-amber-700">
                   <ListTodo className="w-4 h-4" />
@@ -233,6 +253,26 @@ export function MeetingForm({
                 <p className="text-sm text-amber-700 pl-6 line-clamp-2">
                   {lastMeetingContext.nextTopics}
                 </p>
+              </div>
+            )}
+            {prepTalkingPoints.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-amber-700">
+                  <MessageSquare className="w-4 h-4" />
+                  <span>{t('meetings.prepTalkingPoints')}</span>
+                </div>
+                <ul className="space-y-1 pl-6">
+                  {prepTalkingPoints.slice(0, 5).map((tp) => (
+                    <li key={tp.id} className="text-sm text-amber-700 list-disc">
+                      {tp.content}
+                    </li>
+                  ))}
+                  {prepTalkingPoints.length > 5 && (
+                    <li className="text-sm text-amber-600 italic">
+                      +{prepTalkingPoints.length - 5} {t('common.more')}
+                    </li>
+                  )}
+                </ul>
               </div>
             )}
           </div>

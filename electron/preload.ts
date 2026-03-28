@@ -7,6 +7,7 @@ import type {
   DashboardStats,
   MeetingSkip,
   PersonNote,
+  TalkingPoint,
 } from '../src/types'
 contextBridge.exposeInMainWorld('api', {
   persons: {
@@ -75,6 +76,15 @@ contextBridge.exposeInMainWorld('api', {
     create: (data: { personId: number; content: string }): Promise<PersonNote> =>
       ipcRenderer.invoke('db:personNotes:create', data),
     delete: (id: number): Promise<void> => ipcRenderer.invoke('db:personNotes:delete', id),
+  },
+  talkingPoints: {
+    getByPerson: (personId: number): Promise<TalkingPoint[]> =>
+      ipcRenderer.invoke('db:talkingPoints:getByPerson', personId),
+    create: (data: { personId: number; content: string }): Promise<TalkingPoint> =>
+      ipcRenderer.invoke('db:talkingPoints:create', data),
+    toggleComplete: (id: number): Promise<TalkingPoint> =>
+      ipcRenderer.invoke('db:talkingPoints:toggleComplete', id),
+    delete: (id: number): Promise<void> => ipcRenderer.invoke('db:talkingPoints:delete', id),
   },
   data: {
     export: (): Promise<string> => ipcRenderer.invoke('db:export'),

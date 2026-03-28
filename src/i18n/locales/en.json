@@ -103,6 +103,15 @@
     "added": "Note added",
     "deleted": "Note deleted"
   },
+  "talkingPoints": {
+    "title": "Talking points",
+    "placeholder": "Add a topic…",
+    "empty": "No topics yet. Add things to discuss in your next meeting.",
+    "added": "Topic added",
+    "completed": "Completed",
+    "openCount": "{{count}} open",
+    "deleted": "Topic removed"
+  },
   "meetings": {
     "title": "Meetings",
     "description": "All 1-1 meeting notes",
@@ -126,6 +135,7 @@
     "prepSection": "From Last Meeting",
     "pendingFromLast": "{{count}} pending actions",
     "topicsFromLast": "Topics to discuss:",
+    "prepTalkingPoints": "Open talking points",
     "carryOver": "Add to Notes",
     "fromLastMeeting": "From Last Meeting",
     "nextTopics": "For Next Meeting",

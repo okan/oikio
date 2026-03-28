@@ -5,6 +5,7 @@ import type {
   Template,
   MeetingSkip,
   PersonNote,
+  TalkingPoint,
 } from '@/types'
 export const personService = {
   getAll: (): Promise<Person[]> => window.api.persons.getAll(),
@@ -55,4 +56,13 @@ export const personNoteService = {
   create: (data: { personId: number; content: string }): Promise<PersonNote> =>
     window.api.personNotes.create(data),
   delete: (id: number): Promise<void> => window.api.personNotes.delete(id),
+}
+export const talkingPointService = {
+  getByPerson: (personId: number): Promise<TalkingPoint[]> =>
+    window.api.talkingPoints.getByPerson(personId),
+  create: (data: { personId: number; content: string }): Promise<TalkingPoint> =>
+    window.api.talkingPoints.create(data),
+  toggleComplete: (id: number): Promise<TalkingPoint> =>
+    window.api.talkingPoints.toggleComplete(id),
+  delete: (id: number): Promise<void> => window.api.talkingPoints.delete(id),
 }

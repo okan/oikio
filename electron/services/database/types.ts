@@ -1,4 +1,12 @@
-import type { Person, Meeting, ActionItem, Template, MeetingSkip, PersonNote } from '../../../src/types'
+import type {
+  Person,
+  Meeting,
+  ActionItem,
+  Template,
+  MeetingSkip,
+  PersonNote,
+  TalkingPoint,
+} from '../../../src/types'
 export interface DatabaseData {
   persons: Person[]
   meetings: Meeting[]
@@ -6,6 +14,7 @@ export interface DatabaseData {
   templates: Template[]
   meetingSkips: MeetingSkip[]
   personNotes: PersonNote[]
+  talkingPoints: TalkingPoint[]
   meta: {
     lastId: {
       persons: number
@@ -14,6 +23,7 @@ export interface DatabaseData {
       templates: number
       meetingSkips: number
       personNotes: number
+      talkingPoints: number
     }
   }
 }
@@ -24,6 +34,7 @@ export type EntityType =
   | 'templates'
   | 'meetingSkips'
   | 'personNotes'
+  | 'talkingPoints'
 export interface BaseEntity {
   id: number
   createdAt: string
@@ -35,6 +46,7 @@ export const defaultData: DatabaseData = {
   templates: [],
   meetingSkips: [],
   personNotes: [],
+  talkingPoints: [],
   meta: {
     lastId: {
       persons: 0,
@@ -43,6 +55,7 @@ export const defaultData: DatabaseData = {
       templates: 0,
       meetingSkips: 0,
       personNotes: 0,
+      talkingPoints: 0,
     },
   },
 }

@@ -13,6 +13,7 @@ import {
   PersonDetailHeader,
   PersonPendingActions,
   PersonNotes,
+  PersonTalkingPoints,
   PersonMeetingTimeline,
 } from '@/components/person'
 export function PersonDetail() {
@@ -121,6 +122,7 @@ export function PersonDetail() {
         <div className="col-span-3 space-y-4">
           <PersonPendingActions actions={actions} onActionToggle={loadActions} />
           <PersonNotes personId={person.id} />
+          <PersonTalkingPoints personId={person.id} />
           <PersonMeetingTimeline meetings={meetings} onAddClick={handleNewMeeting} />
         </div>
 
