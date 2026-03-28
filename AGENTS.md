@@ -21,8 +21,8 @@ oikio is a **local-first** Electron desktop application for managing 1-1 meeting
 | Layer                | Technology                                                          |
 | -------------------- | ------------------------------------------------------------------- |
 | **UI Framework**     | React 18                                                            |
-| **Bundler**          | Vite 5                                                              |
-| **Desktop Runtime**  | Electron 28                                                         |
+| **Bundler**          | Vite 6                                                              |
+| **Desktop Runtime**  | Electron 35                                                         |
 | **Language**         | TypeScript 5 (strict mode)                                          |
 | **State Management** | Zustand 4                                                           |
 | **Styling**          | TailwindCSS 3 + `tailwind-merge` + `clsx`                           |
