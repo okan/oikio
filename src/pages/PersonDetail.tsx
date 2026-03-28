@@ -35,10 +35,8 @@ export function PersonDetail() {
       setActions([])
       return
     }
-    const allActions = await actionService.getAll()
-    const meetingIds = meetings.map((m) => m.id)
-    const personActions = allActions.filter((a) => meetingIds.includes(a.meetingId))
-    setActions(personActions)
+    const lists = await Promise.all(meetings.map((m) => actionService.getByMeeting(m.id)))
+    setActions(lists.flat())
   }, [id, meetings])
   useEffect(() => {
     const loadData = async () => {
