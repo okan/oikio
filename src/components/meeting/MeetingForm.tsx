@@ -44,12 +44,14 @@ export function MeetingForm({
         return
       }
       try {
-        const meetings = await window.api.meetings.getByPerson(parseInt(personId))
-        if (meetings.length === 0) {
+        const allMeetings = await window.api.meetings.getByPerson(parseInt(personId))
+        const now = new Date()
+        const pastMeetings = allMeetings.filter((m) => new Date(m.date) <= now)
+        if (pastMeetings.length === 0) {
           setLastMeetingContext(null)
           return
         }
-        const lastMeeting = meetings[0]
+        const lastMeeting = pastMeetings[0]
         const actions = await window.api.actions.getByMeeting(lastMeeting.id)
         const pendingActions = actions.filter((a) => !a.completed)
         setLastMeetingContext({
