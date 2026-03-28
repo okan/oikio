@@ -44,16 +44,78 @@ function getLocaleStrings(): Record<string, string> {
   const locale = app.getLocale().startsWith('tr') ? 'tr' : 'en'
   return i18nStrings[locale]
 }
+type NotificationSentState = {
+  meetingReminderIds?: string[]
+  lastActionSummaryDate?: string
+}
+
+function localDateKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 export class NotificationService {
   private db: DatabaseService
   private settings: NotificationSettings
   private checkInterval: NodeJS.Timeout | null = null
+  private sentMeetingReminderIds: Set<string> = new Set()
+  private lastActionSummaryDate: string | undefined
   constructor(db: DatabaseService) {
     this.db = db
     this.settings = this.loadSettings()
+    this.loadSentState()
   }
   private get settingsPath(): string {
     return path.join(app.getPath('userData'), 'oikio-notification-settings.json')
+  }
+  private get sentStatePath(): string {
+    return path.join(app.getPath('userData'), 'oikio-notification-state.json')
+  }
+  private loadSentState(): void {
+    try {
+      if (fs.existsSync(this.sentStatePath)) {
+        const raw = JSON.parse(fs.readFileSync(this.sentStatePath, 'utf-8')) as NotificationSentState
+        this.sentMeetingReminderIds = new Set(raw.meetingReminderIds || [])
+        this.lastActionSummaryDate = raw.lastActionSummaryDate
+      }
+    } catch {
+      this.sentMeetingReminderIds = new Set()
+      this.lastActionSummaryDate = undefined
+    }
+  }
+  private persistSentState(): void {
+    try {
+      fs.writeFileSync(
+        this.sentStatePath,
+        JSON.stringify(
+          {
+            meetingReminderIds: [...this.sentMeetingReminderIds],
+            lastActionSummaryDate: this.lastActionSummaryDate,
+          },
+          null,
+          2
+        ),
+        'utf-8'
+      )
+    } catch (error) {
+      console.error('Error saving notification sent state:', error)
+    }
+  }
+  private pruneStaleMeetingReminderIds(): void {
+    const byId = new Map(this.db.getAllMeetings().map((m) => [String(m.id), m]))
+    const startOfToday = new Date()
+    startOfToday.setHours(0, 0, 0, 0)
+    for (const id of [...this.sentMeetingReminderIds]) {
+      const meeting = byId.get(id)
+      if (!meeting) {
+        this.sentMeetingReminderIds.delete(id)
+        continue
+      }
+      const day = new Date(meeting.date)
+      day.setHours(0, 0, 0, 0)
+      if (day.getTime() < startOfToday.getTime()) {
+        this.sentMeetingReminderIds.delete(id)
+      }
+    }
   }
   private loadSettings(): NotificationSettings {
     try {
@@ -107,24 +169,29 @@ export class NotificationService {
     }
   }
   private async checkMeetingReminders(): Promise<void> {
+    this.pruneStaleMeetingReminderIds()
     const now = new Date()
-    const reminderThreshold = new Date(
-      now.getTime() + this.settings.reminderHoursBefore * 60 * 60 * 1000
-    )
-    const upcomingMeetings = this.db.getUpcomingMeetings(2)
+    const reminderMs = this.settings.reminderHoursBefore * 60 * 60 * 1000
+    const reminderThreshold = new Date(now.getTime() + reminderMs)
+    const daysAhead = Math.max(1, Math.ceil(this.settings.reminderHoursBefore / 24))
+    const upcomingMeetings = this.db.getUpcomingMeetings(daysAhead)
+    let changed = false
     for (const meeting of upcomingMeetings) {
       const meetingDate = new Date(meeting.date)
-      if (meetingDate <= reminderThreshold && meetingDate > now) {
-        const hoursUntil = Math.round(
-          (meetingDate.getTime() - now.getTime()) / (1000 * 60 * 60)
-        )
-        if (hoursUntil === this.settings.reminderHoursBefore || hoursUntil === 1) {
-          this.sendMeetingReminder(meeting.title || '', meeting.personName || '', hoursUntil)
-        }
-      }
+      if (meetingDate <= now || meetingDate > reminderThreshold) continue
+      const idKey = String(meeting.id)
+      if (this.sentMeetingReminderIds.has(idKey)) continue
+      const msUntil = meetingDate.getTime() - now.getTime()
+      const hoursUntil = Math.max(1, Math.ceil(msUntil / (1000 * 60 * 60)))
+      this.sendMeetingReminder(meeting.title || '', meeting.personName || '', hoursUntil)
+      this.sentMeetingReminderIds.add(idKey)
+      changed = true
     }
+    if (changed) this.persistSentState()
   }
   private async checkActionReminders(): Promise<void> {
+    const todayKey = localDateKey(new Date())
+    if (this.lastActionSummaryDate === todayKey) return
     const pendingActions = this.db.getPendingActionItems()
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -146,6 +213,8 @@ export class NotificationService {
     }
     if (overdueCount > 0 || dueTodayCount > 0) {
       this.sendActionSummaryReminder(overdueCount, dueTodayCount, dueTomorrowCount)
+      this.lastActionSummaryDate = todayKey
+      this.persistSentState()
     }
   }
   private getIcon(): string {
