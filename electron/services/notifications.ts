@@ -12,6 +12,36 @@ const defaultSettings: NotificationSettings = {
   actionReminders: true,
   reminderHoursBefore: 24,
 }
+const i18nStrings: Record<string, Record<string, string>> = {
+  tr: {
+    meetingReminder: 'Toplantı Hatırlatıcı',
+    meetingBody: '{person} ile "{title}" toplantınız {time} sonra.',
+    hour1: '1 saat',
+    hours: '{n} saat',
+    actionReminder: 'Aksiyon Hatırlatıcı',
+    overdueActions: '{n} gecikmiş aksiyon.',
+    dueTodayActions: '{n} aksiyon bugün bitmeli.',
+    dueTomorrowActions: '{n} aksiyon yarın bitmeli.',
+    testTitle: 'Oikio Test',
+    testBody: 'Bildirimler düzgün çalışıyor!',
+  },
+  en: {
+    meetingReminder: 'Meeting Reminder',
+    meetingBody: 'Meeting "{title}" with {person} in {time}.',
+    hour1: '1 hour',
+    hours: '{n} hours',
+    actionReminder: 'Action Reminder',
+    overdueActions: '{n} overdue action(s).',
+    dueTodayActions: '{n} action(s) due today.',
+    dueTomorrowActions: '{n} action(s) due tomorrow.',
+    testTitle: 'Oikio Test',
+    testBody: 'Notifications are working correctly!',
+  },
+}
+function getLocaleStrings(): Record<string, string> {
+  const locale = app.getLocale().startsWith('tr') ? 'tr' : 'en'
+  return i18nStrings[locale]
+}
 export class NotificationService {
   private db: DatabaseService
   private settings: NotificationSettings
@@ -60,7 +90,7 @@ export class NotificationService {
     const reminderThreshold = new Date(
       now.getTime() + this.settings.reminderHoursBefore * 60 * 60 * 1000
     )
-    const upcomingMeetings = this.db.getUpcomingMeetings(2)  
+    const upcomingMeetings = this.db.getUpcomingMeetings(2)
     for (const meeting of upcomingMeetings) {
       const meetingDate = new Date(meeting.date)
       if (meetingDate <= reminderThreshold && meetingDate > now) {
@@ -68,7 +98,7 @@ export class NotificationService {
           (meetingDate.getTime() - now.getTime()) / (1000 * 60 * 60)
         )
         if (hoursUntil === this.settings.reminderHoursBefore || hoursUntil === 1) {
-          this.sendMeetingReminder(meeting.title, meeting.personName || '', hoursUntil)
+          this.sendMeetingReminder(meeting.title || '', meeting.personName || '', hoursUntil)
         }
       }
     }
@@ -97,37 +127,44 @@ export class NotificationService {
       this.sendActionSummaryReminder(overdueCount, dueTodayCount, dueTomorrowCount)
     }
   }
+  private getIcon(): string {
+    return app.isPackaged
+      ? `${process.resourcesPath}/build/icon.png`
+      : 'build/icon.png'
+  }
   sendMeetingReminder(title: string, personName: string, hoursUntil: number): void {
     if (!Notification.isSupported()) return
-    const timeText = hoursUntil === 1 ? '1 saat' : `${hoursUntil} saat`
+    const s = getLocaleStrings()
+    const timeText = hoursUntil === 1 ? s.hour1 : s.hours.replace('{n}', String(hoursUntil))
+    const body = s.meetingBody
+      .replace('{person}', personName)
+      .replace('{title}', title)
+      .replace('{time}', timeText)
     const notification = new Notification({
-      title: 'Toplantı Hatırlatıcı',
-      body: `${personName} ile "${title}" toplantınız ${timeText} sonra.`,
-      icon: app.isPackaged 
-        ? `${process.resourcesPath}/build/icon.png`
-        : 'build/icon.png',
+      title: s.meetingReminder,
+      body,
+      icon: this.getIcon(),
     })
     notification.show()
   }
-  sendActionSummaryReminder(overdue: number, today: number, tomorrow: number): void {
+  sendActionSummaryReminder(overdue: number, dueToday: number, dueTomorrow: number): void {
     if (!Notification.isSupported()) return
-    let body = ''
+    const s = getLocaleStrings()
+    const parts: string[] = []
     if (overdue > 0) {
-      body += `${overdue} gecikmiş aksiyon. `
+      parts.push(s.overdueActions.replace('{n}', String(overdue)))
     }
-    if (today > 0) {
-      body += `${today} aksiyon bugün bitmeli. `
+    if (dueToday > 0) {
+      parts.push(s.dueTodayActions.replace('{n}', String(dueToday)))
     }
-    if (tomorrow > 0) {
-      body += `${tomorrow} aksiyon yarın bitmeli.`
+    if (dueTomorrow > 0) {
+      parts.push(s.dueTomorrowActions.replace('{n}', String(dueTomorrow)))
     }
-    if (!body) return
+    if (parts.length === 0) return
     const notification = new Notification({
-      title: 'Aksiyon Hatırlatıcı',
-      body: body.trim(),
-      icon: app.isPackaged 
-        ? `${process.resourcesPath}/build/icon.png`
-        : 'build/icon.png',
+      title: s.actionReminder,
+      body: parts.join(' '),
+      icon: this.getIcon(),
     })
     notification.show()
   }
@@ -136,12 +173,11 @@ export class NotificationService {
       console.log('Notifications not supported on this platform')
       return
     }
+    const s = getLocaleStrings()
     const notification = new Notification({
-      title: 'Oikio Test',
-      body: 'Bildirimler düzgün çalışıyor!',
-      icon: app.isPackaged 
-        ? `${process.resourcesPath}/build/icon.png`
-        : 'build/icon.png',
+      title: s.testTitle,
+      body: s.testBody,
+      icon: this.getIcon(),
     })
     notification.show()
   }
