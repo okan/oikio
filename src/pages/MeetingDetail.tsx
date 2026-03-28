@@ -1,11 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import ReactMarkdown from 'react-markdown'
 import { ArrowLeft, Edit2, Trash2, Calendar, User, ListTodo, Plus, Maximize2 } from 'lucide-react'
 import { useMeetingStore, usePersonStore, useTemplateStore, useActionStore } from '@/store'
-import type { Meeting, ActionItem } from '@/types'
+import {
+  actionService,
+  meetingService,
+  personNoteService,
+  talkingPointService,
+} from '@/services'
+import type { Meeting, ActionItem, PersonNote, TalkingPoint } from '@/types'
 import { Button, Avatar, ConfirmModal, Textarea, PageTransition } from '@/components/ui'
 import { MeetingForm, FocusMode } from '@/components/meeting'
 import { ActionList, ActionForm } from '@/components/action'
@@ -27,6 +33,11 @@ export function MeetingDetail() {
   const [isEditingNextTopics, setIsEditingNextTopics] = useState(false)
   const [isSavingNextTopics, setIsSavingNextTopics] = useState(false)
   const [focusModeOpen, setFocusModeOpen] = useState(false)
+  const [focusPrep, setFocusPrep] = useState<{
+    notes: PersonNote[]
+    talkingPoints: TalkingPoint[]
+    otherActions: ActionItem[]
+  }>({ notes: [], talkingPoints: [], otherActions: [] })
   const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
     const loadData = async () => {
@@ -56,6 +67,38 @@ export function MeetingDetail() {
     const meetingActions = await fetchActionsByMeeting(parseInt(id))
     setActions(meetingActions)
   }
+  const loadFocusPrep = useCallback(async () => {
+    if (!meeting) return
+    const pid = meeting.personId
+    const [notes, tps, personMeetings] = await Promise.all([
+      personNoteService.getByPerson(pid),
+      talkingPointService.getByPerson(pid),
+      meetingService.getByPerson(pid),
+    ])
+    const otherIds = personMeetings.filter((m) => m.id !== meeting.id).map((m) => m.id)
+    const lists = await Promise.all(
+      otherIds.map(async (mid) => {
+        const meetingActions = await actionService.getByMeeting(mid)
+        const m = personMeetings.find((x) => x.id === mid)
+        return meetingActions.map((a) => ({
+          ...a,
+          meetingTitle: m ? formatMeetingTitle(m.title, m.date) : a.meetingTitle,
+          personName: meeting.personName ?? a.personName,
+        }))
+      })
+    )
+    const otherActions = lists.flat().filter((a) => !a.completed)
+    setFocusPrep({
+      notes,
+      talkingPoints: tps.filter((tp) => !tp.completed),
+      otherActions,
+    })
+  }, [meeting])
+  useEffect(() => {
+    if (focusModeOpen && meeting) {
+      loadFocusPrep()
+    }
+  }, [focusModeOpen, meeting, loadFocusPrep])
   if (isLoading || !meeting) {
     return (
       <div className="max-w-5xl mx-auto px-8 py-6">
@@ -140,6 +183,10 @@ export function MeetingDetail() {
   const handleFocusModeToggle = async (actionId: number) => {
     await toggleComplete(actionId)
     await refreshActions()
+  }
+  const handleTogglePrepTalkingPoint = async (talkingPointId: number) => {
+    await talkingPointService.toggleComplete(talkingPointId)
+    await loadFocusPrep()
   }
   return (
     <PageTransition className="space-y-5">
@@ -307,6 +354,10 @@ export function MeetingDetail() {
           onSaveNotes={handleFocusModeSaveNotes}
           onAddAction={handleFocusModeAddAction}
           onToggleAction={handleFocusModeToggle}
+          prepPersonNotes={focusPrep.notes}
+          prepTalkingPoints={focusPrep.talkingPoints}
+          prepOtherMeetingActions={focusPrep.otherActions}
+          onTogglePrepTalkingPoint={handleTogglePrepTalkingPoint}
         />
       )}
     </PageTransition>

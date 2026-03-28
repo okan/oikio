@@ -286,6 +286,10 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 - Action summary: at most once per local calendar day when there are overdue or due-today items
 - Uses Electron's native `Notification` API
 
+### Focus Mode (`src/components/meeting/FocusMode.tsx`)
+- Full-screen notes + sidebar with **Actions** and **Prep** tabs
+- Prep tab: open talking points (toggle complete), read-only quick notes (`PersonNote`), pending actions from other meetings for the same person
+
 ### Keyboard Shortcuts (handled in `src/components/layout/Layout.tsx`)
 - `Cmd/Ctrl + K` — Open search
 - `Cmd/Ctrl + Shift + A` — Quick action modal

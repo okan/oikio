@@ -320,7 +320,13 @@
     "exitConfirmTitle": "You have unsaved changes",
     "exitConfirmDesc": "Are you sure you want to exit without saving?",
     "discardAndExit": "Discard and exit",
-    "saveAndExit": "Save and exit"
+    "saveAndExit": "Save and exit",
+    "prepTab": "Prep",
+    "actionsTab": "Actions",
+    "talkingPointsSection": "Talking points",
+    "quickNotesSection": "Quick notes",
+    "previousActions": "Open actions (other meetings)",
+    "noPrepData": "No prep context yet. Add quick notes, talking points, or actions in other meetings for this person."
   },
   "focus": {
     "title": "Today's Focus",

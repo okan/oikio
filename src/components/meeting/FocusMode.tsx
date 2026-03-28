@@ -1,10 +1,25 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Save, Plus, Check, Clock, User, AlertCircle, CheckCircle2 } from 'lucide-react'
-import type { Meeting, ActionItem } from '@/types'
-import { Button, Input, Avatar, RichTextEditor, Modal } from '@/components/ui'
-import { formatDate, formatMeetingTitle } from '@/lib/utils'
+import {
+  X,
+  Save,
+  Plus,
+  Check,
+  Clock,
+  User,
+  AlertCircle,
+  CheckCircle2,
+  MessageSquare,
+  StickyNote,
+  CheckSquare,
+} from 'lucide-react'
+import type { Meeting, ActionItem, PersonNote, TalkingPoint } from '@/types'
+import { Button, Input, Avatar, RichTextEditor, Modal, Checkbox } from '@/components/ui'
+import { formatDate, formatMeetingTitle, getRelativeTime, cn } from '@/lib/utils'
+
+type SidebarTab = 'actions' | 'prep'
+
 interface FocusModeProps {
   meeting: Meeting
   actions: ActionItem[]
@@ -12,6 +27,10 @@ interface FocusModeProps {
   onSaveNotes: (notes: string) => Promise<void>
   onAddAction: (description: string) => Promise<void>
   onToggleAction: (actionId: number) => Promise<void>
+  prepPersonNotes?: PersonNote[]
+  prepTalkingPoints?: TalkingPoint[]
+  prepOtherMeetingActions?: ActionItem[]
+  onTogglePrepTalkingPoint?: (id: number) => Promise<void>
 }
 export function FocusMode({
   meeting,
@@ -20,8 +39,13 @@ export function FocusMode({
   onSaveNotes,
   onAddAction,
   onToggleAction,
+  prepPersonNotes = [],
+  prepTalkingPoints = [],
+  prepOtherMeetingActions = [],
+  onTogglePrepTalkingPoint,
 }: FocusModeProps) {
   const { t, i18n } = useTranslation()
+  const [sidebarTab, setSidebarTab] = useState<SidebarTab>('actions')
   const [notes, setNotes] = useState(meeting.notes || '')
   const [newAction, setNewAction] = useState('')
   const [isSaving, setIsSaving] = useState(false)
@@ -144,6 +168,14 @@ export function FocusMode({
   }, [handleGlobalKeyDown])
   const pendingActions = localActions.filter((a) => !a.completed)
   const completedActions = localActions.filter((a) => a.completed)
+  const hasPrepContent =
+    prepTalkingPoints.length > 0 ||
+    prepPersonNotes.length > 0 ||
+    prepOtherMeetingActions.length > 0
+  const handlePrepTalkingToggle = async (id: number) => {
+    if (!onTogglePrepTalkingPoint) return
+    await onTogglePrepTalkingPoint(id)
+  }
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -218,77 +250,189 @@ export function FocusMode({
             placeholder={t('focusMode.notesPlaceholder')}
           />
         </div>
-        <div className="w-96 border-l border-stone-200 p-6 overflow-auto bg-stone-50">
-          <h2 className="text-sm font-medium text-stone-500 mb-3">
-            {t('focusMode.actions')}
-          </h2>
-          <div className="flex gap-2 mb-4">
-            <Input
-              value={newAction}
-              onChange={(e) => setNewAction(e.target.value)}
-              onKeyDown={handleInputKeyDown}
-              placeholder={t('focusMode.newActionPlaceholder')}
-              className="flex-1"
-            />
-            <Button onClick={handleAddAction} disabled={!newAction.trim()}>
-              <Plus className="w-4 h-4" />
-            </Button>
+        <div className="w-96 border-l border-stone-200 flex flex-col bg-stone-50 min-h-0">
+          <div className="flex shrink-0 border-b border-stone-200 px-2 pt-4">
+            <button
+              type="button"
+              onClick={() => setSidebarTab('actions')}
+              className={cn(
+                'flex-1 pb-3 text-sm font-medium transition-colors border-b-2 -mb-px',
+                sidebarTab === 'actions'
+                  ? 'text-stone-900 border-stone-900'
+                  : 'text-stone-500 border-transparent hover:text-stone-700'
+              )}
+            >
+              {t('focusMode.actionsTab')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setSidebarTab('prep')}
+              className={cn(
+                'flex-1 pb-3 text-sm font-medium transition-colors border-b-2 -mb-px',
+                sidebarTab === 'prep'
+                  ? 'text-stone-900 border-stone-900'
+                  : 'text-stone-500 border-transparent hover:text-stone-700'
+              )}
+            >
+              {t('focusMode.prepTab')}
+            </button>
           </div>
-          {pendingActions.length > 0 && (
-            <div className="space-y-2 mb-4">
-              {pendingActions.map((action) => (
-                <motion.div
-                  key={action.id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className={`flex items-start gap-3 p-3 bg-white rounded-lg border ${action.id < 0 ? 'border-amber-300 border-dashed' : 'border-stone-200'
-                    }`}
-                >
-                  <button
-                    onClick={() => handleToggle(action.id)}
-                    className="mt-0.5 w-5 h-5 rounded border-2 border-stone-300 hover:border-stone-500 transition-colors flex items-center justify-center"
-                  >
-                    {action.completed && <Check className="w-3 h-3 text-stone-700" />}
-                  </button>
-                  <span className="text-sm text-stone-700">{action.description}</span>
-                  {action.id < 0 && (
-                    <span className="ml-auto text-xs text-amber-600">{t('focusMode.new')}</span>
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          )}
-          {completedActions.length > 0 && (
-            <div>
-              <h3 className="text-xs font-medium text-stone-400 mb-2">
-                {t('focusMode.completed')} ({completedActions.length})
-              </h3>
-              <div className="space-y-2">
-                {completedActions.map((action) => (
-                  <div
-                    key={action.id}
-                    className={`flex items-start gap-3 p-3 rounded-lg opacity-60 ${action.id < 0 ? 'bg-amber-50 border border-amber-200 border-dashed' : 'bg-stone-100'
-                      }`}
-                  >
-                    <button
-                      onClick={() => handleToggle(action.id)}
-                      className="mt-0.5 w-5 h-5 rounded bg-stone-800 flex items-center justify-center"
-                    >
-                      <Check className="w-3 h-3 text-white" />
-                    </button>
-                    <span className="text-sm text-stone-500 line-through">
-                      {action.description}
-                    </span>
+          <div className="flex-1 overflow-auto p-6 min-h-0">
+            {sidebarTab === 'actions' ? (
+              <>
+                <h2 className="text-sm font-medium text-stone-500 mb-3">
+                  {t('focusMode.actions')}
+                </h2>
+                <div className="flex gap-2 mb-4">
+                  <Input
+                    value={newAction}
+                    onChange={(e) => setNewAction(e.target.value)}
+                    onKeyDown={handleInputKeyDown}
+                    placeholder={t('focusMode.newActionPlaceholder')}
+                    className="flex-1"
+                  />
+                  <Button onClick={handleAddAction} disabled={!newAction.trim()}>
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+                {pendingActions.length > 0 && (
+                  <div className="space-y-2 mb-4">
+                    {pendingActions.map((action) => (
+                      <motion.div
+                        key={action.id}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className={`flex items-start gap-3 p-3 bg-white rounded-lg border ${action.id < 0 ? 'border-amber-300 border-dashed' : 'border-stone-200'
+                          }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleToggle(action.id)}
+                          className="mt-0.5 w-5 h-5 rounded border-2 border-stone-300 hover:border-stone-500 transition-colors flex items-center justify-center"
+                        >
+                          {action.completed && <Check className="w-3 h-3 text-stone-700" />}
+                        </button>
+                        <span className="text-sm text-stone-700">{action.description}</span>
+                        {action.id < 0 && (
+                          <span className="ml-auto text-xs text-amber-600">{t('focusMode.new')}</span>
+                        )}
+                      </motion.div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {localActions.length === 0 && (
-            <div className="text-center py-8 text-stone-400">
-              <p className="text-sm">{t('focusMode.noActions')}</p>
-            </div>
-          )}
+                )}
+                {completedActions.length > 0 && (
+                  <div>
+                    <h3 className="text-xs font-medium text-stone-400 mb-2">
+                      {t('focusMode.completed')} ({completedActions.length})
+                    </h3>
+                    <div className="space-y-2">
+                      {completedActions.map((action) => (
+                        <div
+                          key={action.id}
+                          className={`flex items-start gap-3 p-3 rounded-lg opacity-60 ${action.id < 0 ? 'bg-amber-50 border border-amber-200 border-dashed' : 'bg-stone-100'
+                            }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => handleToggle(action.id)}
+                            className="mt-0.5 w-5 h-5 rounded bg-stone-800 flex items-center justify-center"
+                          >
+                            <Check className="w-3 h-3 text-white" />
+                          </button>
+                          <span className="text-sm text-stone-500 line-through">
+                            {action.description}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {localActions.length === 0 && (
+                  <div className="text-center py-8 text-stone-400">
+                    <p className="text-sm">{t('focusMode.noActions')}</p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                {!hasPrepContent ? (
+                  <p className="text-sm text-stone-500 text-center py-10">{t('focusMode.noPrepData')}</p>
+                ) : (
+                  <div className="space-y-6">
+                    {prepTalkingPoints.length > 0 && (
+                      <div>
+                        <h3 className="text-xs font-medium text-stone-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                          <MessageSquare className="w-3.5 h-3.5" />
+                          {t('focusMode.talkingPointsSection')}
+                        </h3>
+                        <ul className="space-y-2">
+                          {prepTalkingPoints.map((tp) => (
+                            <li
+                              key={tp.id}
+                              className="flex items-start gap-2 p-2.5 bg-white rounded-lg border border-stone-200"
+                            >
+                              {onTogglePrepTalkingPoint ? (
+                                <Checkbox
+                                  checked={false}
+                                  onCheckedChange={() => handlePrepTalkingToggle(tp.id)}
+                                  className="mt-0.5"
+                                />
+                              ) : null}
+                              <span className="text-sm text-stone-800 flex-1">{tp.content}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {prepPersonNotes.length > 0 && (
+                      <div>
+                        <h3 className="text-xs font-medium text-stone-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                          <StickyNote className="w-3.5 h-3.5" />
+                          {t('focusMode.quickNotesSection')}
+                        </h3>
+                        <ul className="space-y-2">
+                          {prepPersonNotes.map((note) => (
+                            <li
+                              key={note.id}
+                              className="p-2.5 bg-white rounded-lg border border-stone-200 text-sm text-stone-700"
+                            >
+                              <p className="whitespace-pre-wrap break-words">{note.content}</p>
+                              <p className="text-xs text-stone-400 mt-1">
+                                {getRelativeTime(note.createdAt, i18n.language)}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {prepOtherMeetingActions.length > 0 && (
+                      <div>
+                        <h3 className="text-xs font-medium text-stone-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                          <CheckSquare className="w-3.5 h-3.5" />
+                          {t('focusMode.previousActions')}
+                        </h3>
+                        <ul className="space-y-2">
+                          {prepOtherMeetingActions.map((action) => (
+                            <li
+                              key={action.id}
+                              className="p-2.5 bg-white rounded-lg border border-stone-200 text-sm text-stone-700"
+                            >
+                              <p>{action.description}</p>
+                              {(action.meetingTitle || action.personName) && (
+                                <p className="text-xs text-stone-400 mt-1">
+                                  {[action.meetingTitle, action.personName].filter(Boolean).join(' · ')}
+                                </p>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
       <div className="px-6 py-2 border-t border-stone-200 bg-white">

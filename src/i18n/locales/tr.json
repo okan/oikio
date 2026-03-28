@@ -319,7 +319,13 @@
     "exitConfirmTitle": "Kaydedilmemiş değişiklikler var",
     "exitConfirmDesc": "Kaydetmeden çıkmak istediğinize emin misiniz?",
     "discardAndExit": "Kaydetmeden çık",
-    "saveAndExit": "Kaydet ve çık"
+    "saveAndExit": "Kaydet ve çık",
+    "prepTab": "Hazırlık",
+    "actionsTab": "Aksiyonlar",
+    "talkingPointsSection": "Konuşma konuları",
+    "quickNotesSection": "Hızlı notlar",
+    "previousActions": "Açık aksiyonlar (diğer toplantılar)",
+    "noPrepData": "Henüz hazırlık verisi yok. Bu kişi için hızlı not, konuşma konusu veya diğer toplantılardan açık aksiyon ekleyin."
   },
   "focus": {
     "title": "Bugün Senden Beklenenler",
