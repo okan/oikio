@@ -30,11 +30,18 @@ const RELATIVE_STRINGS: Record<string, Record<string, string>> = {
   en: { today: 'Today', tomorrow: 'Tomorrow', yesterday: 'Yesterday', inDays: 'in {n} days', daysAgo: '{n} days ago' },
 }
 
+function startOfLocalDay(d: Date): Date {
+  const t = new Date(d)
+  t.setHours(0, 0, 0, 0)
+  return t
+}
+
 export function getRelativeTime(date: string | Date, locale: string = 'tr'): string {
   const d = typeof date === 'string' ? new Date(date) : date
-  const now = new Date()
-  const diffInMs = d.getTime() - now.getTime()
-  const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24))
+  const dateDay = startOfLocalDay(d)
+  const todayDay = startOfLocalDay(new Date())
+  const diffInMs = dateDay.getTime() - todayDay.getTime()
+  const diffInDays = Math.round(diffInMs / (1000 * 60 * 60 * 24))
   const strings = RELATIVE_STRINGS[locale] || RELATIVE_STRINGS.en
   if (diffInDays === 0) return strings.today
   if (diffInDays === 1) return strings.tomorrow
@@ -45,9 +52,9 @@ export function getRelativeTime(date: string | Date, locale: string = 'tr'): str
 }
 export function isOverdue(date: string | Date): boolean {
   const d = typeof date === 'string' ? new Date(date) : date
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  return d < today
+  const dayStart = startOfLocalDay(d)
+  const todayStart = startOfLocalDay(new Date())
+  return dayStart < todayStart
 }
 export function toInputDate(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
