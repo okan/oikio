@@ -299,7 +299,11 @@ export function MeetingDetail() {
         <FocusMode
           meeting={meeting}
           actions={actions}
-          onClose={() => setFocusModeOpen(false)}
+          onClose={async () => {
+            setFocusModeOpen(false)
+            await refreshMeeting()
+            await refreshActions()
+          }}
           onSaveNotes={handleFocusModeSaveNotes}
           onAddAction={handleFocusModeAddAction}
           onToggleAction={handleFocusModeToggle}
