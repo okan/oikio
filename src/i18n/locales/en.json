@@ -294,7 +294,8 @@
     "new": "new",
     "exitConfirmTitle": "You have unsaved changes",
     "exitConfirmDesc": "Are you sure you want to exit without saving?",
-    "discardAndExit": "Discard and exit"
+    "discardAndExit": "Discard and exit",
+    "saveAndExit": "Save and exit"
   },
   "focus": {
     "title": "Today's Focus",

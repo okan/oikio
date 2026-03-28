@@ -293,7 +293,8 @@
     "new": "yeni",
     "exitConfirmTitle": "Kaydedilmemiş değişiklikler var",
     "exitConfirmDesc": "Kaydetmeden çıkmak istediğinize emin misiniz?",
-    "discardAndExit": "Kaydetmeden çık"
+    "discardAndExit": "Kaydetmeden çık",
+    "saveAndExit": "Kaydet ve çık"
   },
   "focus": {
     "title": "Bugün Senden Beklenenler",

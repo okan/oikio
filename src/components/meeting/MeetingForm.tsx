@@ -108,13 +108,7 @@ export function MeetingForm({
     if (!validate()) return
     setIsSubmitting(true)
     try {
-      let notesContent = notes.trim() || undefined
-      if (isCreating && templateId) {
-        const template = templates.find((t) => t.id.toString() === templateId)
-        if (template) {
-          notesContent = template.content
-        }
-      }
+      const notesContent = notes.trim() || undefined
       const result = await onSubmit({
         personId: parseInt(personId),
         templateId: templateId ? parseInt(templateId) : undefined,
@@ -235,7 +229,14 @@ export function MeetingForm({
             )}
           </div>
         )}
-        {isCreating ? (
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label={t('meetings.meetingTitle')}
+            placeholder={t('meetings.titlePlaceholder')}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            error={errors.title}
+          />
           <Select
             label={t('meetings.template')}
             placeholder={t('meetings.selectTemplate')}
@@ -243,32 +244,13 @@ export function MeetingForm({
             onValueChange={handleTemplateChange}
             options={templateOptions}
           />
-        ) : (
-          <>
-            <div className="grid grid-cols-2 gap-4">
-              <Input
-                label={t('meetings.meetingTitle')}
-                placeholder={t('meetings.titlePlaceholder')}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                error={errors.title}
-              />
-              <Select
-                label={t('meetings.template')}
-                placeholder={t('meetings.selectTemplate')}
-                value={templateId}
-                onValueChange={handleTemplateChange}
-                options={templateOptions}
-              />
-            </div>
-            <RichTextEditor
-              label={t('meetings.notes')}
-              placeholder={t('meetings.notesPlaceholder')}
-              value={notes}
-              onChange={setNotes}
-            />
-          </>
-        )}
+        </div>
+        <RichTextEditor
+          label={t('meetings.notes')}
+          placeholder={t('meetings.notesPlaceholder')}
+          value={notes}
+          onChange={setNotes}
+        />
         <div className="flex justify-end gap-3 pt-2">
           <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
             {t('common.cancel')}

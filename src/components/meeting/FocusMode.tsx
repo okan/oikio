@@ -40,18 +40,17 @@ export function FocusMode({
     try {
       await onSaveNotes(notes)
       setLastSavedNotes(notes)
-      if (!isAutoSave) {
-        for (const desc of pendingNewActions) {
-          await onAddAction(desc)
+      for (const desc of pendingNewActions) {
+        await onAddAction(desc)
+      }
+      for (const actionId of toggledActionIds) {
+        if (actionId > 0) {
+          await onToggleAction(actionId)
         }
-        for (const actionId of toggledActionIds) {
-          if (actionId > 0) {
-            await onToggleAction(actionId)
-          }
-        }
-        setPendingNewActions([])
-        setToggledActionIds(new Set())
-      } else {
+      }
+      setPendingNewActions([])
+      setToggledActionIds(new Set())
+      if (isAutoSave) {
         setShowAutoSaved(true)
         setTimeout(() => setShowAutoSaved(false), 2000)
       }
@@ -61,6 +60,10 @@ export function FocusMode({
       setIsSaving(false)
     }
   }, [notes, pendingNewActions, toggledActionIds, onSaveNotes, onAddAction, onToggleAction])
+  const handleSaveAndExit = useCallback(async () => {
+    await handleSave(false)
+    onClose()
+  }, [handleSave, onClose])
   useEffect(() => {
     if (notes !== lastSavedNotes) {
       if (autoSaveTimerRef.current) {
@@ -316,6 +319,9 @@ export function FocusMode({
           </Button>
           <Button variant="danger" onClick={onClose}>
             {t('focusMode.discardAndExit')}
+          </Button>
+          <Button onClick={handleSaveAndExit} isLoading={isSaving}>
+            {t('focusMode.saveAndExit')}
           </Button>
         </div>
       </Modal>

@@ -17,6 +17,7 @@ export function Meetings() {
   const { templates, fetchTemplates } = useTemplateStore()
   const [meetingFormOpen, setMeetingFormOpen] = useState(false)
   const [editingMeeting, setEditingMeeting] = useState<Meeting | null>(null)
+  const [defaultPersonId, setDefaultPersonId] = useState<number | undefined>(undefined)
   useEffect(() => {
     fetchMeetings()
     fetchPersons()
@@ -24,12 +25,17 @@ export function Meetings() {
   }, [fetchMeetings, fetchPersons, fetchTemplates])
   useEffect(() => {
     if (searchParams.get('new') === 'true') {
+      const personIdParam = searchParams.get('personId')
+      if (personIdParam) {
+        setDefaultPersonId(parseInt(personIdParam))
+      }
       setMeetingFormOpen(true)
       setSearchParams({})
     }
   }, [searchParams, setSearchParams])
   const handleAddMeeting = () => {
     setEditingMeeting(null)
+    setDefaultPersonId(undefined)
     setMeetingFormOpen(true)
   }
   const handleMeetingSubmit = async (data: Omit<Meeting, 'id' | 'createdAt'>) => {
@@ -61,6 +67,7 @@ export function Meetings() {
         meeting={editingMeeting}
         persons={persons}
         templates={templates}
+        defaultPersonId={defaultPersonId}
         onSubmit={handleMeetingSubmit}
       />
     </PageTransition>
