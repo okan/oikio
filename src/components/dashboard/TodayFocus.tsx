@@ -113,8 +113,9 @@ interface TodayFocusProps {
   persons: Person[]
   pendingActions: ActionItem[]
   upcomingMeetings: Meeting[]
+  isLoading?: boolean
 }
-export function TodayFocus({ persons, pendingActions, upcomingMeetings }: TodayFocusProps) {
+export function TodayFocus({ persons, pendingActions, upcomingMeetings, isLoading: externalLoading }: TodayFocusProps) {
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const { toggleComplete } = useActionStore()
@@ -141,7 +142,7 @@ export function TodayFocus({ persons, pendingActions, upcomingMeetings }: TodayF
       return next
     })
   }
-  const isLoading = persons.length === 0 && pendingActions.length === 0 && upcomingMeetings.length === 0
+  const isLoading = externalLoading ?? (persons.length === 0 && pendingActions.length === 0 && upcomingMeetings.length === 0)
   if (isLoading) {
     return (
       <div className="card p-5">

@@ -8,8 +8,9 @@ import { calculateOverallAnalytics } from '@/lib/analytics'
 interface WelcomeHeroProps {
   meetings: Meeting[]
   actions: ActionItem[]
+  isLoading?: boolean
 }
-export function WelcomeHero({ meetings, actions }: WelcomeHeroProps) {
+export function WelcomeHero({ meetings, actions, isLoading: externalLoading }: WelcomeHeroProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const analytics = useMemo(
@@ -18,7 +19,7 @@ export function WelcomeHero({ meetings, actions }: WelcomeHeroProps) {
       : null,
     [meetings, actions]
   )
-  const isLoading = meetings.length === 0 && actions.length === 0 && !analytics
+  const isLoading = externalLoading ?? (meetings.length === 0 && actions.length === 0 && !analytics)
   const TrendIcon = analytics
     ? analytics.meetingsTrend > 0
       ? TrendingUp

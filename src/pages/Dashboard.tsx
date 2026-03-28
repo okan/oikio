@@ -9,9 +9,10 @@ import { PageTransition } from '@/components/ui'
 import { usePersonStore, useMeetingStore, useActionStore } from '@/store'
 export function Dashboard() {
   const location = useLocation()
-  const { persons, fetchPersons } = usePersonStore()
-  const { meetings, fetchMeetings, upcomingMeetings, fetchUpcomingMeetings } = useMeetingStore()
-  const { actions, fetchActions, pendingActions, fetchPendingActions } = useActionStore()
+  const { persons, isLoading: personsLoading, fetchPersons } = usePersonStore()
+  const { meetings, isLoading: meetingsLoading, fetchMeetings, upcomingMeetings, fetchUpcomingMeetings } = useMeetingStore()
+  const { actions, isLoading: actionsLoading, fetchActions, pendingActions, fetchPendingActions } = useActionStore()
+  const isLoading = personsLoading || meetingsLoading || actionsLoading
   useEffect(() => {
     fetchPersons()
     fetchMeetings()
@@ -22,13 +23,14 @@ export function Dashboard() {
   return (
     <PageTransition key={location.key} className="grid grid-cols-3 gap-4 auto-rows-min">
       <div className="col-span-3">
-        <WelcomeHero meetings={meetings} actions={actions} />
+        <WelcomeHero meetings={meetings} actions={actions} isLoading={isLoading} />
       </div>
       <div className="col-span-2">
         <TodayFocus
           persons={persons}
           pendingActions={pendingActions}
           upcomingMeetings={upcomingMeetings}
+          isLoading={isLoading}
         />
       </div>
       <div className="col-span-1">
