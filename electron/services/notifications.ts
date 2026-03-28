@@ -1,4 +1,6 @@
 import { Notification, app } from 'electron'
+import path from 'path'
+import fs from 'fs'
 import { DatabaseService } from './database/index'
 export interface NotificationSettings {
   enabled: boolean
@@ -50,11 +52,30 @@ export class NotificationService {
     this.db = db
     this.settings = this.loadSettings()
   }
+  private get settingsPath(): string {
+    return path.join(app.getPath('userData'), 'oikio-notification-settings.json')
+  }
   private loadSettings(): NotificationSettings {
-    return defaultSettings
+    try {
+      if (fs.existsSync(this.settingsPath)) {
+        const content = fs.readFileSync(this.settingsPath, 'utf-8')
+        return { ...defaultSettings, ...JSON.parse(content) }
+      }
+    } catch {
+      /* ignore parse errors, use defaults */
+    }
+    return { ...defaultSettings }
+  }
+  private saveSettings(): void {
+    try {
+      fs.writeFileSync(this.settingsPath, JSON.stringify(this.settings, null, 2), 'utf-8')
+    } catch (error) {
+      console.error('Error saving notification settings:', error)
+    }
   }
   updateSettings(newSettings: Partial<NotificationSettings>): void {
     this.settings = { ...this.settings, ...newSettings }
+    this.saveSettings()
   }
   getSettings(): NotificationSettings {
     return { ...this.settings }
