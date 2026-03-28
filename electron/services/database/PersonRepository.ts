@@ -9,9 +9,15 @@ export class PersonRepository {
     return this.store.persons.find((p) => p.id === id) || null
   }
   create(data: Omit<Person, 'id' | 'createdAt'>): Person {
+    const payload = { ...data }
+    for (const key of ['title', 'goals', 'notes'] as const) {
+      if (payload[key] === '') {
+        delete payload[key]
+      }
+    }
     const person: Person = {
       id: this.store.getNextId('persons'),
-      ...data,
+      ...payload,
       createdAt: this.store.getCurrentTimestamp(),
     }
     this.store.persons.push(person)
@@ -21,7 +27,13 @@ export class PersonRepository {
   update(id: number, data: Partial<Person>): Person {
     const index = this.store.persons.findIndex((p) => p.id === id)
     if (index === -1) throw new Error('Person not found')
-    this.store.persons[index] = { ...this.store.persons[index], ...data }
+    const merged = { ...this.store.persons[index], ...data }
+    for (const key of ['title', 'goals', 'notes'] as const) {
+      if (merged[key] === '') {
+        delete merged[key]
+      }
+    }
+    this.store.persons[index] = merged
     this.store.save()
     return this.store.persons[index]
   }

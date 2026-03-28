@@ -4,8 +4,9 @@ export interface Person {
   id: number
   name: string
   role: PersonRole
-  email?: string
   notes?: string
+  title?: string
+  goals?: string
   meetingFrequencyGoal?: MeetingFrequency
   lastMeetingDate?: string
   skippedUntil?: string

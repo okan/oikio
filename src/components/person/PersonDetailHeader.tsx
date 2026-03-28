@@ -63,6 +63,9 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, onSkip, futur
           />
         </div>
         <h1 className="text-lg font-semibold text-stone-900 truncate">{person.name}</h1>
+        {person.title?.trim() && (
+          <p className="text-sm text-stone-500 mt-0.5 truncate w-full">{person.title}</p>
+        )}
         <Badge variant={person.role === 'manager' ? 'primary' : 'default'} size="sm" className="mt-1">
           {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
         </Badge>
@@ -73,6 +76,19 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, onSkip, futur
           </Badge>
         )}
       </div>
+
+      {person.goals?.trim() && (
+        <div className="mb-4 p-3 bg-stone-50 rounded-lg text-left w-full">
+          <p className="text-xs font-medium text-stone-500 mb-1.5">{t('persons.goals')}</p>
+          <p className="text-sm text-stone-700 whitespace-pre-wrap">{person.goals}</p>
+        </div>
+      )}
+      {person.notes?.trim() && (
+        <div className="mb-4 p-3 bg-stone-50 rounded-lg text-left w-full">
+          <p className="text-xs font-medium text-stone-500 mb-1.5">{t('persons.notes')}</p>
+          <p className="text-sm text-stone-700 whitespace-pre-wrap">{person.notes}</p>
+        </div>
+      )}
 
       <div className="space-y-3 mb-4">
         <div className="flex items-center justify-between py-2 px-3 bg-stone-50 rounded-lg">

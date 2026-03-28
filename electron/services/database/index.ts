@@ -126,8 +126,9 @@ export class DatabaseService {
     const persons = this.store.persons.filter(
       (p) =>
         (p.name || '').toLowerCase().includes(lowerQuery) ||
-        p.email?.toLowerCase().includes(lowerQuery) ||
-        p.notes?.toLowerCase().includes(lowerQuery)
+        p.notes?.toLowerCase().includes(lowerQuery) ||
+        (p.title || '').toLowerCase().includes(lowerQuery) ||
+        (p.goals || '').toLowerCase().includes(lowerQuery)
     )
     const meetings = this.store.meetings
       .filter(

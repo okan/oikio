@@ -8,7 +8,7 @@ oikio is a **local-first** Electron desktop application for managing 1-1 meeting
 
 | Entity | Description |
 |---|---|
-| **Person** | A contact with a role (`manager` \| `teammate`), optional meeting frequency goal, and relationship health tracking |
+| **Person** | A contact with a role (`manager` \| `teammate`), optional job `title`, `goals`, `notes`, meeting frequency goal, and relationship health tracking |
 | **Meeting** | A meeting linked to a Person, containing notes (TipTap rich text), talking points, and optional template |
 | **ActionItem** | A task linked to a Meeting, with tags, due date, and ownership (`me` \| `other`) |
 | **Template** | Reusable meeting note templates with categories (`manager` \| `teammate` \| `general`). Default templates are seeded per locale |
@@ -199,6 +199,9 @@ Person (1) ──→ (N) Meeting (1) ──→ (N) ActionItem
 
 ### Key Fields
 
+- **Person.title** — optional job title (UI label: "Title")
+- **Person.goals** — optional career / development notes
+- **Person.notes** — optional personal reminders
 - **Person.meetingFrequencyGoal** — `weekly | biweekly | monthly | quarterly` — drives relationship health scoring
 - **Person.lastMeetingDate** — denormalized, auto-updated when meetings are created/updated/deleted
 - **Person.skippedUntil** — set when a MeetingSkip is created
