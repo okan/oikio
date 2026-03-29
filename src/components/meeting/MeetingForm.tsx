@@ -12,6 +12,8 @@ interface MeetingFormProps {
   persons: Person[]
   templates: Template[]
   defaultPersonId?: number
+  defaultDate?: string
+  defaultTemplateId?: number
   onSubmit: (data: Omit<Meeting, 'id' | 'createdAt'>) => Promise<Meeting | void>
 }
 interface LastMeetingContext {
@@ -26,6 +28,8 @@ export function MeetingForm({
   persons,
   templates,
   defaultPersonId,
+  defaultDate,
+  defaultTemplateId,
   onSubmit,
 }: MeetingFormProps) {
   const { t } = useTranslation()
@@ -93,14 +97,20 @@ export function MeetingForm({
       setNotes(meeting.notes || '')
     } else {
       setPersonId(defaultPersonId?.toString() || '')
-      setTemplateId('')
-      setDate(toInputDate(new Date()))
+      setDate(defaultDate ?? toInputDate(new Date()))
       setTitle('')
-      setNotes('')
+      if (defaultTemplateId != null) {
+        const tpl = templates.find((x) => x.id === defaultTemplateId)
+        setTemplateId(defaultTemplateId.toString())
+        setNotes(tpl?.content ?? '')
+      } else {
+        setTemplateId('')
+        setNotes('')
+      }
     }
     setErrors({})
     setShowPrepSection(true)
-  }, [meeting, open, defaultPersonId])
+  }, [meeting, open, defaultPersonId, defaultDate, defaultTemplateId, templates])
   const handleTemplateChange = (value: string) => {
     setTemplateId(value)
     if (value) {

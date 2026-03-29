@@ -382,7 +382,8 @@
     "noMeetings": "Henüz toplantı yok",
     "noMeetingsDesc": "Bu kişiyle ilk toplantınızı oluşturun",
     "lastMet": "Son görüşme",
-    "nextDue": "Sonraki hedef"
+    "nextDue": "Sonraki hedef",
+    "scheduleNext": "Sonrakini planla"
   },
   "skip": {
     "button": "Pas Geç",

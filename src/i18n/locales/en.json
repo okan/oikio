@@ -383,7 +383,8 @@
     "noMeetings": "No meetings yet",
     "noMeetingsDesc": "Create your first meeting with this person",
     "lastMet": "Last met",
-    "nextDue": "Next due"
+    "nextDue": "Next due",
+    "scheduleNext": "Schedule next"
   },
   "skip": {
     "button": "Skip",

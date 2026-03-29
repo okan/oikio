@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Calendar, Target, Edit2, CalendarPlus, CalendarCheck, SkipForward } from 'lucide-react'
+import { Calendar, Target, Edit2, CalendarPlus, CalendarCheck, SkipForward, CalendarClock } from 'lucide-react'
 import type { Person, Meeting } from '@/types'
 import { Avatar, Badge, Button } from '@/components/ui'
 import {
@@ -15,10 +15,18 @@ interface PersonDetailHeaderProps {
   person: Person
   onEdit: () => void
   onNewMeeting: () => void
+  onScheduleNext: () => void
   onSkip: () => void
   futureMeeting?: Meeting
 }
-export function PersonDetailHeader({ person, onEdit, onNewMeeting, onSkip, futureMeeting }: PersonDetailHeaderProps) {
+export function PersonDetailHeader({
+  person,
+  onEdit,
+  onNewMeeting,
+  onScheduleNext,
+  onSkip,
+  futureMeeting,
+}: PersonDetailHeaderProps) {
   const { t } = useTranslation()
   const health = calculateRelationshipHealth(person)
   const daysSince = getDaysSinceLastMeeting(person.lastMeetingDate)
@@ -153,6 +161,10 @@ export function PersonDetailHeader({ person, onEdit, onNewMeeting, onSkip, futur
           {t('meetings.newMeeting')}
         </Button>
       </div>
+      <Button variant="secondary" size="sm" onClick={onScheduleNext} className="w-full mt-2">
+        <CalendarClock className="w-3.5 h-3.5 mr-1.5" />
+        {t('personDetail.scheduleNext')}
+      </Button>
       {!health.isSkipped && health.isOverdue && (
         <Button variant="secondary" size="sm" onClick={onSkip} className="w-full mt-2">
           <SkipForward className="w-3.5 h-3.5 mr-1.5" />

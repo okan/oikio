@@ -6,6 +6,7 @@ import { ArrowLeft, Trash2 } from 'lucide-react'
 import { usePersonStore, useMeetingStore, useTemplateStore } from '@/store'
 import { actionService, meetingService, meetingSkipService } from '@/services'
 import type { Person, Meeting, ActionItem, MeetingSkip } from '@/types'
+import { calculateNextMeetingDate, pickDefaultTemplateForPerson } from '@/lib/meetingSchedule'
 import { Button, ConfirmModal, PageTransition } from '@/components/ui'
 import { MeetingForm } from '@/components/meeting'
 import {
@@ -30,6 +31,10 @@ export function PersonDetail() {
   const [meetingFormOpen, setMeetingFormOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editingMeeting, setEditingMeeting] = useState<Meeting | null>(null)
+  const [meetingFormDefaults, setMeetingFormDefaults] = useState<{
+    date?: string
+    templateId?: number
+  }>({})
   const [futureMeetings, setFutureMeetings] = useState<Meeting[]>([])
   const [skipHistory, setSkipHistory] = useState<MeetingSkip[]>([])
   const loadActions = useCallback(async () => {
@@ -100,6 +105,17 @@ export function PersonDetail() {
   }
   const handleNewMeeting = () => {
     setEditingMeeting(null)
+    setMeetingFormDefaults({})
+    setMeetingFormOpen(true)
+  }
+  const handleScheduleNext = () => {
+    setEditingMeeting(null)
+    const date = calculateNextMeetingDate(person)
+    const templateId = pickDefaultTemplateForPerson(person, templates)
+    setMeetingFormDefaults({
+      date,
+      ...(templateId != null ? { templateId } : {}),
+    })
     setMeetingFormOpen(true)
   }
   const handleSkip = async () => {
@@ -131,6 +147,7 @@ export function PersonDetail() {
             person={person}
             onEdit={() => setEditFormOpen(true)}
             onNewMeeting={handleNewMeeting}
+            onScheduleNext={handleScheduleNext}
             onSkip={handleSkip}
             futureMeeting={futureMeetings[0]}
           />
@@ -174,11 +191,16 @@ export function PersonDetail() {
       />
       <MeetingForm
         open={meetingFormOpen}
-        onOpenChange={setMeetingFormOpen}
+        onOpenChange={(open) => {
+          setMeetingFormOpen(open)
+          if (!open) setMeetingFormDefaults({})
+        }}
         meeting={editingMeeting}
         persons={persons}
         templates={templates}
         defaultPersonId={person.id}
+        defaultDate={meetingFormDefaults.date}
+        defaultTemplateId={meetingFormDefaults.templateId}
         onSubmit={handleMeetingSubmit}
       />
       <ConfirmModal

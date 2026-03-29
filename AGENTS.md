@@ -315,6 +315,11 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 - Dashboard card groups meetings by local calendar day for the ISO-style week (Monday–Sunday) containing “today”
 - `parseMeetingLocalDate` parses `YYYY-MM-DD` as local midnight to avoid UTC day shifts
 
+### Next meeting suggestion (`src/lib/meetingSchedule.ts`)
+- `calculateNextMeetingDate(person)` — steps forward from `lastMeetingDate` by `meetingFrequencyGoal` interval (default 7 days if no goal) until on/after today; respects active `skippedUntil` (first allowed day after skip)
+- `pickDefaultTemplateForPerson` — first template matching person `role` or `general`, same ordering as `MeetingForm`
+- Person detail **Schedule next** opens `MeetingForm` with `defaultDate` / `defaultTemplateId`
+
 ### Tag Colors (`src/lib/tagColors.ts`)
 - Deterministic color assignment: hash-based mapping from tag name to a palette of 16 TailwindCSS color sets
 - Ensures the same tag always renders the same color across the app
