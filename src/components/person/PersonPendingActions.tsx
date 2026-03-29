@@ -75,8 +75,8 @@ export function PersonPendingActions({ actions, onActionToggle }: PersonPendingA
               </span>
             )}
             {action.dueDate && isOverdue(action.dueDate) && (
-              <Badge variant="error" size="sm">
-                {t('focus.overdue')}
+              <Badge variant="danger" size="sm">
+                {t('common.overdue')}
               </Badge>
             )}
           </motion.div>

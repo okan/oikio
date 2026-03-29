@@ -5,7 +5,6 @@ import {
   X,
   Save,
   Plus,
-  Check,
   Clock,
   User,
   AlertCircle,
@@ -318,13 +317,12 @@ export function FocusMode({
                         className={`flex items-start gap-3 p-3 bg-white rounded-lg border ${action.id < 0 ? 'border-amber-300 border-dashed' : 'border-stone-200'
                           }`}
                       >
-                        <button
-                          type="button"
-                          onClick={() => handleToggle(action.id)}
-                          className="mt-0.5 w-5 h-5 rounded border-2 border-stone-300 hover:border-stone-500 transition-colors flex items-center justify-center"
-                        >
-                          {action.completed && <Check className="w-3 h-3 text-stone-700" />}
-                        </button>
+                        <div className="mt-0.5">
+                          <Checkbox
+                            checked={action.completed}
+                            onCheckedChange={() => handleToggle(action.id)}
+                          />
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start gap-2">
                             <span className="text-sm text-stone-700 flex-1">{action.description}</span>
@@ -363,13 +361,12 @@ export function FocusMode({
                           className={`flex items-start gap-3 p-3 rounded-lg opacity-60 ${action.id < 0 ? 'bg-amber-50 border border-amber-200 border-dashed' : 'bg-stone-100'
                             }`}
                         >
-                          <button
-                            type="button"
-                            onClick={() => handleToggle(action.id)}
-                            className="mt-0.5 w-5 h-5 rounded bg-stone-800 flex items-center justify-center"
-                          >
-                            <Check className="w-3 h-3 text-white" />
-                          </button>
+                          <div className="mt-0.5">
+                            <Checkbox
+                              checked={true}
+                              onCheckedChange={() => handleToggle(action.id)}
+                            />
+                          </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-sm text-stone-500 line-through block">
                               {action.description}

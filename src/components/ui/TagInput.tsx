@@ -9,6 +9,7 @@ interface TagInputProps {
     suggestions?: string[]
     placeholder?: string
     className?: string
+    disabled?: boolean
 }
 
 export function TagInput({
@@ -17,6 +18,7 @@ export function TagInput({
     suggestions = [],
     placeholder,
     className,
+    disabled,
 }: TagInputProps) {
     const { t } = useTranslation()
     const [inputValue, setInputValue] = useState('')
@@ -95,9 +97,10 @@ export function TagInput({
             <div
                 className={cn(
                     'input flex flex-wrap items-center gap-1.5 min-h-[42px] py-1.5 px-2 cursor-text',
-                    'focus-within:ring-2 focus-within:ring-stone-500/20 focus-within:border-stone-400'
+                    'focus-within:ring-2 focus-within:ring-stone-500/20 focus-within:border-stone-400',
+                    disabled && 'opacity-50 cursor-not-allowed'
                 )}
-                onClick={() => inputRef.current?.focus()}
+                onClick={() => !disabled && inputRef.current?.focus()}
             >
                 {value.map((tag) => (
                     <Tag key={tag} name={tag} onRemove={() => removeTag(tag)} />
@@ -115,6 +118,7 @@ export function TagInput({
                     onKeyDown={handleKeyDown}
                     placeholder={value.length === 0 ? (placeholder || t('tags.placeholder')) : ''}
                     className="flex-1 min-w-[100px] bg-transparent border-none outline-none text-sm placeholder:text-stone-400"
+                    disabled={disabled}
                 />
             </div>
 

@@ -17,19 +17,20 @@ export function Layout() {
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
         return
       }
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      const key = e.key.toLowerCase()
+      if ((e.metaKey || e.ctrlKey) && key === 'k') {
         e.preventDefault()
         setSearchOpen(true)
       }
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'a' || e.key === 'A')) {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && key === 'a') {
         e.preventDefault()
         setQuickActionOpen(true)
       }
-      if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === 'n') {
+      if ((e.metaKey || e.ctrlKey) && !e.shiftKey && key === 'n') {
         e.preventDefault()
         navigate('/meetings?new=true')
       }
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'n' || e.key === 'N')) {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && key === 'n') {
         e.preventDefault()
         navigate('/persons?new=true')
       }

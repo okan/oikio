@@ -1,5 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
+import i18next from 'i18next'
 import { Button } from './Button'
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -39,15 +40,15 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               <AlertTriangle className="w-8 h-8 text-red-600" />
             </div>
             <h2 className="text-lg font-semibold text-stone-900 mb-2">
-              Bir şeyler yanlış gitti
+              {i18next.t('errorBoundary.title')}
             </h2>
             <p className="text-sm text-stone-500 mb-4">
-              Beklenmeyen bir hata oluştu. Lütfen sayfayı yenileyin veya tekrar deneyin.
+              {i18next.t('errorBoundary.description')}
             </p>
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mb-4 text-left">
                 <summary className="text-xs text-stone-400 cursor-pointer hover:text-stone-600">
-                  Hata detayları
+                  {i18next.t('errorBoundary.details')}
                 </summary>
                 <pre className="mt-2 p-3 bg-stone-100 rounded-lg text-xs text-red-600 overflow-auto max-h-40">
                   {this.state.error.message}
@@ -56,9 +57,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 </pre>
               </details>
             )}
-            <Button onClick={this.handleRetry} variant="primary">
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Tekrar Dene
+            <Button onClick={this.handleRetry} variant="primary" leftIcon={<RefreshCw className="w-4 h-4" />}>
+              {i18next.t('errorBoundary.retry')}
             </Button>
           </div>
         </div>

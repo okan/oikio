@@ -52,12 +52,14 @@ export function TemplateCard({ template, onEdit, onDelete, index = 0 }: Template
         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={onEdit}
+            aria-label={t('common.edit')}
             className="p-2 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-50 transition-colors"
           >
             <Edit2 className="w-4 h-4" />
           </button>
           <button
             onClick={onDelete}
+            aria-label={t('common.delete')}
             className="p-2 rounded-lg text-stone-400 hover:text-red-500 hover:bg-red-50 transition-colors"
           >
             <Trash2 className="w-4 h-4" />

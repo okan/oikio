@@ -68,3 +68,6 @@ export const talkingPointService = {
     window.api.talkingPoints.toggleComplete(id),
   delete: (id: number): Promise<void> => window.api.talkingPoints.delete(id),
 }
+export const settingsService = {
+  setLanguage: (lang: string): Promise<void> => window.api.setLanguage(lang),
+}

@@ -236,37 +236,38 @@ export function TodayFocus({ persons, pendingActions, upcomingMeetings, isLoadin
               className={`rounded-xl border p-3 transition-colors ${getItemBgColor(item.type)}`}
             >
               {item.type === 'overdue_person' && item.data.person && (
-                <div
-                  className="flex items-center gap-3 cursor-pointer"
-                  onClick={() => navigate(`/persons/${item.data.person!.id}`)}
-                >
-                  <Avatar name={item.data.person.name} size="sm" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-stone-900 text-sm truncate">
-                      {item.data.person.name}
-                    </p>
-                    <p className="text-xs text-red-600">
-                      {item.data.person!.lastMeetingDate
-                        ? t('focus.overdueBy', { days: item.data.daysOverdue })
-                        : t('persons.neverMet')}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-1.5">
+                <div className="flex w-full items-center gap-3">
+                  <button
+                    type="button"
+                    className="flex min-w-0 flex-1 items-center gap-3 cursor-pointer text-left"
+                    onClick={() => navigate(`/persons/${item.data.person!.id}`)}
+                  >
+                    <Avatar name={item.data.person.name} size="sm" />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-stone-900 text-sm truncate">
+                        {item.data.person.name}
+                      </p>
+                      <p className="text-xs text-red-600">
+                        {item.data.person!.lastMeetingDate
+                          ? t('focus.overdueBy', { days: item.data.daysOverdue })
+                          : t('persons.neverMet')}
+                      </p>
+                    </div>
+                  </button>
+                  <div className="flex shrink-0 items-center gap-1.5">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleSkipPerson(item.data.person!.id)
-                      }}
+                      type="button"
+                      onClick={() => handleSkipPerson(item.data.person!.id)}
                       className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
                     >
                       <SkipForward className="w-3 h-3" />
                       {t('skip.button')}
                     </button>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation()
+                      type="button"
+                      onClick={() =>
                         navigate(`/meetings?new=true&personId=${item.data.person!.id}`)
-                      }}
+                      }
                       className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors shadow-sm"
                     >
                       <CalendarPlus className="w-3 h-3" />
@@ -307,15 +308,16 @@ export function TodayFocus({ persons, pendingActions, upcomingMeetings, isLoadin
                       </div>
                     </div>
                     {item.type === 'urgent_action' && (
-                      <Badge variant="error" size="sm">
-                        {t('focus.overdue')}
+                      <Badge variant="danger" size="sm">
+                        {t('common.overdue')}
                       </Badge>
                     )}
                   </div>
                 )}
               {item.type === 'upcoming_meeting' && item.data.meeting && (
-                <div
-                  className="flex items-center gap-3 cursor-pointer"
+                <button
+                  type="button"
+                  className="flex w-full items-center gap-3 cursor-pointer text-left"
                   onClick={() => navigate(`/meetings/${item.data.meeting!.id}`)}
                 >
                   <Avatar name={item.data.meeting.personName || ''} size="sm" />
@@ -331,7 +333,7 @@ export function TodayFocus({ persons, pendingActions, upcomingMeetings, isLoadin
                     </Badge>
                     <ChevronRight className="w-4 h-4 text-stone-400" />
                   </div>
-                </div>
+                </button>
               )}
             </motion.div>
           ))}

@@ -1,5 +1,8 @@
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { ChevronDown, Check } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import { useId } from 'react'
 import { cn } from '@/lib/utils'
 interface SelectOption {
   value: string
@@ -16,19 +19,23 @@ interface SelectProps {
 }
 export function Select({
   label,
-  placeholder = 'Seçiniz',
+  placeholder,
   value,
   onValueChange,
   options,
   error,
   disabled,
 }: SelectProps) {
+  const { t } = useTranslation()
+  const autoId = useId()
+  const triggerId = `select-${autoId}`
   const validOptions = options.filter((opt) => opt.value !== '')
   return (
     <div className="space-y-1.5">
-      {label && <label className="label">{label}</label>}
+      {label && <label htmlFor={triggerId} className="label">{label}</label>}
       <SelectPrimitive.Root value={value || undefined} onValueChange={onValueChange} disabled={disabled}>
         <SelectPrimitive.Trigger
+          id={triggerId}
           className={cn(
             'input flex items-center justify-between gap-2',
             error && 'input-error',
@@ -36,7 +43,7 @@ export function Select({
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
-          <SelectPrimitive.Value placeholder={placeholder} />
+          <SelectPrimitive.Value placeholder={placeholder || t('common.select')} />
           <SelectPrimitive.Icon>
             <ChevronDown className="w-4 h-4 text-stone-400 flex-shrink-0" />
           </SelectPrimitive.Icon>
@@ -50,7 +57,7 @@ export function Select({
           >
             <SelectPrimitive.Viewport className="p-1">
               {validOptions.length === 0 ? (
-                <div className="px-3 py-2 text-sm text-stone-500">Seçenek yok</div>
+                <div className="px-3 py-2 text-sm text-stone-500">{t('common.noOptions')}</div>
               ) : (
                 validOptions.map((option) => (
                   <SelectPrimitive.Item
@@ -74,7 +81,15 @@ export function Select({
           </SelectPrimitive.Content>
         </SelectPrimitive.Portal>
       </SelectPrimitive.Root>
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && (
+        <motion.p
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-sm text-red-500"
+        >
+          {error}
+        </motion.p>
+      )}
     </div>
   )
 }

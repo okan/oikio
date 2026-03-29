@@ -19,8 +19,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <motion.div
           animate={{
             boxShadow: isFocused
-              ? '0 0 0 3px rgba(14, 165, 233, 0.15)'
-              : '0 0 0 0px rgba(14, 165, 233, 0)',
+              ? '0 0 0 3px rgba(120, 113, 108, 0.15)'
+              : '0 0 0 0px rgba(120, 113, 108, 0)',
           }}
           transition={{ duration: 0.15 }}
           className="rounded-lg"

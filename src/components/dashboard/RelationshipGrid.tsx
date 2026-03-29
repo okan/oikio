@@ -82,13 +82,14 @@ export function RelationshipGrid({ persons: rawPersons, futureMeetings }: Relati
         {persons.slice(0, 4).map((person, index) => {
           const health = calculateRelationshipHealth(person)
           return (
-            <motion.div
+            <motion.button
+              type="button"
               key={person.id}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => navigate(`/persons/${person.id}`)}
-              className="flex items-center gap-2.5 p-2 -mx-2 rounded-lg hover:bg-stone-50 cursor-pointer transition-colors"
+              className="flex w-full items-center gap-2.5 p-2 -mx-2 rounded-lg hover:bg-stone-50 cursor-pointer transition-colors text-left"
             >
               <div className="relative">
                 <Avatar name={person.name} size="sm" />
@@ -121,7 +122,7 @@ export function RelationshipGrid({ persons: rawPersons, futureMeetings }: Relati
                   </span>
                 )
               })()}
-            </motion.div>
+            </motion.button>
           )
         })}
       </div>

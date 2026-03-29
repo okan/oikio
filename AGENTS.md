@@ -178,7 +178,7 @@ Every store follows the same shape:
 - Error handling: catch → set error message → re-throw for callers
 
 ### Service Layer
-`src/services/api.ts` contains thin wrappers (`personService`, `meetingService`, `actionService`, `templateService`, `meetingSkipService`, `personNoteService`, `talkingPointService`) that call `window.api.*`. Stores never call `window.api` directly.
+`src/services/api.ts` contains thin wrappers (`personService`, `meetingService`, `actionService`, `templateService`, `meetingSkipService`, `personNoteService`, `talkingPointService`, `settingsService`) that call `window.api.*`. **All** renderer-side code must go through the service layer — never call `window.api` directly from pages or components.
 
 ### Repository Pattern (Electron)
 `electron/services/database/` uses a clean separation:
@@ -194,6 +194,17 @@ All page components are lazy-loaded via `React.lazy()` with a shared `<Suspense>
 
 ### CSS Utility
 `cn()` from `src/lib/utils.ts` combines `clsx` + `tailwind-merge` for conditional class composition.
+
+### UI Primitive Conventions
+- All form fields use `space-y-1.5` between label and input
+- Focus ring: `ring-stone-500/20` (standardized across Input, TagInput, RTE, Checkbox, globals.css)
+- Focus glow (Framer Motion): `rgba(120, 113, 108, 0.15)` stone color, `0.15s` duration (Input + Textarea)
+- Error text: `text-red-500` with `motion.p` fade animation on all form fields
+- Badge variant for red/destructive: `danger` (matching Button); `error` was removed
+- `disabled` prop supported on Input, Textarea, Select, TagInput, RichTextEditor, Checkbox
+- Modal cancel = `variant="secondary"`, inline cancel = `variant="ghost"`
+- Form footer spacing: `pt-4` consistently
+- **Destructive action confirmation**: all delete/reset/overwrite operations use `ConfirmModal` (never `window.confirm`, never sonner toast with action buttons). Pattern: `deleteModalOpen` + `deletingItemId` state → open modal → `onConfirm` handler performs the action
 
 ---
 
@@ -254,9 +265,11 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 ## Internationalization (i18n)
 
 - Two locales: `en.json` and `tr.json` in `src/i18n/locales/`
-- Language preference stored in `localStorage` under key `oikio-language`
+- Language preference stored in `localStorage` under key `oikio-language` **and** persisted to `oikio-settings.json` in Electron `userData` via `app:setLanguage` IPC (so the main process notification service uses the user's choice rather than OS locale)
 - Fallback language: `en`
-- Access translations via `useTranslation()` hook from `react-i18next`
+- Access translations via `useTranslation()` hook from `react-i18next`; for class components (`ErrorBoundary`) use `i18next.t()` directly
+- All UI primitives (Modal, Select, RichTextEditor, ErrorBoundary) use `t()` — no hardcoded locale strings
+- i18n key naming: camelCase (no snake_case), ASCII ellipsis (`...` not `…`)
 - Date/time formatting uses locale-aware `Intl.DateTimeFormat` (see `src/lib/utils.ts`)
 - `getRelativeTime` and `isOverdue` in `src/lib/utils.ts` compare dates by local calendar day (midnight-normalized)
 - Default templates in `electron/services/database.ts` are seeded based on system locale
@@ -290,6 +303,8 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 - Meeting reminders: any upcoming meeting within `reminderHoursBefore` (range-based); each meeting reminded at most once per occurrence (`oikio-notification-state.json` tracks sent meeting IDs, pruned after the meeting day)
 - Action summary: at most once per local calendar day when there are overdue or due-today items
 - Uses Electron's native `Notification` API
+- Locale: reads `language` field from `oikio-settings.json` (written by `app:setLanguage` IPC when user changes language in Settings); falls back to `app.getLocale()` if unset
+- Settings file: `oikio-settings.json` stores both notification settings and language preference
 
 ### Focus Mode (`src/components/meeting/FocusMode.tsx`)
 - Full-screen notes + sidebar with **Actions** and **Prep** tabs

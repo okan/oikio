@@ -33,10 +33,10 @@ export function TemplateForm({ open, onOpenChange, template, onSubmit }: Templat
   const validate = () => {
     const newErrors: Record<string, string> = {}
     if (!name.trim()) {
-      newErrors.name = t('templates.templateName') + ' required'
+      newErrors.name = t('common.required', { field: t('templates.templateName') })
     }
     if (!content.trim()) {
-      newErrors.content = t('templates.content') + ' required'
+      newErrors.content = t('common.required', { field: t('templates.content') })
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0

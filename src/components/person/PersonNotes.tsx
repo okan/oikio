@@ -5,7 +5,7 @@ import { StickyNote, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import type { PersonNote } from '@/types'
 import { personNoteService } from '@/services'
-import { Button, Input } from '@/components/ui'
+import { Button, Input, ConfirmModal } from '@/components/ui'
 import { getRelativeTime, cn } from '@/lib/utils'
 
 interface PersonNotesProps {
@@ -18,6 +18,8 @@ export function PersonNotes({ personId }: PersonNotesProps) {
   const [draft, setDraft] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [deletingNoteId, setDeletingNoteId] = useState<number | null>(null)
 
   const load = useCallback(async () => {
     setIsLoading(true)
@@ -51,13 +53,22 @@ export function PersonNotes({ personId }: PersonNotesProps) {
     }
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDeleteClick = (id: number) => {
+    setDeletingNoteId(id)
+    setDeleteModalOpen(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (deletingNoteId === null) return
     try {
-      await personNoteService.delete(id)
-      setNotes((prev) => prev.filter((n) => n.id !== id))
+      await personNoteService.delete(deletingNoteId)
+      setNotes((prev) => prev.filter((n) => n.id !== deletingNoteId))
       toast.success(t('personNotes.deleted'))
     } catch (error) {
       console.error(error)
+    } finally {
+      setDeleteModalOpen(false)
+      setDeletingNoteId(null)
     }
   }
 
@@ -122,7 +133,7 @@ export function PersonNotes({ personId }: PersonNotesProps) {
                 </div>
                 <button
                   type="button"
-                  onClick={() => handleDelete(note.id)}
+                  onClick={() => handleDeleteClick(note.id)}
                   className={cn(
                     'shrink-0 p-1.5 rounded-md text-stone-400 hover:text-red-600 hover:bg-red-50',
                     'opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity'
@@ -136,6 +147,16 @@ export function PersonNotes({ personId }: PersonNotesProps) {
           </ul>
         )}
       </div>
+      <ConfirmModal
+        open={deleteModalOpen}
+        onOpenChange={(open) => {
+          setDeleteModalOpen(open)
+          if (!open) setDeletingNoteId(null)
+        }}
+        title={t('common.delete')}
+        description={t('personNotes.deleteConfirm')}
+        onConfirm={handleDeleteConfirm}
+      />
     </motion.div>
   )
 }

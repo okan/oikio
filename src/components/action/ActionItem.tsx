@@ -105,13 +105,14 @@ export const ActionItem = memo(function ActionItem({
         />
       </div>
       {isActionOverdue && (
-        <Badge variant="error">{t('dashboard.overdue')}</Badge>
+        <Badge variant="danger">{t('common.overdue')}</Badge>
       )}
       <button
         onClick={(e) => {
           e.stopPropagation()
           onDelete()
         }}
+        aria-label={t('common.delete')}
         className="p-1 rounded text-stone-400 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
       >
         <Trash2 className="w-4 h-4" />

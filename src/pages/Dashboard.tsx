@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 import {
   WelcomeHero,
   WeeklySchedule,
@@ -9,7 +8,6 @@ import {
 import { PageTransition } from '@/components/ui'
 import { usePersonStore, useMeetingStore, useActionStore } from '@/store'
 export function Dashboard() {
-  const location = useLocation()
   const { persons, isLoading: personsLoading, fetchPersons } = usePersonStore()
   const { meetings, isLoading: meetingsLoading, fetchMeetings, upcomingMeetings, fetchUpcomingMeetings } = useMeetingStore()
   const { actions, isLoading: actionsLoading, fetchActions, pendingActions, fetchPendingActions } = useActionStore()
@@ -20,9 +18,9 @@ export function Dashboard() {
     fetchActions()
     fetchPendingActions()
     fetchUpcomingMeetings(365)
-  }, [location.key, fetchPersons, fetchMeetings, fetchActions, fetchPendingActions, fetchUpcomingMeetings])
+  }, [fetchPersons, fetchMeetings, fetchActions, fetchPendingActions, fetchUpcomingMeetings])
   return (
-    <PageTransition key={location.key} className="grid grid-cols-3 gap-4 auto-rows-min">
+    <PageTransition className="grid grid-cols-3 gap-4 auto-rows-min">
       <div className="col-span-3">
         <WelcomeHero meetings={meetings} actions={actions} isLoading={isLoading} />
       </div>

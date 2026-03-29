@@ -31,7 +31,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
         className="h-7"
         style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
       />
-      <div className="grid grid-cols-3 items-center px-6 h-11">
+        <div className="grid grid-cols-3 items-center px-8 h-11">
         <div
           className="flex items-center"
           style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
@@ -60,7 +60,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
                     : 'text-stone-500 hover:text-stone-700 hover:bg-stone-50'
                 )}
               >
-                <item.icon className="w-[15px] h-[15px]" />
+                <item.icon className="w-4 h-4" />
                 <span>{item.label}</span>
               </NavLink>
             )

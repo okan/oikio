@@ -163,7 +163,7 @@ export function PersonForm({ open, onOpenChange, person, onSubmit }: PersonFormP
             {t('common.cancel')}
           </Button>
           <Button type="submit" isLoading={isSubmitting}>
-            {person ? t('common.save') : t('common.add')}
+            {person ? t('common.save') : t('common.create')}
           </Button>
         </div>
       </form>

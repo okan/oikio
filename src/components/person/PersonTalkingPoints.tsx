@@ -5,7 +5,7 @@ import { MessageSquare, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import type { TalkingPoint } from '@/types'
 import { talkingPointService } from '@/services'
-import { Button, Input, Checkbox } from '@/components/ui'
+import { Button, Input, Checkbox, ConfirmModal } from '@/components/ui'
 import { cn } from '@/lib/utils'
 
 interface PersonTalkingPointsProps {
@@ -18,6 +18,8 @@ export function PersonTalkingPoints({ personId }: PersonTalkingPointsProps) {
   const [draft, setDraft] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [deletingPointId, setDeletingPointId] = useState<number | null>(null)
 
   const load = useCallback(async () => {
     setIsLoading(true)
@@ -75,13 +77,22 @@ export function PersonTalkingPoints({ personId }: PersonTalkingPointsProps) {
     }
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDeleteClick = (id: number) => {
+    setDeletingPointId(id)
+    setDeleteModalOpen(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (deletingPointId === null) return
     try {
-      await talkingPointService.delete(id)
-      setItems((prev) => prev.filter((tp) => tp.id !== id))
+      await talkingPointService.delete(deletingPointId)
+      setItems((prev) => prev.filter((tp) => tp.id !== deletingPointId))
       toast.success(t('talkingPoints.deleted'))
     } catch (error) {
       console.error(error)
+    } finally {
+      setDeleteModalOpen(false)
+      setDeletingPointId(null)
     }
   }
 
@@ -150,7 +161,7 @@ export function PersonTalkingPoints({ personId }: PersonTalkingPointsProps) {
                     </p>
                     <button
                       type="button"
-                      onClick={() => handleDelete(tp.id)}
+                      onClick={() => handleDeleteClick(tp.id)}
                       className={cn(
                         'shrink-0 p-1.5 rounded-md text-stone-400 hover:text-red-600 hover:bg-red-50',
                         'opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity'
@@ -182,7 +193,7 @@ export function PersonTalkingPoints({ personId }: PersonTalkingPointsProps) {
                       </p>
                       <button
                         type="button"
-                        onClick={() => handleDelete(tp.id)}
+                        onClick={() => handleDeleteClick(tp.id)}
                         className={cn(
                           'shrink-0 p-1.5 rounded-md text-stone-400 hover:text-red-600 hover:bg-red-50',
                           'opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity'
@@ -199,6 +210,16 @@ export function PersonTalkingPoints({ personId }: PersonTalkingPointsProps) {
           </div>
         )}
       </div>
+      <ConfirmModal
+        open={deleteModalOpen}
+        onOpenChange={(open) => {
+          setDeleteModalOpen(open)
+          if (!open) setDeletingPointId(null)
+        }}
+        title={t('common.delete')}
+        description={t('talkingPoints.deleteConfirm')}
+        onConfirm={handleDeleteConfirm}
+      />
     </motion.div>
   )
 }

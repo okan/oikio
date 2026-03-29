@@ -126,12 +126,12 @@ export function PersonDetail() {
     await fetchPersons()
   }
   return (
-    <PageTransition className="space-y-5">
+    <PageTransition className="space-y-6">
       <button
         onClick={() => navigate('/persons')}
-        className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-700 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-700 transition-colors"
       >
-        <ArrowLeft className="w-3.5 h-3.5" />
+        <ArrowLeft className="w-4 h-4" />
         <span>{t('nav.persons')}</span>
       </button>
 

@@ -1,4 +1,5 @@
 import { X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { getTagColor } from '@/lib/tagColors'
 
@@ -9,6 +10,7 @@ interface TagProps {
 }
 
 export function Tag({ name, onRemove, className }: TagProps) {
+    const { t } = useTranslation()
     const colors = getTagColor(name)
 
     return (
@@ -25,6 +27,7 @@ export function Tag({ name, onRemove, className }: TagProps) {
             {onRemove && (
                 <button
                     type="button"
+                    aria-label={t('common.delete')}
                     onClick={(e) => {
                         e.stopPropagation()
                         onRemove()

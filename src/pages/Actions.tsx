@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { useActionStore } from '@/store'
 import { Header } from '@/components/layout'
 import { ActionList } from '@/components/action'
 import { cn, isOverdue } from '@/lib/utils'
 import { Search, Layers, AlertCircle, Hourglass, User, ExternalLink } from 'lucide-react'
-import { Input, PageTransition } from '@/components/ui'
+import { Input, ConfirmModal, PageTransition } from '@/components/ui'
 export function Actions() {
   const { t } = useTranslation()
   const {
@@ -22,6 +21,8 @@ export function Actions() {
   const [activeTab, setActiveTab] = useState('pending')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [deletingActionId, setDeletingActionId] = useState<number | null>(null)
 
   useEffect(() => {
     fetchActions()
@@ -42,16 +43,16 @@ export function Actions() {
   }
 
   const handleDelete = (id: number) => {
-    toast(t('actions.deleteConfirm'), {
-      action: {
-        label: t('common.delete'),
-        onClick: () => deleteAction(id),
-      },
-      cancel: {
-        label: t('common.cancel'),
-        onClick: () => {},
-      },
-    })
+    setDeletingActionId(id)
+    setDeleteModalOpen(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (deletingActionId !== null) {
+      await deleteAction(deletingActionId)
+      setDeleteModalOpen(false)
+      setDeletingActionId(null)
+    }
   }
 
   const filteredActions = actions.filter((a) => {
@@ -82,7 +83,7 @@ export function Actions() {
 
         <div className="card p-4 flex items-center justify-between">
           <div>
-            <p className="text-xs font-medium text-stone-500">{t('dashboard.overdue')}</p>
+            <p className="text-xs font-medium text-stone-500">{t('common.overdue')}</p>
             <p className="mt-1 text-2xl font-bold text-red-600">{stats.overdue}</p>
           </div>
           <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
@@ -221,6 +222,16 @@ export function Actions() {
           )}
         </div>
       </div>
+      <ConfirmModal
+        open={deleteModalOpen}
+        onOpenChange={(open) => {
+          setDeleteModalOpen(open)
+          if (!open) setDeletingActionId(null)
+        }}
+        title={t('common.delete')}
+        description={t('actions.deleteConfirm')}
+        onConfirm={handleDeleteConfirm}
+      />
     </PageTransition>
   )
 }

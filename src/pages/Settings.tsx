@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { Download, Upload, Database, Info, Globe, Bell, AlertTriangle } from 'lucide-react'
 import { Header } from '@/components/layout'
 import { Button, Modal, Select, Checkbox, PageTransition } from '@/components/ui'
+import { settingsService } from '@/services'
 import type { NotificationSettings } from '@/types'
 export function Settings() {
   const { t, i18n } = useTranslation()
@@ -32,6 +33,7 @@ export function Settings() {
   const handleLanguageChange = (lang: string) => {
     i18n.changeLanguage(lang)
     localStorage.setItem('oikio-language', lang)
+    settingsService.setLanguage(lang).catch(() => {})
   }
   const handleExport = async () => {
     setIsExporting(true)
@@ -94,8 +96,8 @@ export function Settings() {
       localStorage.setItem('resetSuccess', 'true')
       setResetModalOpen(false)
       window.location.reload()
-    } catch (error) {
-      console.error('Reset error:', error)
+    } catch {
+      toast.error(t('common.error'))
     }
   }
   const languageOptions = [
@@ -108,8 +110,8 @@ export function Settings() {
     setNotificationSettings(newSettings)
     try {
       await window.api.notifications.updateSettings({ [key]: value })
-    } catch (error) {
-      console.error('Error updating notification settings:', error)
+    } catch {
+      toast.error(t('common.error'))
     }
   }
   const handleTestNotification = async () => {

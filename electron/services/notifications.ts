@@ -7,6 +7,7 @@ export interface NotificationSettings {
   meetingReminders: boolean
   actionReminders: boolean
   reminderHoursBefore: number
+  language?: string
 }
 const defaultSettings: NotificationSettings = {
   enabled: true,
@@ -40,9 +41,9 @@ const i18nStrings: Record<string, Record<string, string>> = {
     testBody: 'Notifications are working correctly!',
   },
 }
-function getLocaleStrings(): Record<string, string> {
-  const locale = app.getLocale().startsWith('tr') ? 'tr' : 'en'
-  return i18nStrings[locale]
+function resolveLocale(saved?: string): string {
+  if (saved === 'tr' || saved === 'en') return saved
+  return app.getLocale().startsWith('tr') ? 'tr' : 'en'
 }
 type NotificationSentState = {
   meetingReminderIds?: string[]
@@ -65,7 +66,7 @@ export class NotificationService {
     this.loadSentState()
   }
   private get settingsPath(): string {
-    return path.join(app.getPath('userData'), 'oikio-notification-settings.json')
+    return path.join(app.getPath('userData'), 'oikio-settings.json')
   }
   private get sentStatePath(): string {
     return path.join(app.getPath('userData'), 'oikio-notification-state.json')
@@ -120,8 +121,7 @@ export class NotificationService {
   private loadSettings(): NotificationSettings {
     try {
       if (fs.existsSync(this.settingsPath)) {
-        const content = fs.readFileSync(this.settingsPath, 'utf-8')
-        return { ...defaultSettings, ...JSON.parse(content) }
+        return { ...defaultSettings, ...JSON.parse(fs.readFileSync(this.settingsPath, 'utf-8')) }
       }
     } catch {
       /* ignore parse errors, use defaults */
@@ -141,6 +141,9 @@ export class NotificationService {
   }
   getSettings(): NotificationSettings {
     return { ...this.settings }
+  }
+  private getLocaleStrings(): Record<string, string> {
+    return i18nStrings[resolveLocale(this.settings.language)]
   }
   start(): void {
     if (this.checkInterval) return
@@ -224,7 +227,7 @@ export class NotificationService {
   }
   sendMeetingReminder(title: string, personName: string, hoursUntil: number): void {
     if (!Notification.isSupported()) return
-    const s = getLocaleStrings()
+    const s = this.getLocaleStrings()
     const timeText = hoursUntil === 1 ? s.hour1 : s.hours.replace('{n}', String(hoursUntil))
     const body = s.meetingBody
       .replace('{person}', personName)
@@ -239,7 +242,7 @@ export class NotificationService {
   }
   sendActionSummaryReminder(overdue: number, dueToday: number, dueTomorrow: number): void {
     if (!Notification.isSupported()) return
-    const s = getLocaleStrings()
+    const s = this.getLocaleStrings()
     const parts: string[] = []
     if (overdue > 0) {
       parts.push(s.overdueActions.replace('{n}', String(overdue)))
@@ -263,7 +266,7 @@ export class NotificationService {
       console.log('Notifications not supported on this platform')
       return
     }
-    const s = getLocaleStrings()
+    const s = this.getLocaleStrings()
     const notification = new Notification({
       title: s.testTitle,
       body: s.testBody,

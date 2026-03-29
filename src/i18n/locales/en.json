@@ -16,7 +16,11 @@
     "dismiss": "Dismiss",
     "more": "more",
     "error": "An error occurred",
-    "required": "{{field}} is required"
+    "required": "{{field}} is required",
+    "close": "Close",
+    "select": "Select",
+    "noOptions": "No options",
+    "overdue": "Overdue"
   },
   "nav": {
     "home": "Home",
@@ -49,7 +53,7 @@
     "newMeeting": "New Meeting",
     "createMeetingNote": "Create a meeting note",
     "viewAll": "View all",
-    "actions_count": "{{count}} actions",
+    "actionsCount": "{{count}} actions",
     "overdue": "Overdue",
     "needAttention": "Need Attention",
     "needAttentionDesc": "People you should catch up with",
@@ -100,19 +104,21 @@
   },
   "personNotes": {
     "title": "Quick notes",
-    "placeholder": "Add a note…",
+    "placeholder": "Add a note...",
     "empty": "No notes yet. Jot down observations between meetings.",
     "added": "Note added",
-    "deleted": "Note deleted"
+    "deleted": "Note deleted",
+    "deleteConfirm": "Are you sure you want to delete this note?"
   },
   "talkingPoints": {
     "title": "Talking points",
-    "placeholder": "Add a topic…",
+    "placeholder": "Add a topic...",
     "empty": "No topics yet. Add things to discuss in your next meeting.",
     "added": "Topic added",
     "completed": "Completed",
     "openCount": "{{count}} open",
-    "deleted": "Topic removed"
+    "deleted": "Topic removed",
+    "deleteConfirm": "Are you sure you want to delete this topic?"
   },
   "meetings": {
     "title": "Meetings",
@@ -148,6 +154,7 @@
     "searchPlaceholder": "Search meetings...",
     "allPersons": "All people",
     "noResults": "No meetings match your search",
+    "templateOverwriteTitle": "Replace notes?",
     "templateOverwriteConfirm": "You have existing notes. Selecting this template will replace them. Continue?",
     "moodLabel": "How did it go?",
     "moodClear": "Clear rating",
@@ -167,7 +174,7 @@
     "noCompletedDesc": "No completed action items yet.",
     "noActionsDesc": "No action items added yet.",
     "addAction": "Add New Action",
-    "description_label": "Description",
+    "descriptionLabel": "Description",
     "descriptionPlaceholder": "Action description...",
     "dueDate": "Due Date",
     "assignedTo": "Who is responsible?",
@@ -175,7 +182,7 @@
     "other": "Other party",
     "deleteConfirm": "Are you sure you want to delete this action?",
     "progressUpdates": "Progress updates",
-    "addProgressPlaceholder": "Add an update…",
+    "addProgressPlaceholder": "Add an update...",
     "addProgress": "Add update",
     "progressExpand": "Show progress updates",
     "progressCollapse": "Hide progress updates"
@@ -207,7 +214,11 @@
     "categoryManager": "Manager",
     "categoryTeammate": "Teammate",
     "categoryGeneral": "General",
-    "recommended": "Recommended"
+    "recommended": "Recommended",
+    "created": "Template created",
+    "updated": "Template updated",
+    "deleted": "Template deleted",
+    "deleteConfirm": "Are you sure you want to delete this template? This action cannot be undone."
   },
   "settings": {
     "title": "Settings",
@@ -392,6 +403,7 @@
     "from": "From",
     "to": "To",
     "download": "Download .md",
+    "invalidRange": "Start date must be before end date.",
     "success": "Report downloaded",
     "reportHeading": "Report",
     "period": "Period",
@@ -409,6 +421,20 @@
     "generated": "Generated",
     "actionDone": "Done",
     "actionOpen": "Open"
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please refresh or try again.",
+    "details": "Error details",
+    "retry": "Retry"
+  },
+  "editor": {
+    "placeholder": "Start writing...",
+    "heading": "Heading",
+    "bold": "Bold",
+    "italic": "Italic",
+    "bulletList": "Bullet list",
+    "orderedList": "Numbered list"
   },
   "skip": {
     "button": "Skip",

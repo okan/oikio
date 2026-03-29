@@ -161,6 +161,7 @@ export interface ElectronAPI {
     getPath: () => Promise<string>
   }
   search: (query: string) => Promise<SearchResults>
+  setLanguage: (lang: string) => Promise<void>
   notifications: {
     getSettings: () => Promise<NotificationSettings>
     updateSettings: (settings: Partial<NotificationSettings>) => Promise<NotificationSettings>

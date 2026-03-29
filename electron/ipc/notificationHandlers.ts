@@ -11,4 +11,7 @@ export function registerNotificationHandlers(notificationService: NotificationSe
   ipcMain.handle('notifications:test', () => {
     return notificationService.sendTestNotification()
   })
+  ipcMain.handle('app:setLanguage', (_, lang: string) => {
+    notificationService.updateSettings({ language: lang })
+  })
 }

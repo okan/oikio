@@ -102,4 +102,5 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.invoke('notifications:updateSettings', settings),
     test: () => ipcRenderer.invoke('notifications:test'),
   },
+  setLanguage: (lang: string): Promise<void> => ipcRenderer.invoke('app:setLanguage', lang),
 })

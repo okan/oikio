@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion'
 import { CheckSquare } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { ActionItem as ActionItemType } from '@/types'
 import { EmptyState } from '@/components/ui'
 import { ActionItem } from './ActionItem'
@@ -17,16 +18,17 @@ export function ActionList({
   onToggle,
   onDelete,
   showMeeting = false,
-  emptyTitle = 'No actions',
-  emptyDescription = 'No action items added yet.',
+  emptyTitle,
+  emptyDescription,
   onAddProgressNote,
 }: ActionListProps) {
+  const { t } = useTranslation()
   if (actions.length === 0) {
     return (
       <EmptyState
         icon={<CheckSquare className="w-12 h-12" />}
-        title={emptyTitle}
-        description={emptyDescription}
+        title={emptyTitle || t('actions.noActions')}
+        description={emptyDescription || t('actions.noActionsDesc')}
       />
     )
   }

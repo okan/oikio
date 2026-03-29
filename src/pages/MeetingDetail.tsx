@@ -29,6 +29,8 @@ export function MeetingDetail() {
   const [actions, setActions] = useState<ActionItem[]>([])
   const [editFormOpen, setEditFormOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [deleteActionModalOpen, setDeleteActionModalOpen] = useState(false)
+  const [deletingActionId, setDeletingActionId] = useState<number | null>(null)
   const [nextTopics, setNextTopics] = useState('')
   const [isEditingNextTopics, setIsEditingNextTopics] = useState(false)
   const [isSavingNextTopics, setIsSavingNextTopics] = useState(false)
@@ -101,17 +103,15 @@ export function MeetingDetail() {
   }, [focusModeOpen, meeting, loadFocusPrep])
   if (isLoading || !meeting) {
     return (
-      <div className="max-w-5xl mx-auto px-8 py-6">
-        <div className="animate-pulse space-y-5">
-          <div className="h-4 bg-stone-100 rounded w-16" />
-          <div className="grid grid-cols-3 gap-4">
-            <div className="col-span-2 space-y-4">
-              <div className="h-48 bg-stone-100 rounded-xl" />
-              <div className="h-32 bg-stone-100 rounded-xl" />
-            </div>
-            <div className="col-span-1">
-              <div className="h-64 bg-stone-100 rounded-xl" />
-            </div>
+      <div className="animate-pulse space-y-6">
+        <div className="h-4 bg-stone-100 rounded w-16" />
+        <div className="grid grid-cols-3 gap-4">
+          <div className="col-span-2 space-y-4">
+            <div className="h-48 bg-stone-100 rounded-xl" />
+            <div className="h-32 bg-stone-100 rounded-xl" />
+          </div>
+          <div className="col-span-1">
+            <div className="h-64 bg-stone-100 rounded-xl" />
           </div>
         </div>
       </div>
@@ -138,9 +138,16 @@ export function MeetingDetail() {
     await toggleComplete(actionId)
     await refreshActions()
   }
-  const handleDeleteAction = async (actionId: number) => {
-    await deleteAction(actionId)
+  const handleDeleteActionClick = (actionId: number) => {
+    setDeletingActionId(actionId)
+    setDeleteActionModalOpen(true)
+  }
+  const handleDeleteActionConfirm = async () => {
+    if (deletingActionId === null) return
+    await deleteAction(deletingActionId)
     await refreshActions()
+    setDeleteActionModalOpen(false)
+    setDeletingActionId(null)
   }
   const refreshMeeting = async () => {
     if (!id) return
@@ -157,8 +164,8 @@ export function MeetingDetail() {
       await updateMeeting(meeting.id, { nextTopics: nextTopics.trim() || undefined })
       await refreshMeeting()
       setIsEditingNextTopics(false)
-    } catch (error) {
-      console.error('Error saving next topics:', error)
+    } catch {
+      toast.error(t('common.error'))
     } finally {
       setIsSavingNextTopics(false)
     }
@@ -202,13 +209,13 @@ export function MeetingDetail() {
     return updated
   }
   return (
-    <PageTransition className="space-y-5">
+    <PageTransition className="space-y-6">
       <button
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-700 transition-colors"
+        onClick={() => navigate('/meetings')}
+        className="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-700 transition-colors"
       >
-        <ArrowLeft className="w-3.5 h-3.5" />
-        <span>{t('common.back')}</span>
+        <ArrowLeft className="w-4 h-4" />
+        <span>{t('nav.meetings')}</span>
       </button>
 
       <div className="grid grid-cols-3 gap-4">
@@ -234,7 +241,7 @@ export function MeetingDetail() {
               <ActionList
                 actions={actions}
                 onToggle={handleToggle}
-                onDelete={handleDeleteAction}
+                onDelete={handleDeleteActionClick}
                 onAddProgressNote={handleAddProgressNote}
                 emptyTitle={t('actions.noActions')}
                 emptyDescription={t('actions.noActionsDesc')}
@@ -357,6 +364,16 @@ export function MeetingDetail() {
         title={t('meetings.deleteMeeting')}
         description={t('meetings.deleteConfirm')}
         onConfirm={handleDelete}
+      />
+      <ConfirmModal
+        open={deleteActionModalOpen}
+        onOpenChange={(open) => {
+          setDeleteActionModalOpen(open)
+          if (!open) setDeletingActionId(null)
+        }}
+        title={t('common.delete')}
+        description={t('actions.deleteConfirm')}
+        onConfirm={handleDeleteActionConfirm}
       />
       {focusModeOpen && (
         <FocusMode

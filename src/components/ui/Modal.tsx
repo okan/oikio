@@ -1,5 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 interface ModalProps {
   open: boolean
@@ -10,6 +11,7 @@ interface ModalProps {
   className?: string
 }
 export function Modal({ open, onOpenChange, title, description, children, className }: ModalProps) {
+  const { t } = useTranslation()
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -39,7 +41,7 @@ export function Modal({ open, onOpenChange, title, description, children, classN
             <Dialog.Close asChild>
               <button
                 className="p-1.5 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors"
-                aria-label="Kapat"
+                aria-label={t('common.close')}
               >
                 <X className="w-4 h-4" />
               </button>

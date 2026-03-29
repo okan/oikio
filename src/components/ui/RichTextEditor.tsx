@@ -2,6 +2,8 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Bold, Italic, List, ListOrdered, Heading2 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { useEffect } from 'react'
 interface RichTextEditorProps {
@@ -10,6 +12,7 @@ interface RichTextEditorProps {
   value: string
   onChange: (value: string) => void
   error?: string
+  disabled?: boolean
 }
 function ToolbarButton({
   onClick,
@@ -27,8 +30,10 @@ function ToolbarButton({
       type="button"
       onClick={onClick}
       title={title}
+      aria-label={title}
+      aria-pressed={isActive}
       className={cn(
-        'p-1.5 rounded transition-colors',
+        'p-1.5 rounded-lg transition-colors',
         isActive
           ? 'bg-stone-100 text-stone-700'
           : 'text-stone-500 hover:bg-stone-100 hover:text-stone-700'
@@ -40,11 +45,13 @@ function ToolbarButton({
 }
 export function RichTextEditor({
   label,
-  placeholder = 'Yazmaya başlayın...',
+  placeholder,
   value,
   onChange,
   error,
+  disabled,
 }: RichTextEditorProps) {
+  const { t } = useTranslation()
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -53,7 +60,7 @@ export function RichTextEditor({
         },
       }),
       Placeholder.configure({
-        placeholder,
+        placeholder: placeholder || t('editor.placeholder'),
       }),
     ],
     content: value,
@@ -62,6 +69,7 @@ export function RichTextEditor({
       const markdown = htmlToMarkdown(html)
       onChange(markdown)
     },
+    editable: !disabled,
     editorProps: {
       attributes: {
         class: 'prose prose-sm prose-slate max-w-none focus:outline-none min-h-[150px] px-3 py-2',
@@ -84,28 +92,29 @@ export function RichTextEditor({
           'rounded-lg border border-stone-300 bg-white overflow-hidden',
           'focus-within:border-stone-400 focus-within:ring-2 focus-within:ring-stone-500/20',
           'transition-all duration-150',
-          error && 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/20'
+          error && 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/20',
+          disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
         <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-stone-200 bg-stone-50">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             isActive={editor.isActive('heading', { level: 2 })}
-            title="Başlık"
+            title={t('editor.heading')}
           >
             <Heading2 className="w-4 h-4" />
           </ToolbarButton>
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBold().run()}
             isActive={editor.isActive('bold')}
-            title="Kalın"
+            title={t('editor.bold')}
           >
             <Bold className="w-4 h-4" />
           </ToolbarButton>
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleItalic().run()}
             isActive={editor.isActive('italic')}
-            title="İtalik"
+            title={t('editor.italic')}
           >
             <Italic className="w-4 h-4" />
           </ToolbarButton>
@@ -113,21 +122,29 @@ export function RichTextEditor({
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             isActive={editor.isActive('bulletList')}
-            title="Madde listesi"
+            title={t('editor.bulletList')}
           >
             <List className="w-4 h-4" />
           </ToolbarButton>
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
             isActive={editor.isActive('orderedList')}
-            title="Numaralı liste"
+            title={t('editor.orderedList')}
           >
             <ListOrdered className="w-4 h-4" />
           </ToolbarButton>
         </div>
         <EditorContent editor={editor} />
       </div>
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && (
+        <motion.p
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-sm text-red-500"
+        >
+          {error}
+        </motion.p>
+      )}
     </div>
   )
 }

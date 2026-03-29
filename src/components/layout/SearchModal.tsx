@@ -102,6 +102,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
           className="fixed left-1/2 top-[15%] -translate-x-1/2 z-50 w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none border border-stone-200 data-[state=open]:animate-search-in data-[state=closed]:animate-search-out"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
+          <Dialog.Title className="sr-only">{t('common.search')}</Dialog.Title>
           <div className="flex items-center gap-3 px-4 py-3 border-b border-stone-100">
             <Search className="w-5 h-5 text-stone-400" />
             <input

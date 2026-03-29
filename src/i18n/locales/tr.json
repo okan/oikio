@@ -16,7 +16,11 @@
     "dismiss": "Kapat",
     "more": "daha",
     "error": "Bir hata oluştu",
-    "required": "{{field}} zorunludur"
+    "required": "{{field}} zorunludur",
+    "close": "Kapat",
+    "select": "Seçiniz",
+    "noOptions": "Seçenek yok",
+    "overdue": "Gecikmiş"
   },
   "nav": {
     "home": "Giriş",
@@ -49,7 +53,7 @@
     "newMeeting": "Yeni Toplantı",
     "createMeetingNote": "Toplantı notu oluştur",
     "viewAll": "Tümünü gör",
-    "actions_count": "{{count}} aksiyon",
+    "actionsCount": "{{count}} aksiyon",
     "overdue": "Gecikmiş",
     "needAttention": "İlgilenilmesi Gerekenler",
     "needAttentionDesc": "Toplantı zamanı gelen kişiler",
@@ -100,19 +104,21 @@
   },
   "personNotes": {
     "title": "Hızlı notlar",
-    "placeholder": "Not ekle…",
+    "placeholder": "Not ekle...",
     "empty": "Henüz not yok. Toplantılar arasında gözlemlerinizi buraya yazın.",
     "added": "Not eklendi",
-    "deleted": "Not silindi"
+    "deleted": "Not silindi",
+    "deleteConfirm": "Bu notu silmek istediğinize emin misiniz?"
   },
   "talkingPoints": {
     "title": "Konuşma konuları",
-    "placeholder": "Konu ekle…",
+    "placeholder": "Konu ekle...",
     "empty": "Henüz konu yok. Bir sonraki toplantıda konuşmak istediğiniz şeyleri ekleyin.",
     "added": "Konu eklendi",
     "completed": "Tamamlandı",
     "openCount": "{{count}} açık",
-    "deleted": "Konu silindi"
+    "deleted": "Konu silindi",
+    "deleteConfirm": "Bu konuyu silmek istediğinize emin misiniz?"
   },
   "meetings": {
     "title": "Toplantılar",
@@ -148,6 +154,7 @@
     "searchPlaceholder": "Toplantı ara...",
     "allPersons": "Tüm kişiler",
     "noResults": "Aramanızla eşleşen toplantı yok",
+    "templateOverwriteTitle": "Notlar değiştirilsin mi?",
     "templateOverwriteConfirm": "Mevcut notlarınız var. Şablon seçimi bunların üzerine yazacak. Devam etmek istiyor musunuz?",
     "moodLabel": "Nasıl geçti?",
     "moodClear": "Puanı kaldır",
@@ -167,7 +174,7 @@
     "noCompletedDesc": "Henüz tamamlanmış aksiyon bulunmuyor.",
     "noActionsDesc": "Henüz aksiyon maddesi eklenmemiş.",
     "addAction": "Yeni Aksiyon Ekle",
-    "description_label": "Açıklama",
+    "descriptionLabel": "Açıklama",
     "descriptionPlaceholder": "Aksiyon açıklaması...",
     "dueDate": "Son Tarih",
     "assignedTo": "Sorumlu Kim?",
@@ -175,7 +182,7 @@
     "other": "Karşı Tarafta",
     "deleteConfirm": "Bu aksiyonu silmek istediğinize emin misiniz?",
     "progressUpdates": "İlerleme notları",
-    "addProgressPlaceholder": "Güncelleme ekle…",
+    "addProgressPlaceholder": "Güncelleme ekle...",
     "addProgress": "Güncelleme ekle",
     "progressExpand": "İlerleme notlarını göster",
     "progressCollapse": "İlerleme notlarını gizle"
@@ -207,7 +214,11 @@
     "categoryManager": "Yönetici",
     "categoryTeammate": "Takım Arkadaşı",
     "categoryGeneral": "Genel",
-    "recommended": "Önerilen"
+    "recommended": "Önerilen",
+    "created": "Şablon oluşturuldu",
+    "updated": "Şablon güncellendi",
+    "deleted": "Şablon silindi",
+    "deleteConfirm": "Bu şablonu silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
   },
   "settings": {
     "title": "Ayarlar",
@@ -223,6 +234,7 @@
     "exportSuccess": "Veriler başarıyla dışa aktarıldı!",
     "importSuccess": "Veriler başarıyla içe aktarıldı!",
     "importError": "İçe aktarma başarısız. Lütfen dosya formatını kontrol edin.",
+    "importWarning": "Bu işlem mevcut verilerinizi yedek dosyası ile değiştirecektir. Bu işlem geri alınamaz. Devam etmek istediğinize emin misiniz?",
     "dangerZone": "Tehlikeli Bölge",
     "dangerZoneDesc": "Dikkatli olun, bu işlemler geri alınamaz.",
     "resetData": "Fabrika Ayarlarına Dön",
@@ -391,6 +403,7 @@
     "from": "Başlangıç",
     "to": "Bitiş",
     "download": ".md indir",
+    "invalidRange": "Başlangıç tarihi bitiş tarihinden önce olmalıdır.",
     "success": "Rapor indirildi",
     "reportHeading": "Rapor",
     "period": "Dönem",
@@ -408,6 +421,20 @@
     "generated": "Oluşturulma",
     "actionDone": "Tamamlandı",
     "actionOpen": "Açık"
+  },
+  "errorBoundary": {
+    "title": "Bir şeyler yanlış gitti",
+    "description": "Beklenmeyen bir hata oluştu. Lütfen sayfayı yenileyin veya tekrar deneyin.",
+    "details": "Hata detayları",
+    "retry": "Tekrar Dene"
+  },
+  "editor": {
+    "placeholder": "Yazmaya başlayın...",
+    "heading": "Başlık",
+    "bold": "Kalın",
+    "italic": "İtalik",
+    "bulletList": "Madde listesi",
+    "orderedList": "Numaralı liste"
   },
   "skip": {
     "button": "Pas Geç",

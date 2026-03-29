@@ -88,8 +88,8 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
-        <Dialog.Content className="fixed left-1/2 top-[15%] -translate-x-1/2 z-50 w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none data-[state=open]:animate-search-in data-[state=closed]:animate-search-out">
+        <Dialog.Overlay className="fixed inset-0 bg-stone-900/40 z-50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
+        <Dialog.Content className="fixed left-1/2 top-[15%] -translate-x-1/2 z-50 w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden focus:outline-none border border-stone-200 data-[state=open]:animate-search-in data-[state=closed]:animate-search-out">
           <div className="flex items-center justify-between px-4 py-3 border-b border-stone-200 bg-white">
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-stone-600" />
@@ -215,10 +215,10 @@ export function QuickActionModal({ open, onOpenChange }: QuickActionModalProps) 
           <div className="px-4 py-2 border-t border-stone-200 bg-stone-50">
             <div className="flex items-center gap-4 text-xs text-stone-500">
               <span>
-                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded">⌘⇧A</kbd> {t('quickAction.shortcut')}
+                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded text-stone-600">⌘⇧A</kbd> {t('quickAction.shortcut')}
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded">Esc</kbd> {t('search.close')}
+                <kbd className="px-1.5 py-0.5 bg-stone-200 rounded text-stone-600">Esc</kbd> {t('search.close')}
               </span>
             </div>
           </div>

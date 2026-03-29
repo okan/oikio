@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { AlertCircle, CheckSquare, ListTodo, MessageSquare } from 'lucide-react'
 import type { Meeting, Person, Template, ActionItem, TalkingPoint } from '@/types'
 import { meetingService, actionService, talkingPointService } from '@/services'
-import { Button, Input, Select, Modal, RichTextEditor } from '@/components/ui'
+import { Button, Input, Select, Modal, ConfirmModal, RichTextEditor } from '@/components/ui'
 import { toInputDate } from '@/lib/utils'
 interface MeetingFormProps {
   open: boolean
@@ -43,6 +43,8 @@ export function MeetingForm({
   const [lastMeetingContext, setLastMeetingContext] = useState<LastMeetingContext | null>(null)
   const [prepTalkingPoints, setPrepTalkingPoints] = useState<TalkingPoint[]>([])
   const [showPrepSection, setShowPrepSection] = useState(true)
+  const [templateConfirmOpen, setTemplateConfirmOpen] = useState(false)
+  const [pendingTemplateId, setPendingTemplateId] = useState<string>('')
   useEffect(() => {
     const fetchLastMeetingContext = async () => {
       if (!personId || meeting) {
@@ -112,18 +114,26 @@ export function MeetingForm({
     setShowPrepSection(true)
   }, [meeting, open, defaultPersonId, defaultDate, defaultTemplateId, templates])
   const handleTemplateChange = (value: string) => {
+    if (value) {
+      const template = templates.find((t) => t.id.toString() === value)
+      if (template && notes.trim() && notes.trim() !== template.content.trim()) {
+        setPendingTemplateId(value)
+        setTemplateConfirmOpen(true)
+        return
+      }
+    }
     setTemplateId(value)
     if (value) {
       const template = templates.find((t) => t.id.toString() === value)
-      if (template) {
-        if (notes.trim() && notes.trim() !== template.content.trim()) {
-          if (!window.confirm(t('meetings.templateOverwriteConfirm'))) {
-            return
-          }
-        }
-        setNotes(template.content)
-      }
+      if (template) setNotes(template.content)
     }
+  }
+  const handleTemplateOverwriteConfirm = () => {
+    setTemplateId(pendingTemplateId)
+    const template = templates.find((t) => t.id.toString() === pendingTemplateId)
+    if (template) setNotes(template.content)
+    setTemplateConfirmOpen(false)
+    setPendingTemplateId('')
   }
   const isCreating = !meeting
   const hasPreselectedPerson = isCreating && defaultPersonId !== undefined
@@ -309,7 +319,7 @@ export function MeetingForm({
           value={notes}
           onChange={setNotes}
         />
-        <div className="flex justify-end gap-3 pt-2">
+        <div className="flex justify-end gap-3 pt-4">
           <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
             {t('common.cancel')}
           </Button>
@@ -318,6 +328,18 @@ export function MeetingForm({
           </Button>
         </div>
       </form>
+      <ConfirmModal
+        open={templateConfirmOpen}
+        onOpenChange={(open) => {
+          setTemplateConfirmOpen(open)
+          if (!open) setPendingTemplateId('')
+        }}
+        title={t('meetings.templateOverwriteTitle')}
+        description={t('meetings.templateOverwriteConfirm')}
+        variant="warning"
+        confirmLabel={t('settings.continue')}
+        onConfirm={handleTemplateOverwriteConfirm}
+      />
     </Modal>
   )
 }

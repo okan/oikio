@@ -147,6 +147,9 @@ export function PersonReportExport({ person, meetings, actions, skips }: PersonR
           onChange={(e) => setDateTo(e.target.value)}
         />
       </div>
+      {dateFrom > dateTo && (
+        <p className="text-xs text-red-500 mb-2">{t('personReport.invalidRange')}</p>
+      )}
       <Button
         type="button"
         className="w-full"
