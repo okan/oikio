@@ -137,7 +137,7 @@ oikio/
 │   ├── components/
 │   │   ├── ui/                      # Reusable primitives (Button, Modal, Input, RichTextEditor, etc.)
 │   │   ├── layout/                  # Layout, Navbar, SearchModal, QuickActionModal, KeyboardShortcutsHelp
-│   │   ├── person/                  # PersonCard, PersonForm, PersonDetailHeader, PersonNotes, PersonTalkingPoints, PersonMeetingTimeline, etc.
+│   │   ├── person/                  # PersonCard, PersonForm, PersonDetailHeader, PersonNotes, PersonTalkingPoints, PersonMeetingTimeline, PersonReportExport, etc.
 │   │   ├── meeting/                 # MeetingCard, MeetingForm, MeetingList, FocusMode
 │   │   ├── action/                  # ActionForm, ActionItem, ActionList, ActionProgressSection
 │   │   ├── dashboard/               # WelcomeHero, WeeklySchedule, TodayFocus, RelationshipGrid
@@ -147,6 +147,7 @@ oikio/
 │   │   ├── relationships.ts         # Relationship health scoring algorithm
 │   │   ├── analytics.ts             # Monthly stats and trend calculations
 │   │   ├── searchPlainText.ts       # stripHtmlToPlainText, extractMatchSnippet (search)
+│   │   ├── personReportMarkdown.ts  # Markdown export for person detail report
 │   │   └── tagColors.ts             # Deterministic tag color mapping via hash
 │   ├── i18n/
 │   │   ├── index.ts                 # i18next configuration
@@ -294,6 +295,10 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 - Full-screen notes + sidebar with **Actions** and **Prep** tabs
 - Prep tab: open talking points (toggle complete), read-only quick notes (`PersonNote`), pending actions from other meetings for the same person
 - Header **How did it go?** (`MoodSelector`): five-step mood saved immediately via `updateMeeting`
+
+### Person Markdown report (`src/lib/personReportMarkdown.ts`, `PersonReportExport.tsx`)
+- Person detail sidebar: date range + download `.md` (Blob + `a[download]`, same pattern as Settings JSON export)
+- Includes profile, meetings in range (mood, notes as plain text, actions with progress notes), quick notes and talking points filtered by `createdAt`, skips filtered by `skippedAt`
 
 ### Search (`electron/services/database/searchQuery.ts`, `src/lib/searchPlainText.ts`)
 - Global search matches meeting notes, talking points, next topics, and person text fields using **plain text** after `stripHtmlToPlainText` (TipTap HTML)

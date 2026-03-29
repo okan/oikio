@@ -16,6 +16,7 @@ import {
   PersonNotes,
   PersonTalkingPoints,
   PersonMeetingTimeline,
+  PersonReportExport,
 } from '@/components/person'
 export function PersonDetail() {
   const { id } = useParams<{ id: string }>()
@@ -168,6 +169,12 @@ export function PersonDetail() {
               </div>
             </div>
           )}
+          <PersonReportExport
+            person={person}
+            meetings={meetings}
+            actions={actions}
+            skips={skipHistory}
+          />
           <div className="flex justify-center">
             <Button
               variant="ghost"
