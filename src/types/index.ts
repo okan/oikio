@@ -90,6 +90,14 @@ export interface DashboardStats {
   meetingsThisMonth: number
   pendingActions: number
 }
+export type SearchPersonHit = Person & { searchSnippet?: string }
+export type SearchMeetingHit = Meeting & { searchSnippet?: string }
+export type SearchActionHit = ActionItem & { searchSnippet?: string }
+export type SearchResults = {
+  persons: SearchPersonHit[]
+  meetings: SearchMeetingHit[]
+  actions: SearchActionHit[]
+}
 export interface ElectronAPI {
   persons: {
     getAll: () => Promise<Person[]>
@@ -152,7 +160,7 @@ export interface ElectronAPI {
     reset: () => Promise<void>
     getPath: () => Promise<string>
   }
-  search: (query: string) => Promise<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }>
+  search: (query: string) => Promise<SearchResults>
   notifications: {
     getSettings: () => Promise<NotificationSettings>
     updateSettings: (settings: Partial<NotificationSettings>) => Promise<NotificationSettings>

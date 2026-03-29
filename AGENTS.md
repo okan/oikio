@@ -110,7 +110,8 @@ oikio/
 │       │   ├── TemplateRepository.ts
 │       │   ├── MeetingSkipRepository.ts
 │       │   ├── PersonNoteRepository.ts
-│       │   └── TalkingPointRepository.ts
+│       │   ├── TalkingPointRepository.ts
+│       │   └── searchQuery.ts       # Global search (plain text + snippets)
 │       └── notifications.ts         # Native notification service
 ├── src/                             # React renderer
 │   ├── main.tsx                     # App bootstrap (StrictMode, HashRouter)
@@ -145,6 +146,7 @@ oikio/
 │   │   ├── utils.ts                 # cn(), formatDate, getRelativeTime, getInitials, etc.
 │   │   ├── relationships.ts         # Relationship health scoring algorithm
 │   │   ├── analytics.ts             # Monthly stats and trend calculations
+│   │   ├── searchPlainText.ts       # stripHtmlToPlainText, extractMatchSnippet (search)
 │   │   └── tagColors.ts             # Deterministic tag color mapping via hash
 │   ├── i18n/
 │   │   ├── index.ts                 # i18next configuration
@@ -292,6 +294,10 @@ All data is stored in `oikio-data.json` at Electron's `userData` path. The file 
 - Full-screen notes + sidebar with **Actions** and **Prep** tabs
 - Prep tab: open talking points (toggle complete), read-only quick notes (`PersonNote`), pending actions from other meetings for the same person
 - Header **How did it go?** (`MoodSelector`): five-step mood saved immediately via `updateMeeting`
+
+### Search (`electron/services/database/searchQuery.ts`, `src/lib/searchPlainText.ts`)
+- Global search matches meeting notes, talking points, next topics, and person text fields using **plain text** after `stripHtmlToPlainText` (TipTap HTML)
+- Action **progress notes** and **tags** are included; results may include `searchSnippet` for preview in `SearchModal`
 
 ### Keyboard Shortcuts (handled in `src/components/layout/Layout.tsx`)
 - `Cmd/Ctrl + K` — Open search

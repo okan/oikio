@@ -8,6 +8,7 @@ import type {
   MeetingSkip,
   PersonNote,
   TalkingPoint,
+  SearchResults,
 } from '../src/types'
 contextBridge.exposeInMainWorld('api', {
   persons: {
@@ -94,8 +95,7 @@ contextBridge.exposeInMainWorld('api', {
     reset: (): Promise<void> => ipcRenderer.invoke('db:reset'),
     getPath: (): Promise<string> => ipcRenderer.invoke('db:getPath'),
   },
-  search: (query: string): Promise<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }> =>
-    ipcRenderer.invoke('db:search', query),
+  search: (query: string): Promise<SearchResults> => ipcRenderer.invoke('db:search', query),
   notifications: {
     getSettings: () => ipcRenderer.invoke('notifications:getSettings'),
     updateSettings: (settings: Record<string, unknown>) =>

@@ -16,6 +16,7 @@ import { TemplateRepository } from './TemplateRepository'
 import { MeetingSkipRepository } from './MeetingSkipRepository'
 import { PersonNoteRepository } from './PersonNoteRepository'
 import { TalkingPointRepository } from './TalkingPointRepository'
+import { runSearch } from './searchQuery'
 export class DatabaseService {
   private store: DataStore
   private personRepo: PersonRepository
@@ -166,44 +167,15 @@ export class DatabaseService {
       pendingActions: this.store.actionItems.filter((a) => !a.completed).length,
     }
   }
-  search(query: string): { persons: Person[]; meetings: Meeting[]; actions: ActionItem[] } {
-    const lowerQuery = query.toLowerCase()
-    const persons = this.store.persons.filter(
-      (p) =>
-        (p.name || '').toLowerCase().includes(lowerQuery) ||
-        p.notes?.toLowerCase().includes(lowerQuery) ||
-        (p.title || '').toLowerCase().includes(lowerQuery) ||
-        (p.goals || '').toLowerCase().includes(lowerQuery)
+  search(query: string) {
+    return runSearch(
+      {
+        persons: this.store.persons,
+        meetings: this.store.meetings,
+        actionItems: this.store.actionItems,
+      },
+      query
     )
-    const meetings = this.store.meetings
-      .filter(
-        (m) =>
-          m.title?.toLowerCase().includes(lowerQuery) ||
-          m.notes?.toLowerCase().includes(lowerQuery) ||
-          m.talkingPoints?.toLowerCase().includes(lowerQuery)
-      )
-      .map((m) => ({
-        ...m,
-        personName: this.store.persons.find((p) => p.id === m.personId)?.name,
-      }))
-
-    const actions = this.store.actionItems
-      .filter(
-        (a) =>
-          a.description.toLowerCase().includes(lowerQuery) ||
-          (a.tags || []).some((tag) => tag.toLowerCase().includes(lowerQuery))
-      )
-      .map((a) => {
-        const meeting = this.store.meetings.find((m) => m.id === a.meetingId)
-        const person = meeting ? this.store.persons.find((p) => p.id === meeting.personId) : null
-        return {
-          ...a,
-          meetingTitle: meeting?.title,
-          personName: person?.name,
-        }
-      })
-
-    return { persons, meetings, actions }
   }
   exportData(): string {
     return this.store.exportData()

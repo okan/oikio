@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Search, User, Calendar, X, CheckSquare } from 'lucide-react'
-import type { Person, Meeting, ActionItem } from '@/types'
+import type { SearchResults } from '@/types'
 import { formatDateShort, formatMeetingTitle } from '@/lib/utils'
 import { Tag } from '@/components/ui'
 interface SearchModalProps {
@@ -14,7 +14,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState<{ persons: Person[]; meetings: Meeting[]; actions: ActionItem[] }>({
+  const [results, setResults] = useState<SearchResults>({
     persons: [],
     meetings: [],
     actions: [],
@@ -70,6 +70,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   }
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const items = getAllItems()
+    if (items.length === 0) return
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       setSelectedIndex((prev) => (prev + 1) % items.length)
@@ -141,17 +142,20 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                           className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-stone-100' : 'hover:bg-stone-50'
                             }`}
                         >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
                             }`}>
                             <User className="w-4 h-4" />
                           </div>
-                          <div>
+                          <div className="min-w-0 flex-1">
                             <div className={`text-sm font-medium ${isSelected ? 'text-stone-900' : 'text-stone-800'}`}>
                               {person.name}
                             </div>
                             <div className="text-xs text-stone-500">
                               {person.role === 'manager' ? t('persons.manager') : t('persons.teammate')}
                             </div>
+                            {person.searchSnippet && (
+                              <p className="text-xs text-stone-500 mt-1 line-clamp-2">{person.searchSnippet}</p>
+                            )}
                           </div>
                         </button>
                       )
@@ -174,17 +178,20 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                           className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-stone-100' : 'hover:bg-stone-50'
                             }`}
                         >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
                             }`}>
                             <Calendar className="w-4 h-4" />
                           </div>
-                          <div>
+                          <div className="min-w-0 flex-1">
                             <div className={`text-sm font-medium ${isSelected ? 'text-stone-900' : 'text-stone-800'}`}>
-                              {formatMeetingTitle(meeting.title, meeting.date)}
+                              {formatMeetingTitle(meeting.title, meeting.date, i18n.language)}
                             </div>
                             <div className="text-xs text-stone-500">
                               {meeting.personName} • {formatDateShort(meeting.date, i18n.language)}
                             </div>
+                            {meeting.searchSnippet && (
+                              <p className="text-xs text-stone-500 mt-1 line-clamp-2">{meeting.searchSnippet}</p>
+                            )}
                           </div>
                         </button>
                       )
@@ -207,7 +214,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                           className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${isSelected ? 'bg-stone-100' : 'hover:bg-stone-50'
                             }`}
                         >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isSelected ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-500'
                             }`}>
                             <CheckSquare className="w-4 h-4" />
                           </div>
@@ -225,6 +232,12 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                                 </div>
                               )}
                             </div>
+                            {action.searchSnippet &&
+                              action.searchSnippet !== action.description && (
+                                <p className="text-xs text-stone-500 mt-1 line-clamp-2">
+                                  {action.searchSnippet}
+                                </p>
+                              )}
                           </div>
                         </button>
                       )
